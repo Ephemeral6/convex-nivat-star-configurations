@@ -3,8 +3,8 @@
 Source, compiled PDF and verification scripts for the paper
 
 > **The convex Nivat conjecture: a complexity lower bound for star
-> configurations, and a reduction that depends on Colle–Garibaldi at one step
-> only**
+> configurations, and a reduction from low convex complexity to star
+> configurations**
 > Guancheng Pan, Chengsong You, Junwei Zhou, Yongchao Chen (11 September 2026)
 
 Nivat's conjecture asserts that a configuration `ξ : Z² → A` over a finite
@@ -12,10 +12,10 @@ alphabet with `P_ξ(m,n) ≤ mn` for some `m, n ≥ 1` is periodic. Its *convex*
 replaces the rectangle by an arbitrary non-empty finite lattice-convex window
 `S`, that is one with `S = Conv(S) ∩ Z²`.
 
-## Two results, at two different levels
+## Two results
 
-**Theorem T is unconditional and self-contained** (§§0–7 of the paper). Call
-`θ = Σᵢ Fᵢ : Z² → F_p` a *star configuration* when each `Fᵢ` has a non-zero
+**Theorem T: a lower bound for star configurations** (§§0–7, self-contained).
+Call `θ = Σᵢ Fᵢ : Z² → F_p` a *star configuration* when each `Fᵢ` has a non-zero
 period `kᵢvᵢ`, is not doubly periodic, and agrees with doubly periodic fields on
 the two half-planes `{π_i < ℓ_i}` and `{π_i > r_i}`, the primitive directions
 `vᵢ` being pairwise non-parallel. Then
@@ -32,36 +32,32 @@ a window, and as the exact capacity of a family of quadratic characters
 independent modulo those relations — and the two cancel for every `S` and
 every `Z`.
 
-**Theorem 8.15 and Corollary 8.16 are conditional, and the condition is carried
-in their statements.** The only hypothesis they assume is a weak form of
-
-> [CG, Proposition 3.1(ii)] — C. F. Colle and E. Garibaldi, *A modular structure
-> theorem for minimal periodic decompositions and periodicity of configurations
-> with `P_η(4,n) ≤ 4n`*, preprint, `arXiv:2606.10193v1` (8 June 2026),
-
-which supplies the *second* of the two half-planes on which each component of a
-minimal periodic decomposition is fully periodic. **That preprint has not been
-refereed.** The first half-plane is no longer assumed: Proposition 8.9 proves it
-here, from Kari–Szabados and from Colle's two published papers, by a one-sided
-finite-state argument. What the reduction then contributes is Lemma 8.14: any
-decomposition of that shape can be normalised into a star configuration, with no
-appeal to `F_p`-minimality or to the distinctness of the directions. Under the
-one remaining assumption the paper derives the convex Nivat conjecture, and with
-it Nivat's conjecture.
-
-The chain is
+**Theorem B: the reduction** (§8). A counterexample to the convex conjecture can
+be turned into a star configuration, so Theorem T settles the conjecture, and
+with it Nivat's. The chain is
 
 ```
-[KS], [Colle23a] --(Prop 8.9)--> U_i --(Asm 8.12, [CG])--> V_i
-      --(Lem 8.14)--> star configuration --(Thm T)--> convex Nivat ==> Nivat
+[KS], [Colle23a] --(Prop 8.9)--> U_i --(Thm 8.12)--> V_i
+      --(Lem 8.17)--> star configuration --(Thm T)--> convex Nivat ==> Nivat
 ```
 
-Appendix D proves [CG, Theorem 2.8] — the `F_p` and convex form of Szabados'
-theorem — in full, that being the one link behind Proposition 3.1(ii) for which
-the source gives a sketch rather than a proof. The appendix uses nothing beyond
-the one-dimensional Morse–Hedlund theorem. Remark 8.17 records how far a route
-avoiding [CG] altogether currently gets, and exactly which propagation lemma is
-still missing.
+Both half-planes are proved here. Proposition 8.9 gives the first, by extending
+the full periodicity on a region to a doubly periodic field, isolating the
+component with a difference operator `Qᵢ`, and closing with a finite-state
+argument. Theorem 8.12 gives the second: pushing the configuration to the limit
+along the direction of another component, the limit is a sum of two periodic
+configurations with different directions, hence periodic by Theorem D.1, so every
+limit on the far side of the component under consideration is doubly periodic;
+since there are only finitely many such limits, the far side itself coincides
+with a doubly periodic field. Theorem 8.1 (each component fully periodic on two
+disjoint half-planes) coincides formally with the structure theorem of [CG]; the
+proof here is different and uses no minimality of the decomposition.
+
+Apart from the annihilator and periodic decomposition theorem of Kari and
+Szabados, and Colle's Theorem 1.9 and Lemma 4.6, every step is proved in the
+paper. Appendix D proves in full the `F_p` and convex form of Szabados'
+theorem — stated with a sketch as [CG, Theorem 2.8] — using nothing beyond the
+one-dimensional Morse–Hedlund theorem.
 
 ## Contents
 
@@ -109,10 +105,7 @@ repeated builds of an unchanged source agree byte for byte.
 ## Status
 
 The paper is a preprint, prepared for arXiv submission; it has not been
-refereed. The reading of [CG] reported in Remarks 8.11 and 8.13 — including the
-six items (a)–(f) and the checks against Colle's two published papers — is the
-authors' own audit record, and is reproduced in the paper as such. Corrections
-and counterexamples are welcome; please open an issue.
+refereed. Corrections and counterexamples are welcome; please open an issue.
 
 ## License
 
@@ -126,8 +119,8 @@ and counterexamples are welcome; please open an issue.
 @misc{PYZC2026convexnivat,
   author = {Pan, Guancheng and You, Chengsong and Zhou, Junwei and Chen, Yongchao},
   title  = {The convex {N}ivat conjecture: a complexity lower bound for star
-            configurations, and a reduction that depends on
-            {C}olle--{G}aribaldi at one step only},
+            configurations, and a reduction from low convex complexity to star
+            configurations},
   year   = {2026},
   note   = {Preprint},
   howpublished = {\url{https://github.com/Ephemeral6/convex-nivat-star-configurations}}

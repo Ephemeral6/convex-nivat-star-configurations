@@ -1,8 +1,8 @@
 % !TEX program = pdflatex
 %
 % The convex Nivat conjecture: a complexity lower bound for star
-% configurations, and a reduction that depends on Colle--Garibaldi at one
-% step only
+% configurations, and a reduction from low convex complexity to star
+% configurations
 %
 % Build rules in force for this version:
 %   * Typesetting aligned with the authors' other public preprints: amsart 11pt,
@@ -11,7 +11,7 @@
 %   * The internal numbering of the manuscript (Lemma 2.5, Theorem 7.3,
 %     Proposition 8.9, ...) is preserved EXACTLY, including the sections whose
 %     first statement is numbered .0 (Lemma 2.0, Lemma 3.0) and the two primed
-%     remarks (2.1', 3.1').  Section 8 now runs in numerical order 8.1--8.17 and
+%     remarks (2.1', 3.1').  Section 8 now runs in numerical order 8.1--8.19 and
 %     needs no hand-set counters; elsewhere counters are still set by hand where
 %     the order demands it.
 %   * The manuscript's revision log ("修订说明 v3.1") is NOT reproduced: it
@@ -28,13 +28,14 @@
 %         here, because \ell_i is the left-tail threshold of (S3) everywhere else.
 %     All other notation is the manuscript's.
 %   * Citations: the data of [CG] and [Khe] were checked against the arXiv
-%     abstract pages, and the statement AND number of the results of [CG] that
-%     are quoted were checked against the arXiv HTML of that paper.  Section 8
-%     and Appendix D quote internal numbers of [CG], [Colle23a], [Colle23b],
-%     [Sz] and [CyrKra15]: those numbers, and the readings of the results they
-%     name, are the manuscript's own audit record and are reproduced as the
-%     authors wrote them.  The remaining entries carry the data printed in the
-%     reference list of [CG]; where that is the source, the entry says so.
+%     abstract pages.  Section 8 and Appendix D quote internal numbers of
+%     [Colle23a], [Sz] and [CyrKra15]: those numbers, and the readings of the
+%     results they name, are the manuscript's own record and are reproduced as
+%     the authors wrote them.  The external input of Section 8 is [KS] and
+%     [Colle23a] only; [CG] is cited as related work and is not a dependency.
+%     The remaining entries carry the data printed in the reference list of
+%     [CG].  The bibitems are in alphabetical order, so the printed numbers
+%     [1]--[17] are the ones used in the text.
 \documentclass[11pt,reqno]{amsart}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -66,7 +67,6 @@
 \newtheorem{cor}[thm]{Corollary}
 \theoremstyle{definition}
 \newtheorem{dfn}[thm]{Definition}
-\newtheorem{assu}[thm]{Assumption}
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{Remark}
 \newtheorem{obs}[thm]{Observation}
@@ -108,6 +108,7 @@
 \DeclareMathOperator{\diam}{diam}
 \DeclareMathOperator{\lcm}{lcm}
 \DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Tr}{Tr}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
@@ -118,6 +119,7 @@
 \newcommand{\cA}{\mathcal{A}}
 \newcommand{\cE}{\mathcal{E}}
 \newcommand{\cH}{\mathcal{H}}
+\newcommand{\cK}{\mathcal{K}}
 \newcommand{\cL}{\mathcal{L}}
 \newcommand{\cR}{\mathcal{R}}
 \newcommand{\cS}{\mathcal{S}}
@@ -142,8 +144,8 @@
 \title[Star configurations and the convex Nivat conjecture]
       {The convex Nivat conjecture:\\
        a complexity lower bound for star configurations,\\
-       and a reduction that depends on Colle--Garibaldi\\
-       at one step only}
+       and a reduction from low convex complexity\\
+       to star configurations}
 % ---------------------------------------------------------------------------
 % Title block.  Hand-built, and deliberately the same arrangement as the
 % authors' other preprints: names in a grid with superscript affiliation keys,
@@ -199,10 +201,10 @@ Nivat's conjecture asserts that a configuration $\xi\colon\Z^2\to\cA$ over a
 finite alphabet with $P_\xi(m,n)\le mn$ for some $m,n\ge1$ is periodic.  Its
 convex form replaces the rectangle by an arbitrary non-empty finite
 lattice-convex window $S$, that is, one with $S=\Conv(S)\cap\Z^2$.  This paper
-contains two results at two different levels, and it matters which is which.
+contains two results.
 
-The first is unconditional and self-contained, and occupies
-\S\S\ref{sec:notation}--\ref{sec:quadratic}: we call $\theta=\sum_{i=1}^mF_i\colon\Z^2\to\Fp$ a \emph{star
+The first occupies \S\S\ref{sec:notation}--\ref{sec:quadratic}: we call
+$\theta=\sum_{i=1}^mF_i\colon\Z^2\to\Fp$ a \emph{star
 configuration} when each $F_i$ has a non-zero period $k_iv_i$, is not doubly
 periodic, and agrees with doubly periodic fields on the two half-planes
 $\{\pi_i<\ell_i\}$ and $\{\pi_i>r_i\}$, the primitive directions $v_i$ being
@@ -216,24 +218,14 @@ affine relations carried by a window ($\dim U_S\ge|S|+1-|R_Z(S)|$), and it is
 the exact capacity for a family of quadratic characters that are independent
 modulo those relations.  The two cancel, for every $S$ and every $Z$.
 
-The second result is a reduction (\S\ref{sec:reduction}) of the convex
-conjecture to the first.  Every link of the chain is either a published result
-(Kari--Szabados, Colle) or proved here in full, with a single exception:
-Proposition~3.1(ii) of the Colle--Garibaldi preprint \cite{CG} of June 2026,
-which has not been refereed, and which says that each periodic component is
-fully periodic on a half-plane on the far side as well.  We carry it as
-Assumption~\ref{assu:CG}, written into the hypothesis of
-Theorem~\ref{thm:convex-nivat}.  The other half of the structure theorem of
-\cite{CG} — full periodicity of each component on one half-plane — is proved
-here independently (Proposition~\ref{prop:firsthalf}), by a difference operator
-and a finite-state argument, with no appeal to minimality of the decomposition,
-to one-sided nonexpansive directions, or to modular minimality; and
-Lemma~\ref{lem:normalise} turns any configuration of the resulting shape into a
-star configuration.  Appendix~\ref{app:szabados} proves in full the $\Fp$ and
-convex form of Szabados' theorem, quoted as \cite[Theorem~2.8]{CG} and used in
-the proof of Proposition~3.1(ii) there, which the sources give only as a sketch.
-A further appendix reports a numerical verification of the main theorem and of
-the intermediate assertions of
+The second result is a reduction (\S\ref{sec:reduction}): the convex conjecture
+reduces to the first result, and therefore holds.  Apart from the annihilator
+and periodic decomposition theorem of Kari and Szabados \cite{KS} and Colle's
+results \cite{Colle23a} on one-sided nonexpansive directions and on full
+periodicity over a region, every step of the chain is proved here in full.
+Appendix~\ref{app:szabados} proves in full the $\Fp$ and convex form of
+Szabados' theorem.  A further appendix reports a numerical verification of the
+main theorem and of the intermediate assertions of
 \S\S\ref{sec:spectrum}--\ref{sec:quotient}, including a counterexample to the
 natural over-generalisation of Lemma~\ref{lem:Ae-sectors}.
 \end{abstract}
@@ -277,8 +269,12 @@ a non-trivial annihilating Laurent polynomial and deduced that the configuration
 decomposes as a sum of periodic configurations over $\Z$; Szabados \cite{Sz}
 settled the case of two components; Colle \cite{Colle23a,Colle23b} developed
 the interaction between minimal periodic decompositions and one-sided
-nonexpansive directions, and Colle and Garibaldi \cite{CG} recently reached
-$k\le4$.  Kari and Moutot \cite{KM} proved that the orbit closure of a
+nonexpansive directions; and Colle and Garibaldi \cite{CG} recently proved, in
+the framework of $\Z_p$-minimal periodic decompositions, a structure theorem —
+the orbit closure of an aperiodic configuration of low convex complexity
+contains an aperiodic configuration each of whose periodic components is fully
+periodic on two disjoint half-planes — and deduced from it the case $k\le4$.
+Kari and Moutot \cite{KM20,KM23} proved that the orbit closure of a
 configuration of low convex complexity contains a periodic configuration, and
 the related decidability statement for low-complexity tilings.
 
@@ -295,9 +291,9 @@ statement for non-convex windows of full affine span.
 
 \subsection*{Results}
 
-Our results are two, and it matters which is which.  The first is
-unconditional; the second is conditional on one citation, which is carried in
-its statement.
+Our results are two.  The first is a complexity lower bound for star
+configurations, proved from scratch; the second reduces the convex Nivat
+conjecture to the first, quoting only results of \cite{KS} and \cite{Colle23a}.
 
 Call $\theta\colon\Z^2\to\Fp$ a \emph{star configuration} if
 $\theta=\sum_{i=1}^mF_i$ with $m\ge2$, where each $F_i$ is periodic in a
@@ -321,41 +317,34 @@ multiplication (Ostrowski), the Chinese remainder theorem, Hilbert's
 Nullstellensatz, and the existence of unimodular triangulations of lattice
 polygons.
 
-\begin{thmB}[Theorem~\ref{thm:convex-nivat}; conditional]
-Assume Assumption~\ref{assu:CG} below, that is, the weak form of
-\cite[Proposition~3.1(ii)]{CG}: for the configuration $\vartheta$ and the
-decomposition constructed in \S\ref{sec:reduction}, every component is fully
-periodic on a half-plane $V_i$ disjoint from the half-plane $U_i$ already
-obtained.  Let $\cA$ be finite and $\xi\colon\Z^2\to\cA$.  If $P_\xi(S)\le|S|$
+\begin{thmB}[Theorem~\ref{thm:convex-nivat}]
+Let $\cA$ be finite and $\xi\colon\Z^2\to\cA$.  If $P_\xi(S)\le|S|$
 for some non-empty finite lattice-convex $S$, then $\xi$ is periodic.
 Consequently, if $P_\xi(m,n)\le mn$ for some $m,n\ge1$, then $\xi$ is periodic.
 \end{thmB}
 
-Theorem~B is a reduction of the convex conjecture to Theorem~A.  The chain
-(\S\ref{sec:reduction}) starts from the annihilator and the periodic
-decomposition of Kari and Szabados \cite{KS}, passes through the two published
-results of Colle \cite{Colle23a} (a line that is one-sidedly nonexpansive in
-both directions; a non-periodic configuration in the orbit closure which is
-fully periodic on a region), then through
-Proposition~\ref{prop:firsthalf} of this paper (each component is fully periodic
-on one half-plane $U_i$), then through Assumption~\ref{assu:CG} (each component
-is fully periodic on a half-plane $V_i$ on the far side), and finally through
-Lemma~\ref{lem:normalise}, which normalises such a configuration into a star
-configuration and contradicts Theorem~A.
-
-The one link that has not been refereed is Assumption~\ref{assu:CG}.  \cite{CG}
-is a preprint of June 2026 (v1); it proves that assertion in its
-Proposition~3.1(ii).  We have gone through the relevant part of its dependency
-chain and record what we found (Remark~\ref{rem:audit} and the paragraphs
-following it), and Appendix~\ref{app:szabados} proves in full the one result
-used there which the literature gives only as a sketch, the $\Fp$ and convex
-form of Szabados' theorem; but we do \emph{not} treat
-Assumption~\ref{assu:CG} as an established fact: it is written into the
-statement of Theorem~B.  The other half of the structure theorem of
-\cite{CG} — full periodicity of each component on one half-plane — has a
-complete independent proof here (Proposition~\ref{prop:firsthalf}), which uses
-neither minimality of the decomposition, nor one-sided nonexpansive directions,
-nor the modular minimality theorem of \cite{Colle23b}.
+Theorem~B is a reduction of the convex conjecture to Theorem~A
+(\S\ref{sec:reduction}).  The chain runs as follows: the annihilator and the
+periodic decomposition of Kari and Szabados \cite{KS}; the two results of Colle
+\cite{Colle23a} — a line that is one-sidedly nonexpansive in both directions,
+and an aperiodic configuration $\vartheta$ in the orbit closure which is fully
+periodic on a region; and then the two steps of this paper.  The first is that
+each periodic component is fully periodic on one half-plane $U_i$
+(Proposition~\ref{prop:firsthalf}: extend the full periodicity over the region
+to a doubly periodic field, isolate the component with a difference operator
+$Q_i$, and run a finite-state argument).  The second is that each component is
+fully periodic on a half-plane $V_i$ on the far side
+(Theorem~\ref{thm:secondhalf}: push to the limit along the direction of some
+component; the limit is a sum of two periodic configurations in distinct
+directions, hence periodic by Theorem~\ref{thm:szabados} of
+Appendix~\ref{app:szabados}, and therefore every limit on the far side of the
+component under examination is doubly periodic; that there are only finitely
+many such limits then forces the far side itself to agree with a doubly periodic
+field).  Finally Lemma~\ref{lem:normalise} normalises such a $\vartheta$ into a
+star configuration, contradicting Theorem~A.  Theorem~\ref{thm:structure} —
+each component is fully periodic on two disjoint half-planes — coincides
+formally with the structure theorem of \cite{CG}; the proof given here is
+different from the one there and uses no minimality of the decomposition.
 
 \subsection*{The shape of the proof of Theorem~A}
 
@@ -414,27 +403,24 @@ two-point difference, \S\ref{sec:quotient} confines it to $Z-Z$, and
 \S\ref{sec:zonotope} converts that into a pair of lattice points of $Z$.
 \S\ref{sec:quadratic} assembles Theorem~A, and \S\ref{sec:reduction} deduces
 Theorem~B: \S\ref{ssec:halfplanes} sets up half-planes, regions and full
-periodicity; \S\ref{ssec:external} collects the published input;
+periodicity; \S\ref{ssec:external} collects the results that are quoted;
 \S\ref{ssec:firsthalf} proves the first half-plane
-(Proposition~\ref{prop:firsthalf}); \S\ref{ssec:secondhalf} states
-Assumption~\ref{assu:CG} and reports our reading of \cite{CG};
+(Proposition~\ref{prop:firsthalf}); \S\ref{ssec:secondhalf} proves the second
+(Theorem~\ref{thm:secondhalf});
 \S\ref{ssec:normalisation} normalises; \S\ref{ssec:nivat} proves Theorem~B.
 Appendix~\ref{app:skeleton} is a one-page skeleton of the argument.
 Appendix~\ref{app:edge} briefly describes, without proof and for the record
 only, a different route that was explored and is not used here.
 Appendix~\ref{app:numerics} reports the numerical verification.
 Appendix~\ref{app:szabados} proves the $\Fp$ and convex form of Szabados'
-theorem that \cite[Theorem~2.8]{CG} uses.
+theorem.
 
-\smallskip\noindent\textbf{Dependencies at a glance.}
-\S\S\ref{sec:notation}--\ref{sec:quadratic} are self-contained.  The external
-input of \S\ref{sec:reduction} is Kari--Szabados \cite{KS} and Colle
-\cite{Colle23a}, both published; \cite[Theorem~1.6]{Colle23b} is used only to
-align the decomposition of this paper with the $\Z_p$-minimal decomposition of
-\cite{CG}; and the only link that has not been refereed is
-Assumption~\ref{assu:CG}, that is \cite[Proposition~3.1(ii)]{CG}.
-Appendix~\ref{app:szabados} quotes nothing external beyond the one-dimensional
-Morse--Hedlund theorem.
+\smallskip\noindent\textbf{Dependencies.}
+\S\S\ref{sec:notation}--\ref{sec:quadratic} are self-contained.
+\S\ref{sec:reduction} quotes \cite{KS} (annihilators and periodic
+decompositions) and \cite[Theorem~1.9 and Lemma~4.6]{Colle23a}.
+Appendix~\ref{app:szabados} uses nothing beyond the one-dimensional
+Morse--Hedlund theorem \cite{MH38}.
 
 \setcounter{section}{-1}
 \section{Notation, hypotheses and the main theorem}\label{sec:notation}
@@ -1530,17 +1516,13 @@ Theorem~\ref{thm:main}.  The chain is
 \text{Theorems~\ref{thm:coneed} and \ref{thm:colregion}~\cite{Colle23a}}\\[4pt]
 \longrightarrow\ \text{Proposition~\ref{prop:firsthalf} (first half-plane,
 this paper)}\\[4pt]
-\longrightarrow\ \text{Assumption~\ref{assu:CG} (second half-plane,
-\cite{CG})}\ \longrightarrow\ \text{Lemma~\ref{lem:normalise}}\
+\longrightarrow\ \text{Theorem~\ref{thm:secondhalf} (second half-plane,
+this paper)}\ \longrightarrow\ \text{Lemma~\ref{lem:normalise}}\
 \longrightarrow\ \text{Theorem~\ref{thm:main}} .
 \end{array}
 \]
-Apart from Assumption~\ref{assu:CG}, every link is either a published result or
-proved here in full.  The dependence on \cite{CG} is confined to its
-Proposition~3.1(ii): its Lemma~2.10, Lemma~2.11, Claim~3.2 and
-Proposition~3.1(i) are not on the chain, and the modular minimality theorem of
-\cite{Colle23b} enters only where Assumption~\ref{assu:CG} is docked onto the
-proof given in \cite{CG} (Remark~\ref{rem:audit}).
+Every link is either a result of \cite{KS} or \cite{Colle23a}, or proved here in
+full.
 
 \begin{thm}[Structure input]\label{thm:structure}
 Let $\xi$ be a counterexample of minimal order in the sense of
@@ -1557,11 +1539,9 @@ from $U_i$.
 \end{enumerate}
 \end{thm}
 
-Part~(i) is proved in \S\S\ref{ssec:external}--\ref{ssec:firsthalf}, from
-published results and Proposition~\ref{prop:firsthalf} of this paper.  Part~(ii)
-is the content of \cite[Proposition~3.1(ii)]{CG} and is quoted here as
-Assumption~\ref{assu:CG} (\S\ref{ssec:secondhalf}); Theorem~\ref{thm:convex-nivat}
-is conditional on it.
+Part~(i) is proved in \S\S\ref{ssec:external}--\ref{ssec:firsthalf}
+(Proposition~\ref{prop:firsthalf} and Corollary~\ref{cor:firsthalf}); part~(ii)
+is proved in \S\ref{ssec:secondhalf} (Theorem~\ref{thm:secondhalf}).
 
 \subsection{Half-planes, regions and full periodicity}\label{ssec:halfplanes}
 
@@ -1584,8 +1564,8 @@ $R+h\subseteq R$, then $C_R+h=\overline{\Conv}(R+h)\subseteq C_R$, that is
 $h\in K_R$.  A half-plane is a lattice-convex region, with
 $K_R=\{w:\langle w,n\rangle\ge0\}$.
 
-Following Colle and Garibaldi \cite[Definition~2.1]{CG}, say for a non-empty
-$\cU\subseteq\Z^2$ that $G\colon\Z^2\to\Fp$ is \emph{fully periodic on $\cU$} if
+For a non-empty $\cU\subseteq\Z^2$ say that $G\colon\Z^2\to\Fp$ is \emph{fully
+periodic on $\cU$} (\cite[Definition~2.1]{CG}) if
 there are $\R$-linearly independent $h,h'\in\Z^2$ with $\cU+h\subseteq\cU$,
 $\cU+h'\subseteq\cU$, $G(z+h)=G(z)$ and $G(z+h')=G(z)$ for all $z\in\cU$.  The
 restriction of a doubly periodic field to any half-plane is fully periodic: take
@@ -1627,7 +1607,7 @@ The same for $h'$.
 Half-planes are the special case: there $K_R=\{w:\langle w,n\rangle\ge0\}$ and
 $g$ satisfies $\langle g,n\rangle>0$.
 
-\subsection{The published input and counterexamples of minimal
+\subsection{The results quoted, and counterexamples of minimal
 order}\label{ssec:external}
 
 \begin{rem}[Counterexamples of minimal order]\label{rem:minimal}
@@ -1654,7 +1634,8 @@ terms, that is $\ord(\xi')\le m$.\hfill$\square$
 
 Consequently every result of \cite{Colle23a} proved under the standing
 assumption that the non-periodic configurations of the orbit closure all have
-the same order — including \cite[Theorem~1.10]{Colle23a} and the Claims of its
+the same order (\cite[\S4.1]{Colle23a}) — including
+\cite[Theorem~1.10]{Colle23a} and the Claims of its
 \S4 — is available for a counterexample $\xi$ of minimal order; it is under that
 assumption that Theorem~\ref{thm:colregion} below quotes
 \cite[Lemma~4.6]{Colle23a}.
@@ -1673,9 +1654,8 @@ possibly unbounded).
 \end{enumerate}
 \end{thm}
 
-Part~(a) is the linear dependence of the $S$-patterns, the same argument as in
-the proof of Proposition~\ref{prop:case-A}; the two assertions of (b) are the
-decomposition theorem of \cite{KS} and the construction inside its proof.
+Both (a) and (b) are in \cite{KS}; the argument for (a) is the same as in
+the proof of Proposition~\ref{prop:case-A}.
 
 \begin{lem}[Passing to the orbit closure and reducing mod
 $p$]\label{lem:modp}
@@ -1705,10 +1685,6 @@ with parallel periods is again periodic (take a common multiple of the two
 periods); if only one term were left, $\vartheta$ would be periodic.
 \end{proof}
 
-Lemma~\ref{lem:modp} needs no minimality of the decomposition; minimality
-appears only in Assumption~\ref{assu:CG}, where it is required in order to dock
-onto \cite{CG}.
-
 \begin{thm}[Colle {\cite[Theorem~1.9]{Colle23a}}]\label{thm:coneed}
 Let $\cA\subset\Z$ and let $\xi$ have a non-trivial annihilator.  If for every
 line $\ell$ either $-\boldsymbol\ell\notin\mathrm{ONED}(\xi)$ or
@@ -1717,11 +1693,11 @@ particular, if $\xi$ is non-periodic there is a line $\ell$ with
 $\pm\boldsymbol\ell\in\mathrm{ONED}(\xi)$.
 \end{thm}
 
-Its proof uses the periodic-limit theorem of Kari and Moutot \cite{KM} and the
-Boyle--Lind theorem, both published; we do not reprove it.
+The proof of \cite[Theorem~1.9]{Colle23a} uses the periodic-limit theorem of
+Kari and Moutot \cite{KM20,KM23} and the Boyle--Lind theorem \cite{BoyleLind};
+it does not depend on the equal-order assumption of \cite[\S4.1]{Colle23a}.
 
-\begin{thm}[Colle {\cite[Lemma~4.6]{Colle23a}}, the two
-cases]\label{thm:colregion}
+\begin{thm}[Colle {\cite[Lemma~4.6]{Colle23a}}]\label{thm:colregion}
 Let $\xi$ be a counterexample of minimal order in the sense of
 Remark~\ref{rem:minimal}, so that the equal-order assumption of \S4.1 of
 \cite{Colle23a} is in force, and let $\ell$ be as in
@@ -1733,14 +1709,15 @@ unbounded edges, along $\ell$ and along $\ell'$, both nonexpansive lines for
 $X_\xi$, and finitely many bounded edges.
 \end{thm}
 
-Only three items of this are used below: $\vartheta$ is non-periodic, $R$ is a
-lattice-convex region, and $\vartheta$ is fully periodic on $R$.  The position
-of the two asymptotic directions of the region (Claims~4.11 and 4.16 of
-\cite{Colle23a}, Claim~3.2 of \cite{CG}) is not needed: Proposition~%
-\ref{prop:firsthalf}(c) shows that it is determined by the decomposition itself.
-We read the conclusion with ``fully periodic'' as defined in
-\S\ref{ssec:halfplanes}, that is as in \cite[Definition~2.1]{CG}: both periods
-point into the region.
+Theorem~\ref{thm:colregion} is the conclusion of \cite[Lemma~4.6]{Colle23a},
+restated with ``fully periodic'' as defined in \S\ref{ssec:halfplanes}; its
+proof there uses Lemma~3.5, Lemma~4.2, Propositions~2.13--2.14 and
+Claims~4.7--4.16 of \cite{Colle23a}, of which Claims~4.11 and 4.16 depend on the
+equal-order assumption.  Only three items of it are used below: $\vartheta$ is
+non-periodic, $R$ is a lattice-convex region, and $\vartheta$ is fully periodic
+on $R$.  The position of the two asymptotic directions of the region is not
+needed: Proposition~\ref{prop:firsthalf}(c) shows that it is determined by the
+decomposition itself.
 
 \subsection{The first half-plane}\label{ssec:firsthalf}
 
@@ -1908,198 +1885,276 @@ Proposition~\ref{prop:firsthalf}(c), the sector spanned by two adjacent rays
 $\sigma_av_a$, $\sigma_bv_b$.
 \end{cor}
 
-\begin{rem}[Relation to the body of the paper and to \cite{CG}]\label{rem:relation}
+\begin{rem}\label{rem:relation}
 \textup{(1)} Proposition~\ref{prop:firsthalf} is the one-sided version of
 Lemma~\ref{lem:fi} of \S\ref{sec:twopoint} — the support of $f_i=Q_i\eta$
 lies in a strip — and Lemma~\ref{lem:finitestate} is the general form of
 step~(6) of Lemma~\ref{lem:propagation}.
-\textup{(2)} Proposition~\ref{prop:firsthalf}(b) is the conclusion of
-\cite[Proposition~3.1(i)]{CG}, but obtained without induction, without
-$\mathrm{ONED}$ and without $\Z_p$-minimality; consequently Lemma~2.10,
-Lemma~2.11 and Claim~3.2 of \cite{CG}, and the two gaps (b) and (d) recorded in
-Remark~\ref{rem:audit}, no longer enter the chain.
-\textup{(3)} Proposition~\ref{prop:firsthalf}(c) is the content of
-\cite[Claim~3.2]{CG}: in the oriented-edge convention of that paper, the
-recession cone of an $(\boldsymbol\ell_\iota,\boldsymbol\ell_{\iota+m-1})$-region
-should be exactly the sector between the adjacent rays
-$\boldsymbol\ell_{\iota+m-1}$ and
-$\boldsymbol\ell_{\iota+m}=-\boldsymbol\ell_\iota$; this may serve as a
-consistency check against \cite{CG}.
-\textup{(4)} In (b) neither the non-periodicity of $\vartheta$ nor the
-minimality of the decomposition is required; components falling into
-case~$(\alpha)$ are simply absorbed.
+\textup{(2)} In Proposition~\ref{prop:firsthalf}(b) neither the non-periodicity
+of $\vartheta$ nor the minimality of the decomposition is required; components
+falling into case~$(\alpha)$ are simply absorbed.
 \end{rem}
 
-\subsection{The second half-plane: the remaining external
-input}\label{ssec:secondhalf}
+\subsection{The second half-plane}\label{ssec:secondhalf}
 
-\begin{assu}[{\cite[Proposition~3.1(ii)]{CG}}, weak form; that is,
-Theorem~\ref{thm:structure}(ii)]\label{assu:CG}
-Let $\vartheta$ be as in Theorem~\ref{thm:colregion}, let
-$\vartheta=\sum_i\vartheta_i$ be a $\Z$-minimal periodic decomposition of it, of
-order $m=\ord(\xi)$ as in Remark~\ref{rem:minimal} and with pairwise
-non-parallel periods, and let $p$ be the prime supplied for this decomposition
-by \cite[Theorem~1.6]{Colle23b}, so that the reduction
-$\vartheta=\sum_i\bar\vartheta_i$ modulo $p$ is a $\Z_p$-minimal decomposition
-of the same order.  Apply Corollary~\ref{cor:firsthalf} to it —
-Proposition~\ref{prop:firsthalf} applies to any decomposition — and let
-$\vartheta=\sum_{i\in I}G_i$ and the half-planes $U_i$ be the result.  Then for
-every $i\in I$ there is a half-plane $V_i$ with $V_i\cap U_i=\varnothing$ such
-that $G_i|_{V_i}$ is fully periodic.
-\end{assu}
+This subsection proves Theorem~\ref{thm:structure}(ii), in three steps.
+Proposition~\ref{prop:twolimits} uses Theorem~\ref{thm:szabados} to show that,
+when $\vartheta$ is pushed to the limit along a suitable direction, every
+subsequential limit on the far side of one component is doubly periodic.
+Lemma~\ref{lem:propagate2} shows that this forces the component to agree with a
+doubly periodic field on a half-plane on that side, the point of the argument
+being that there are only finitely many such limits.
+Lemma~\ref{lem:available} guarantees that the directions required can always be
+found, in a fixed order, so that an induction produces all of the $V_i$.
 
-By step~$(\gamma)$ of Lemma~\ref{lem:normalise}, every half-plane of full
-periodicity of an $h_i$-periodic field that is not doubly periodic is bounded by
-a line parallel to $h_i$; so $V_i$ necessarily lies in the complementary side
-$\{\sigma_i\pi_i<t_i\}$ of $U_i$, and shrinking either $U_i$ or $V_i$ destroys
-nothing.  Assumption~\ref{assu:CG} is therefore insensitive to the exact
-position of the half-planes.  In its Proposition~3.1(ii), \cite{CG} proves this
-assertion for a $\vartheta$ of the same provenance
-(\cite[Lemma~4.6]{Colle23a}) and for a $\Z_p$-minimal decomposition of it; the
-half-plane its part~(i) supplies lies on the same side of the region $R$ as the
-one produced by Proposition~\ref{prop:firsthalf}, and one may shrink whichever
-of the two is the larger.  We do not treat Assumption~\ref{assu:CG} as an
-established fact; it is written into the hypothesis of
-Theorem~\ref{thm:convex-nivat}.
+\begin{thm}[The second half-plane]\label{thm:secondhalf}
+In the notation of Corollary~\ref{cor:firsthalf}, for every $i\in I$ there is a
+half-plane $V_i$ with $V_i\cap U_i=\varnothing$ such that $G_i|_{V_i}$ is fully
+periodic.
+\end{thm}
 
-In the remark and the three paragraphs that follow we report what we checked in
-the sources.  They use the notation of the cited papers
-($\mathrm{NEL}$, $\mathrm{ONED}$, regions, the supports $\cS_\varphi$, and the
-internal numbering of \cite{CG}, \cite{Colle23a} and \cite{Colle23b}), which is
-not set up in this paper; nothing in \S\S\ref{sec:notation}--\ref{sec:quadratic}
-or in the statement of Theorem~\ref{thm:convex-nivat} depends on them.
+The proof is at the end of the subsection.  By step~$(\gamma)$ of
+Lemma~\ref{lem:normalise}, every half-plane of full periodicity of an
+$h_i$-periodic field that is not doubly periodic is bounded by a line parallel
+to $h_i$; so such a $V_i$ necessarily lies on the side of $U_i$ opposite to
+$U_i$, and shrinking either $U_i$ or $V_i$ destroys nothing.
 
-\begin{rem}[Reading the proof in \cite{CG}]\label{rem:audit}
-The chain of the proof of \cite[Theorem~3.5]{CG} is: $\eta$ non-periodic with a
-non-trivial annihilator $\Rightarrow$ (by \cite[Theorem~1.9]{Colle23a}) there is
-$\ell\in\mathrm{NEL}(\eta)$ with $\pm\boldsymbol\ell\in\mathrm{ONED}(\eta)$
-$\Rightarrow$ (repeating the two cases of \cite[Lemma~4.6]{Colle23a}, which use
-Propositions~2.13--2.14, Lemma~3.5, Lemma~4.2 and Claims~4.7--4.15 of that
-paper) one obtains a non-periodic $\vartheta\in X_\eta$ and an
-$(\boldsymbol\ell,\boldsymbol\ell')$-region on which $\vartheta$ is fully
-periodic $\Rightarrow$ (by \cite[Theorem~1.5]{Colle23b}) one chooses $p$ for
-which the reduction modulo $p$ of a $\Z$-minimal decomposition is a
-$\Z_p$-minimal decomposition of the same order $\Rightarrow$ (by
-Proposition~3.1) one obtains $U_i$ and $V_i$.  Theorems~\ref{thm:coneed} and
-\ref{thm:colregion} of this paper correspond to the first two steps,
-Lemma~\ref{lem:modp} and Corollary~\ref{cor:firsthalf} to the part of the third
-and fourth steps that produces $U_i$, and Assumption~\ref{assu:CG} to the part
-that produces $V_i$.  The material new to \cite{CG}
-here is Lemma~2.10, Lemma~2.11 and Proposition~3.1.  We went through these three
-line by line.
-\begin{enumerate}
-\item[\textup{(a)}] The layer propagation of Lemma~2.10 is correct: after the
-factor $X^{h_k}-1$ has been removed, $\cS_{\hat\varphi}$ has no edge parallel to
-$\ell_k$, so a single vertex can be placed outside the region and the
-propagation proceeds half-line by half-line.
-\item[\textup{(b)}] Lemma~2.11 is correct, but its proof writes the translation
-along $v_{\ell''}$ as a multiple of the period $u''$; one should first pass to a
-subsequence lying in a fixed residue class modulo $u''$ and argue there.
-\item[\textup{(c)}] Claim~3.2, which excludes $\iota'\ne\iota+m-1$ using
-Lemma~2.11 and Proposition~2.6, is correct.
-\item[\textup{(d)}] The inductive step of Proposition~3.1(i) applies the
-induction hypothesis to the partial sum $\vartheta_1+\cdots+\vartheta_{m-1}$
-without checking that this partial sum satisfies the hypothesis
-$\boldsymbol\ell_1,\boldsymbol\ell_{m-1}\in\mathrm{ONED}$.  This is repairable:
-the proof of (i) uses the $\mathrm{ONED}$ hypothesis only in order to place the
-two asymptotic directions of the region on edges of $\cS_\varphi$ (Lemma~2.9 and
-Claim~3.2), and the directions of the region of the partial sum are
-$\boldsymbol\ell_1$ and $\boldsymbol\ell_{m-1}$ anyway, so it suffices to
-restate the induction hypothesis as ``for every configuration of minimal order
-$m'$ which is fully periodic on some
-$(\boldsymbol\ell_\iota,\boldsymbol\ell_{\iota+m'-1})$-region''.  The conclusion
-is unaffected.  In this paper part~(i) is replaced by
-Proposition~\ref{prop:firsthalf}, so that (a)--(d) no longer enter the chain.
-\item[\textup{(e)}] Claim~3.3(a) deduces from Theorem~2.8 (the $\Z_p$ and convex
-form of Szabados' theorem) and from Boyle--Lind that $\theta$ is
-$\ell_j$-periodic; the passage ``$\theta_j$ fully periodic $\Rightarrow$
-$\vartheta_j$ fully periodic'' is correct, because translating the
-$h_j$-periodic $\vartheta_j$ along $\ell_j$ produces only finitely many
-translates.  In Claim~3.3(b), the ``maximal convex region $L_\alpha$'', the
-largest interval in the union of entire layers along $\ell_k$ containing a given
-strip, is well defined; there the translation $t_{n_\alpha}+s_\alpha\sigma
-t_k\tau$ has to be a positive multiple of $\tau v_{\ell_j}$ for the hypothesis
-of the Claim to apply, which does hold at the three places where Step~3 uses it
-($j=p-1$, $k=p$, $\tau=1$ and $j=2$, $k=1$, $\tau=-1$), since $\sigma\tau=1$ in
-each; but the general statement of the Claim does not record this constraint.
-\item[\textup{(f)}] The angular argument of Step~3, that $v_{\ell_{p-1}}$ points
-into the interior of $U_i$ for $i\le p-2$ and of $V_i$ for $i\ge p+1$, rests on
-$\boldsymbol\ell_1,\dots,\boldsymbol\ell_m$ lying in a half-circle and on
-$\boldsymbol\ell_{i+m}=-\boldsymbol\ell_i$, and is correct; the sector structure
-of Proposition~\ref{prop:firsthalf}(c) can be used directly to establish that
-ordering along the half-circle.
-\end{enumerate}
-Assumption~\ref{assu:CG} depends on (e) and (f).  Item~(e) is a gap in the
-exposition and can be filled as described.  We found no substantive error.
-\end{rem}
+\begin{lem}[Bi-periodicity over $\Fp$]\label{lem:biper}
+Let $G\colon\Z^2\to\Fp$ have a non-zero period $h$, let $d\in\Z^2$ be
+non-parallel to $h$, and suppose $g:=(T^d-1)G$ is doubly periodic.  Then $G$ is
+doubly periodic.
+\end{lem}
 
-\noindent\textbf{The check against \cite{Colle23a}} (the published version).
-\cite[Theorem~1.9]{Colle23a} reads: a configuration with $\cA\subset\Z$ and a
-non-trivial annihilator is fully periodic provided that for every line $\ell$
-either $-\boldsymbol\ell\notin\mathrm{ONED}$ or
-$\boldsymbol\ell\notin\mathrm{ONED}$.  It carries \emph{no} hypothesis that the
-non-periodic configurations in the orbit closure have the same order; that
-hypothesis appears only in \cite[Theorem~1.10]{Colle23a}, a standing assumption
-of its \S4.1, and in its Claims~4.11 and 4.16.  When the proof of
-\cite[Theorem~3.5]{CG} repeats the two cases of \cite[Lemma~4.6]{Colle23a} it
-uses only Claims~4.7--4.10 (first case) and 4.12--4.15 (second case), and the
-role of Claims~4.11 and 4.16 — locating the second asymptotic direction of the
-region — is taken over by its own Claim~3.2.  Those claims, and
-Propositions~2.13--2.14, Lemmas~2.6--2.8, 3.5, 4.2 and 4.5, do not depend on the
-equal-order assumption.  The proof of \cite[Theorem~1.9]{Colle23a} itself uses
-the periodic-limit theorem of Kari and Moutot \cite{KM} and the Boyle--Lind
-theorem.  Theorem~\ref{thm:colregion} above quotes
-\cite[Lemma~4.6]{Colle23a} directly, under the equal-order assumption supplied
-by Remark~\ref{rem:minimal}, and does not need the position of the second
-asymptotic direction; so either way of quoting the source is available.
+\begin{proof}
+Choose $M\ge1$ with $Md\in\Per(g)$.  From
+$T^{Md}-1=\bigl(\sum_{i=0}^{M-1}T^{id}\bigr)(T^d-1)$ we get
+$g':=(T^{Md}-1)G=\sum_{i=0}^{M-1}T^{id}g$, and
+$T^{Md}g'=\sum_iT^{id}\,T^{Md}g=g'$.  Hence
+\[(T^{pMd}-1)G=\Bigl(\sum_{i=0}^{p-1}T^{iMd}\Bigr)g'=p\,g'=0,\]
+so $pMd$ is a period of $G$, and it is independent of $h$.
+\end{proof}
 
-\noindent\textbf{The check against \cite{Colle23b}} (arXiv:2204.06658v1).  The
-result cited as ``\cite[Theorem~1.5]{Colle23b}'' in \cite{CG} is Theorem~1.6 of
-that version: for $\cA\subset\Z_+$ and a $\Z$-minimal decomposition
-$\eta=\eta_1+\cdots+\eta_m$, there is a prime $p$ with $\cA\subset\dbr{p}$ for
-which $\bar\eta=\bar\eta_1+\cdots+\bar\eta_m$ is a $\Z_p$-minimal decomposition;
-this agrees with the way \cite{CG} restates it.  Its proof chooses $p$ so that
-the values of the finite-alphabet configurations $\varphi_i\eta_i+N_i\one$ lie
-in $\dbr{p}$, shows first, by Proposition~2.9 of that paper with $R=\Z$, that no
-$\bar\eta_i$ is fully periodic, and then derives a contradiction from Lemma~3.1
-there (if a shorter $\Z_p$-decomposition existed, some $\bar\eta_i$ would be
-fully periodic).  The proof of that Lemma~3.1 uses the fact that the reflected
-convex supports of two annihilators have no parallel edges to conclude
-$\mathrm{ONED}=\varnothing$, then Boyle--Lind for full periodicity, peeling off
-one component at a time; the proof of Proposition~2.9 for an arbitrary $R$ (its
-Lemma~2.8, the ``division by $X^v-1$'' construction, together with its
-Proposition~2.7) we also read through.  Neither contains an error.  The other
-results of \cite{Colle23b} quoted in \cite{CG} — its Lemma~2.4, its
-Proposition~2.7, a rewriting of \cite[Lemma~5.10]{CyrKra15}, and its
-Proposition~2.9 — match in number and in content.  In this paper that theorem is
-used only for the choice of the prime $p$ in Assumption~\ref{assu:CG}, that is,
-to align the decomposition used here with the $\Z_p$-minimal decomposition of
-\cite{CG}; the proof of Theorem~\ref{thm:structure}(i) does not need it.
+\smallskip\noindent\textbf{Safe directions.}
+In the notation of Corollary~\ref{cor:firsthalf} we may change the signs of the
+$v_j$ so that $\sigma_j=+$ throughout, that is $U_j=\{\pi_j\ge t_j\}$.  For
+$j\in I$ let $\cK_j$ be the set of half-planes on which $G_j$ is so far known to
+be fully periodic: initially $\cK_j=\{U_j\}$, and a half-plane $V_j$ disjoint
+from $U_j$ is added to $\cK_j$ as soon as it has been produced.  For
+$\cH\in\cK_j$ write $\widetilde G_j^{\cH}$ for the global extension of
+$G_j|_{\cH}$ furnished by Lemma~\ref{lem:extend}.  Fix $N\ge1$ divisible by all
+the $k_j$ and such that $N\Z^2$ is contained in the period lattice of every
+$\widetilde G_j^{\cH}$.  For a non-zero $d\in N\Z^2$ say that $d$ \emph{fixes}
+$j$ if $d\parallel h_j$ — then $d\in\Z k_jv_j$ and $T^dG_j=G_j$ — and that $d$
+is \emph{safe for $j$} if there is
+$\cH=\{\tau\pi_j\ge t\}\in\cK_j$, $\tau\in\{+,-\}$, with $\tau\pi_j(d)>0$.  If
+$d$ is safe for $j$ then $T^{nd}G_j\to\widetilde G_j^{\cH}$ pointwise as
+$n\to\infty$, the convergence being eventual equality at each point: for a fixed
+$z$ and large $n$ one has $z+nd\in\cH$, whence
+$G_j(z+nd)=\widetilde G_j^{\cH}(z+nd)=\widetilde G_j^{\cH}(z)$.
 
-\noindent\textbf{The one link that is given only as a sketch.}  Claim~3.3(a) of
-\cite{CG}, and through it its Proposition~3.1(ii) and the existence of the
-half-planes $V_i$, uses its Theorem~2.8, the $\Z_p$ and convex form of Szabados'
-theorem that a minimal decomposition of order two does not have low convex
-complexity.  We checked where that version is to be found: it is \emph{not} in
-\cite{Colle23b}; the published version of \cite{Colle23a} states, as its
-Theorem~1.7, only the $\Z$-coefficient convex form, citing Szabados \cite{Sz},
-whose own statement is over $\Z$ and for rectangles; the arXiv version of
-\cite{Colle23a} carries a remark that the same proof works over a finite field;
-and \cite{CG} gives a sketch of the rewriting (a pigeonhole argument producing
-agreement with a translate on a strip, its Proposition~2.7 of \cite{Colle23b}
-giving $\mathrm{ONED}$ in both directions for two edge directions, and the
-propagation of balanced sets from Cyr--Kra \cite{CyrKra15} and
-\cite[Lemma~4]{Sz}).  Every step of the sketch concerns only pattern counting
-for finite-alphabet configurations and the geometry of generating sets, and none
-of it involves the arithmetic of the coefficient ring, so that the $\Z_p$ form
-is plausible; but nowhere is it written out.  Theorem~A does not depend on
-Theorem~2.8; \S\ref{sec:reduction} depends on it indirectly, through
-Assumption~\ref{assu:CG}.
-\textbf{Appendix~\ref{app:szabados} gives a complete proof of
-\cite[Theorem~2.8]{CG}} (Theorem~\ref{thm:szabados} and
-Corollary~\ref{cor:szabados}, using nothing beyond the one-dimensional
-Morse--Hedlund theorem), so that this link is no longer a sketch and Claim~3.3(a)
-of \cite{CG} may quote Theorem~\ref{thm:szabados} directly.
+\begin{prop}[Two-component limits]\label{prop:twolimits}
+Let $b,c\in I$ with $b\ne c$, let $d\in N\Z^2$ fix $c$, let $\pi_b(d)<0$, and
+let $d$ be safe for every $j\in I\setminus\{b,c\}$.  Let
+$n_1<n_2<\cdots$ be such that $T^{n_kd}G_b$ converges pointwise — such a
+sequence exists by compactness of $\Fp^{\Z^2}$ — and write $G_b^\infty$ for the
+limit.  Then $G_b^\infty$ is doubly periodic.
+\end{prop}
+
+\begin{proof}
+By the preceding paragraph $T^{n_kd}\vartheta\to\Xi:=G_c+B+G_b^\infty$
+pointwise, where $B:=\sum_{j\ne b,c}\widetilde G_j^{\cH_j}$ is doubly periodic.
+Since $X_\xi$ is closed, $\Xi\in X_\xi$, so $P_\Xi(S)\le P_\vartheta(S)\le|S|$.
+Choose $h_c'\in(\Per(B)\cap\Z h_c)\setminus\{0\}$; then
+$\theta_1:=G_c+B$ has period $h_c'$ and $\theta_2:=G_b^\infty$ has period $h_b$
+(a pointwise limit of translates keeps the period), and $h_c'\nparallel h_b$.
+Theorem~\ref{thm:szabados} supplies a non-zero period $d_0$ of
+$\Xi=\theta_1+\theta_2$.  There are three cases.
+
+\emph{(i) $d_0$ is parallel to neither $h_b$ nor $h_c$.}  Then
+$g:=(T^{d_0}-1)\theta_1=-(T^{d_0}-1)\theta_2$ has both $h_c'$ and $h_b$ as
+periods, hence is doubly periodic; Lemma~\ref{lem:biper}, applied to $\theta_1$
+with $d_0\nparallel h_c'$, makes $\theta_1$ doubly periodic, so
+$G_c=\theta_1-B$ is doubly periodic, contradicting
+Corollary~\ref{cor:firsthalf}.
+
+\emph{(ii) $d_0\parallel h_b$.}  Pick $d_1\in(\Z d_0\cap\Z h_b)\setminus\{0\}$.
+From $T^{d_1}\Xi=\Xi$ and $T^{d_1}\theta_2=\theta_2$ we get
+$T^{d_1}\theta_1=\theta_1$; as $d_1\nparallel h_c'$, $\theta_1$ is doubly
+periodic and we conclude as in (i).
+
+\emph{(iii) $d_0\parallel h_c$.}  Pick
+$d_1\in(\Z d_0\cap\Z h_c')\setminus\{0\}$.  From $T^{d_1}\theta_1=\theta_1$ and
+$T^{d_1}\Xi=\Xi$ we get $T^{d_1}\theta_2=\theta_2$; as $d_1\nparallel h_b$, the
+field $\theta_2=G_b^\infty$ is doubly periodic.
+\end{proof}
+
+\begin{lem}[Available directions]\label{lem:available}
+Let $O\subseteq I$ be the set of components for which no $V_j$ has yet been
+produced, $O\ne\varnothing$, and let $N$ be chosen as above.  Then there are
+$b\in O$, $c\in I\setminus\{b\}$ and $d\in N\Z^2$ satisfying all the hypotheses
+of Proposition~\ref{prop:twolimits}.
+\end{lem}
+
+\begin{proof}
+If $O=\{b\}$, take any $c\ne b$ and $d:=\tau Nh_c$ with $\tau\in\{+,-\}$ chosen
+so that $\pi_b(\tau h_c)<0$; this is possible because $h_c\nparallel h_b$, so
+$\pi_b(h_c)\ne0$.  For $j\ne b,c$ we have $j\notin O$, so
+$\cK_j=\{U_j,V_j\}$ contains a half-plane on each side of $\pi_j$, and
+$\pi_j(d)\ne0$; hence $d$ is safe for $j$.
+
+If $|O|\ge2$, put $K_O:=\bigcap_{j\in O}\{\pi_j\ge0\}$.  By
+Corollary~\ref{cor:firsthalf} the inclusion $U_j\supseteq R+w_j$ gives
+$K_R\subseteq\{\pi_j\ge0\}$, so $K_O\supseteq K_R$ and $\dim K_O=2$.  Being the
+intersection of $|O|\ge2$ closed half-planes through the origin with pairwise
+distinct boundary lines $\R v_j$, the cone $K_O$ is a closed sector of opening
+$<\pi$; its two boundary rays lie on two of the lines $\R v_a$, $\R v_b$ with
+$a,b\in O$, $a\ne b$, and $\operatorname{int}K_O\subseteq\{\pi_j>0\}$ for
+$j\in O$ contains no $\pm v_j$ with $j\in O$.  Write $r\subset\R v_a$ and
+$r'\subset\R v_b$ for the two boundary rays, oriented so that turning
+anticlockwise from $r$ to $r'$ sweeps exactly $K_O$.  Among the $2m$ rays
+$\{\pm v_j:j\in I\}$, let $r_c=\varepsilon_cv_c$ ($c\in I$,
+$\varepsilon_c\in\{+,-\}$) be the first one met when turning anticlockwise from
+$r'$.  It exists, and $c\ne b$ with $\angle(r',r_c)<\pi$: the angle from $r'$
+anticlockwise to $-r$ equals $\pi-\angle(r,r')<\pi=\angle(r',-r')$, so $-r$
+occurs before $-r'$.  (The index $c$ may lie in $O$, and may equal $a$.)  Put
+$d:=\varepsilon_cNh_c$.
+
+We verify the hypotheses.  \textup{(1)} $d$ fixes $c$.  \textup{(2)} The
+interior of the sector $Q:=\operatorname{cone}(r',r_c)$ contains none of the
+rays $\pm v_j$, since $r_c$ is the first after $r'$, and its boundary rays are
+$r'\subset\R v_b$ and $r_c\subset\R v_c$.  For $j\in O\setminus\{b,c\}$ the line
+$\R v_j$ misses $Q\setminus\{0\}$, so $\pi_j$ has constant sign on
+$Q\setminus\{0\}$; as $r'\subset K_O\subseteq\{\pi_j\ge0\}$ and
+$r'\not\subset\R v_j$, that sign is positive, and in particular $\pi_j(d)>0$, so
+$d$ is safe for $j$ (using $U_j\in\cK_j$).  \textup{(3)} $Q$ is adjacent to
+$K_O$ along $r'$ and crosses the line $\R v_b$, because
+$\angle(r',r_c)<\pi$; hence $Q\subseteq\{\pi_b\le0\}$, and since
+$r_c\not\subset\R v_b$ we get $\pi_b(d)<0$.  \textup{(4)} For $j\notin O$ with
+$j\ne c$ we have $\cK_j=\{U_j,V_j\}$ and $\pi_j(d)\ne0$, so $d$ is safe for $j$.
+\end{proof}
+
+\begin{lem}[Propagation]\label{lem:propagate2}
+Let $G\colon\Z^2\to\Fp$ have period $kv$ with $v$ primitive and $k\ge1$, let
+$(v,u)$ be a basis of $\Z^2$ with $\det(v,u)=1$ and put $\pi:=\det(v,\cdot)$.
+Let $d\in\Z^2$ satisfy $\delta:=-\pi(d)>0$.  If every subsequential limit of the
+sequence $(T^{nd}G)_{n\ge1}$ is doubly periodic, then there are $\beta\in\Z$ and
+a doubly periodic field $\theta_*$ with $G=\theta_*$ on $\{\pi\le\beta\}$.
+\end{lem}
+
+\begin{proof}
+Let $\Omega$ be the set of limit points of the sequence: $y\in\Omega$ if and only
+if $T^{n_kd}G\to y$ pointwise for some $n_1<n_2<\cdots$.  By compactness of
+$\Fp^{\Z^2}$, $\Omega\ne\varnothing$; it is closed; and
+$T^{d}\Omega=T^{-d}\Omega=\Omega$, since replacing the indices $n_k$ by
+$n_k\pm1$ does not affect the existence of a subsequential limit.  Every element
+of $\Omega$ has period $kv$, each $T^{nd}G$ having it and pointwise limits
+keeping it, and is doubly periodic by hypothesis.  Call $\{\pi=t\}$ the
+\emph{$t$-th row} and put $B_W:=\{sv+tu:|s|,|t|\le W\}$.  Two fields of period
+$kv$ that agree at $k$ consecutive lattice points of a row agree on the whole
+row; so agreement on $B_W$ with $W\ge k$ implies agreement on the rows $-W$ to
+$W$.  For a doubly periodic $y$ of period $kv$ set
+\[\Tr(y):=\min\{\pi(\lambda):\lambda\in\Per(y),\ \pi(\lambda)>0\},\]
+which is defined because $\Per(y)$ has finite index.
+
+\emph{Step 1: $\Omega$ is finite.}  First, $\{y\in\Omega:\Tr(y)\le P\}$ is finite
+for every $P$.  Indeed take $\lambda\in\Per(y)$ with $\pi(\lambda)=\Tr(y)$;
+subtracting a multiple of $kv$ we may assume $\lambda=s'v+\Tr(y)\,u$ with
+$0\le s'<k$.  For any $z$ write $\pi(z)=m\Tr(y)+r$ with $0\le r<\Tr(y)$; then
+$y(z)=y(z-m\lambda)$ and $\pi(z-m\lambda)=r$.  So $y$ is determined by $\lambda$
+together with the values of $y$ on
+$\{sv+tu:0\le s<k,\ 0\le t<\Tr(y)\}$, and there are only finitely many such
+data.
+
+Suppose $\Omega$ were infinite.  Then there are $y_n\in\Omega$ with
+$\Tr(y_n)\to\infty$; passing to a subsequence, $y_n\to\theta\in\Omega$.  Now
+$\theta$ is doubly periodic; put $P:=\Tr(\theta)$ and choose
+$\varpi\in\Per(\theta)$ with $\pi(\varpi)=P$.  From $y_n\to\theta$ we may choose
+$W_n\to\infty$ with $y_n=\theta$ on $B_{W_n}$, hence, once $W_n\ge k$, on the
+rows $-W_n$ to $W_n$.
+
+Call the $t$-th row \emph{$\varpi$-good for $y_n$} if $y_n(z+\varpi)=y_n(z)$ for
+every $z$ with $\pi(z)=t$.  The rows $-W_n$ to $W_n-P$ are $\varpi$-good: both
+$z$ and $z+\varpi$ lie in rows where $y_n$ and $\theta$ agree, and
+$\theta(z+\varpi)=\theta(z)$.  Let $J_n$ be the largest integer interval
+containing $[-W_n,W_n-P]$ and consisting of $\varpi$-good rows.  If
+$J_n=\Z$ then $\varpi\in\Per(y_n)$ and $\Tr(y_n)\le P$, contradicting
+$\Tr(y_n)\to\infty$ for large $n$.  So $J_n=[a_n,b_n]$ has at least one finite
+endpoint; passing to a subsequence we may assume $a_n$ finite for every $n$, the
+case of finite $b_n$ being symmetric (replace $T^{q_nd}$ below by $T^{-q_nd}$
+and $\{\pi\ge\delta\}$ by $\{\pi\le-\delta\}$).  Then $a_n\le-W_n$ and the row
+$a_n-1$ is not $\varpi$-good: there is $z_n$ with $\pi(z_n)=a_n-1$ and
+$y_n(z_n+\varpi)\ne y_n(z_n)$.
+
+Put $q_n:=\lceil-a_n/\delta\rceil\ge1$, so that $r_n:=a_n+q_n\delta\in[0,\delta)$,
+and put $y_n':=T^{q_nd}y_n\in\Omega$.  Since $\pi(z+q_nd)=\pi(z)-q_n\delta$, the
+$t$-th row is $\varpi$-good for $y_n'$ exactly when the row $t-q_n\delta$ is
+$\varpi$-good for $y_n$.  Hence the rows $r_n$ to $b_n+q_n\delta$ are
+$\varpi$-good for $y_n'$, where
+$b_n+q_n\delta\ge(W_n-P)+(-a_n)\ge2W_n-P\to\infty$, while the row $r_n-1$ is
+not: the point $z_n':=z_n-q_nd$ satisfies $\pi(z_n')=r_n-1$ and
+$y_n'(z_n'+\varpi)\ne y_n'(z_n')$.  Using the $kv$-periodicity, translate $z_n'$
+along $v$ into $\{sv+tu:0\le s<k\}$; this yields a point $z_n''$ of the finite
+set $F:=\{sv+tu:0\le s<k,\ -1\le t\le\delta-2\}$ with
+$y_n'(z_n''+\varpi)\ne y_n'(z_n'')$.  Passing to a further subsequence we may
+assume $z_n''=z_*$ and $r_n=r_*$ constant and $y_n'\to y\in\Omega$, $\Omega$
+being closed.
+
+Then: \textup{(i)} $y(z+\varpi)=y(z)$ whenever $\pi(z)\ge\delta$ — for large $n$
+one has $r_n\le\delta-1<\pi(z)\le b_n+q_n\delta$, so the row $\pi(z)$ is
+$\varpi$-good for $y_n'$, and one lets $n\to\infty$; and \textup{(ii)}
+$y(z_*+\varpi)\ne y(z_*)$, the two values lying in the finite set $\Fp$ and
+converging, so that the inequality survives in the limit.  But $y\in\Omega$ is
+doubly periodic: taking $\lambda\in\Per(y)$ with $\pi(\lambda)>0$ and $M$ with
+$\pi(z_*+M\lambda)\ge\delta$, part~(i) gives
+\[y(z_*+\varpi)=y(z_*+\varpi+M\lambda)=y(z_*+M\lambda)=y(z_*),\]
+contradicting (ii).  So $\Omega$ is finite.
+
+\emph{Step 2: eventual agreement.}  Put $\Lambda:=\bigcap_{y\in\Omega}\Per(y)$,
+of finite index, and choose $N'\ge1$ with $N'\Z^2\subseteq\Lambda$; every
+element of $\Omega$ then has period $N'u$.  Put $W:=\max(k,N'+\delta)$.
+
+\textup{(a)} For all large $n$ the field $T^{nd}G$ agrees on $B_W$ with some
+element of $\Omega$.  Otherwise there are $n_1<n_2<\cdots$ with
+$T^{n_kd}G|_{B_W}$ outside the finite set $\{y|_{B_W}:y\in\Omega\}$; passing to
+a convergent subsequence with limit $y\in\Omega$ gives
+$T^{n_kd}G|_{B_W}=y|_{B_W}$ for large $k$, a contradiction.  For such $n$ choose
+$y^{(n)}\in\Omega$ with $T^{nd}G=y^{(n)}$ on $B_W$, hence, $W\ge k$, on the rows
+$-W$ to $W$.
+
+\textup{(b)} Let $n\ge n_0$ be such $n$.  For $\pi(z)\in[-W+\delta,W]$ one has
+$\pi(z+d)\in[-W,W]$, so
+\[y^{(n+1)}(z)=(T^{(n+1)d}G)(z)=(T^{nd}G)(z+d)=y^{(n)}(z+d)=(T^{d}y^{(n)})(z).\]
+Thus $T^dy^{(n)}$ and $y^{(n+1)}$ agree on $2W-\delta+1\ge N'$ consecutive
+entire rows.  Both lie in $\Omega$, since $T^d\Omega=\Omega$, and both have
+period $N'u$; any row can be translated by a multiple of $N'u$ into those $N'$
+consecutive rows, so the two fields agree everywhere: $T^dy^{(n)}=y^{(n+1)}$.
+
+\textup{(c)} Hence $y^{(n)}=T^{(n-n_0)d}y^{(n_0)}$ for $n\ge n_0$.  For
+$\pi(w)\in[-n\delta-W,\,-n\delta+W]$ one has $\pi(w-nd)\in[-W,W]$, so
+\[G(w)=(T^{nd}G)(w-nd)=y^{(n)}(w-nd)
+  =y^{(n_0)}\bigl(w-nd+(n-n_0)d\bigr)=\bigl(T^{-n_0d}y^{(n_0)}\bigr)(w).\]
+As $n$ runs over the integers $\ge n_0$, the row intervals
+$[-n\delta-W,-n\delta+W]$ cover $(-\infty,-n_0\delta+W]$, consecutive intervals
+overlapping because $2W\ge\delta$.  Take $\theta_*:=T^{-n_0d}y^{(n_0)}$, which is
+doubly periodic, and $\beta:=-n_0\delta+W$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\textup{\ref{thm:secondhalf}}]
+Induct, starting from $O:=I$, the set of components for which no $V_j$ has yet
+been produced.  While $O\ne\varnothing$, choose $N$ as in the paragraph on safe
+directions — it depends on the current $\cK_j$ — and take $b\in O$, $c$ and $d$
+as in Lemma~\ref{lem:available}.  By Proposition~\ref{prop:twolimits} every
+subsequential limit of $(T^{nd}G_b)_{n\ge1}$ is doubly periodic, so
+Lemma~\ref{lem:propagate2}, applied to $G:=G_b$, $v:=v_b$, $u:=u_b$ and this $d$
+(for which $\pi_b(d)<0$), yields $\beta$ and a doubly periodic $\theta_*$ with
+$G_b=\theta_*$ on $\{\pi_b\le\beta\}$.  Put
+$V_b:=\{\pi_b\le\min(\beta,t_b-1)\}$.  Then $V_b\cap U_b=\varnothing$ and
+$G_b|_{V_b}$ is fully periodic, with the periods $k_bv_b$ and any
+$\lambda\in\Per(\theta_*)$ with $\pi_b(\lambda)<0$, neither of which leaves
+$V_b$.  Add $V_b$ to $\cK_b$ and remove $b$ from $O$.  Each step decreases
+$|O|$ by one, so after $|I|$ steps $O=\varnothing$ and every component has the
+required $V_i$.
+\end{proof}
 
 \subsection{Normalisation}\label{ssec:normalisation}
 
@@ -2178,12 +2233,9 @@ configuration.
 
 \subsection{The convex Nivat conjecture}\label{ssec:nivat}
 
-\begin{thm}[Convex Nivat conjecture, conditional on
-Assumption~\ref{assu:CG}]\label{thm:convex-nivat}
-Assume Assumption~\ref{assu:CG}, that is the weak form of
-\cite[Proposition~3.1(ii)]{CG}, which is Theorem~\ref{thm:structure}(ii).  Let
-$\xi\colon\Z^2\to\cA$ with $\cA$ finite, and suppose there is a non-empty finite
-lattice-convex $S$ with $P_\xi(S)\le|S|$.  Then $\xi$ is periodic.
+\begin{thm}[Convex Nivat conjecture]\label{thm:convex-nivat}
+Let $\xi\colon\Z^2\to\cA$ with $\cA$ finite, and suppose there is a non-empty
+finite lattice-convex $S$ with $P_\xi(S)\le|S|$.  Then $\xi$ is periodic.
 \end{thm}
 
 \begin{proof}
@@ -2201,20 +2253,17 @@ $\xi$; we may take $m=\ord(\xi)$.
 Theorem~\ref{thm:colregion} a non-periodic $\vartheta\in X_\xi$ together with a
 lattice-convex region $R$ on which $\vartheta$ is fully periodic.
 
-\emph{(2) The decomposition.}  Take a $\Z$-minimal periodic decomposition
-$\vartheta=\sum_i\vartheta_i$, of order $m=\ord(\xi)$ by
-Remark~\ref{rem:minimal} and with pairwise non-parallel periods, and take $p$ as
-Assumption~\ref{assu:CG} requires, by \cite[Theorem~1.6]{Colle23b}.  Then
-Lemma~\ref{lem:modp}(b) gives $\vartheta=\sum_i\bar\vartheta_i$ over $\Fp$ with
-each $\bar\vartheta_i$ of period $h_i$.
+\emph{(2) The decomposition.}  Take any prime $p>\max\cA$; then
+Lemma~\ref{lem:modp} gives $\vartheta=\sum_i\bar\vartheta_i$ over $\Fp$ with
+each $\bar\vartheta_i$ of period $h_i$, the directions being pairwise distinct.
 
 \emph{(3) The first half-plane.}  Corollary~\ref{cor:firsthalf} gives
 $\vartheta=\sum_{i\in I}G_i$ with $|I|\ge2$, no component doubly periodic,
 pairwise non-parallel periods, and each $G_i$ fully periodic on $U_i$.
 
-\emph{(4) The second half-plane.}  Assumption~\ref{assu:CG} gives half-planes
-$V_i$ disjoint from $U_i$ with $G_i|_{V_i}$ fully periodic.  At this point the
-whole of Theorem~\ref{thm:structure} holds.
+\emph{(4) The second half-plane.}  Theorem~\ref{thm:secondhalf} gives
+half-planes $V_i$ disjoint from $U_i$ with $G_i|_{V_i}$ fully periodic.  At this
+point the whole of Theorem~\ref{thm:structure} holds.
 
 \emph{(5) The complexity does not increase.}  Since $\cA\subset\dbr{p}$, reading
 the values of $\vartheta$ in $\Fp$ merges no colours: as an $\Fp$-valued
@@ -2236,34 +2285,10 @@ Lemma~\ref{lem:normalise}, $\vartheta$ is a star configuration.
 $P_\vartheta(S)\ge|S|+1$, contradicting \eqref{eq:complexity}.
 \end{proof}
 
-\begin{cor}[Nivat's conjecture, under the hypothesis of
-Theorem~\ref{thm:convex-nivat}]\label{cor:nivat}
-Under the same hypothesis: if $P_\xi\bigl([1,n]\times[1,k]\bigr)\le nk$ for some
-$n,k\ge1$, then $\xi$ is periodic.  (A rectangle is lattice-convex.)
+\begin{cor}[Nivat's conjecture]\label{cor:nivat}
+If $P_\xi\bigl([1,n]\times[1,k]\bigr)\le nk$ for some $n,k\ge1$, then $\xi$ is
+periodic.  (A rectangle is lattice-convex.)
 \end{cor}
-
-\begin{rem}[The link that is not yet removed]\label{rem:open}
-Assumption~\ref{assu:CG} is the only dependence left between this paper and
-\cite{CG}.  A route that avoids \cite{CG} reaches, at present, the following
-point.  Let $c\in I$ and $\sigma\in\{+,-\}$, and put
-\[J(c,\sigma):=\{j\ne c:\ \sigma_j\pi_j(\sigma h_c)<0\}.\]
-Translating along $\sigma Nh_c$, where $N\Z^2\subseteq\bigcap_j
-\Per(\widetilde G_j)$, and passing to a subsequential limit
-$\Xi=\lim T^{n_k\sigma Nh_c}\vartheta\in X_\xi$, one gets
-\[\Xi=G_c+\sum_{j\notin J}\widetilde G_j+\sum_{j\in J}G_j^\infty,\]
-where $\widetilde G_j$ is the global extension of $G_j|_{U_j}$.  When
-$|J(c,\sigma)|=1$, the configuration $\Xi$ is a sum of two periodic
-configurations with different directions, so Theorem~\ref{thm:szabados} makes
-$\Xi$ periodic, and over $\Fp$ one deduces further that $G_j^\infty$ is doubly
-periodic, $j$ being the unique element of $J$: along such directions, every
-subsequential limit of $G_j$ on the side where it is not yet known is doubly
-periodic.  What is still missing is a propagation lemma from ``every limit at
-infinity is doubly periodic'' to ``the far field is itself eventually doubly
-periodic''; the one-dimensional example
-$\cdots(0^31)^{N_3}(0^21)^{N_2}(01)^{N_1}$ shows that the information carried by
-the limits alone does not suffice.  Claim~3.3 of \cite{CG} fills that step with
-the propagation of balanced sets of Cyr and Kra.  We leave it to future work.
-\end{rem}
 
 \appendix
 
@@ -2298,7 +2323,7 @@ the propagation of balanced sets of Cyr and Kra.  We leave it to future work.
 \text{\S\ref{sec:reduction}} &
   \text{\cite{KS},\cite{Colle23a}}
   \xrightarrow{\text{Prop.\ \ref{prop:firsthalf}}}U_i
-  \xrightarrow{\text{Asm.\ \ref{assu:CG}, \cite{CG}}}V_i
+  \xrightarrow{\text{Thm.\ \ref{thm:secondhalf}}}V_i
   \xrightarrow{\text{Lem.\ \ref{lem:normalise}}}\text{star configuration}\\
   &\xrightarrow{\text{Thm.\ \ref{thm:main}}}\text{convex Nivat}
   \Longrightarrow\text{Nivat}.
@@ -2310,14 +2335,13 @@ using only the standard facts that $\C[T^\pm]$ is a unique factorisation domain,
 Newton-polygon additivity (Ostrowski), the Chinese remainder theorem, the
 Nullstellensatz, and the existence of unimodular triangulations of lattice
 polygons.  The external inputs to \S\ref{sec:reduction} are Kari and Szabados
-\cite{KS} and Colle \cite{Colle23a}, both published, together with the one link
-that has not been refereed: Assumption~\ref{assu:CG}, that is
-\cite[Proposition~3.1(ii)]{CG}, the second half-plane.  The first half-plane is
-proved unconditionally here, in Proposition~\ref{prop:firsthalf}; the result
-\cite[Theorem~2.8]{CG} on which \cite{CG} rests in proving that proposition is
-proved in full in Appendix~\ref{app:szabados}; and \cite[Theorem~1.6]{Colle23b}
-is used only to align the decomposition of this paper with the
-$\Z_p$-minimal decomposition of \cite{CG}.
+\cite{KS} and Colle \cite{Colle23a} only: the first supplies the annihilator and
+the periodic decomposition, the second a line both of whose directions are
+one-sided nonexpansive (\cite[Theorem~1.9]{Colle23a}) and a non-periodic
+configuration in the orbit closure that is fully periodic on a region
+(\cite[Lemma~4.6]{Colle23a}).  The $\Fp$ and convex form of Szabados' theorem,
+used by Proposition~\ref{prop:twolimits}, is proved in
+Appendix~\ref{app:szabados}.
 
 \section{Independent edge-increment results, not part of the proof
 chain}\label{app:edge}
@@ -2538,9 +2562,13 @@ exactly, and only, what Lemma~\ref{lem:Ae-finite} needs.
 \section{The \texorpdfstring{$\Fp$}{Fp} and convex form of Szabados'
 theorem}\label{app:szabados}
 
-This appendix proves \cite[Theorem~2.8]{CG} in full, and so removes the one step
-which Remark~\ref{rem:audit} reports as being, in the whole chain, the only one
-given as a sketch in the source.  The proof follows Szabados \cite{Sz} —
+This appendix proves in full the $\Fp$ and convex version of a theorem of
+Szabados.  Szabados \cite[Theorem~1]{Sz} proved that a sum of two $\Z$-valued
+periodic configurations with different period directions does not have low
+rectangular complexity; the convex generalisation is
+\cite[Theorem~1.7]{Colle23a}, and the $\Fp$ and convex version is stated, with a
+sketch, as \cite[Theorem~2.8]{CG}.  Theorem~\ref{thm:szabados} below is the
+latter, proved here in full.  The proof follows Szabados \cite{Sz} —
 pigeonhole, balanced sets, and the one-dimensional Morse--Hedlund theorem — with
 two changes.  The coefficient ring is $\Fp$: every argument below uses only
 equality of values and the fact that a certain difference is periodic in a given
@@ -2564,7 +2592,7 @@ independent over $\R$, and put $\theta=\theta_1+\theta_2$.  If $P_\theta(S)\le|S
 for some non-empty finite lattice-convex $S$, then $\theta$ is periodic.
 \end{thm}
 
-\begin{cor}[{\cite[Theorem~2.8]{CG}}]\label{cor:szabados}
+\begin{cor}\label{cor:szabados}
 Let $\eta\colon\Z^2\to\Fp$ and let $\eta=\eta_1+\eta_2$ be an $\Fp$-minimal
 periodic decomposition, of order $2$ — that is, a decomposition into periodic
 $\Fp$-configurations with as few summands as possible, here two.  Then $\eta$
@@ -2578,11 +2606,6 @@ different directions, components with parallel periods being mergeable into one,
 against minimality.  If $\eta$ had low convex complexity,
 Theorem~\ref{thm:szabados} would make it periodic, a contradiction.
 \end{proof}
-
-Claim~3.3(a) of \cite{CG} applies its Theorem~2.8 to
-$\theta=\bigl(\sum_{i\ne k}\theta_i\bigr)+\theta_k$, the two summands having
-periods $\tilde h_j\in\ell_j$ and $h_k$ in different directions;
-Theorem~\ref{thm:szabados} applies to that verbatim.
 
 \subsection{Notation}\label{app:szab-notation}
 
@@ -2878,41 +2901,40 @@ carried out with the scripts named there.
 % Ground rule: an entry's data is either checked against the source, or the
 % entry says where the data came from.
 %   [CG]  -- title, authors, date and abstract checked against the arXiv
-%            abstract page; the statement and the number of Proposition 3.1,
-%            which carries the whole of the conditional part of this paper,
-%            checked against the arXiv HTML full text.  The further numbers
-%            quoted in Section 8 (Definition 2.1, Theorem 2.8, Lemmas 2.10 and
-%            2.11, Definition 3.4, Theorem 3.5, Claims 3.2 and 3.3) come from
-%            the reading reported in Remark 8.13.
+%            abstract page.  It is cited here as related work only; no result
+%            of it is used as a hypothesis.
 %   [Khe] -- title, author, date and abstract checked against the arXiv
 %            abstract page.
 %   all others -- bibliographic data as printed in the reference list of [CG].
-% Internal numbers of [CG], [Colle23a], [Colle23b], [Sz] and [CyrKra15] are
-% quoted in Section 8 and in Appendix D.  Those numbers, and the readings of
-% the results they name, are the manuscript's own audit record: they were
-% recorded by the authors while reading the sources, and are reproduced here
-% as written.
+% Internal numbers of [Colle23a], [Sz] and [CyrKra15] are quoted in Section 8
+% and in Appendix D; they were recorded by the authors while reading the
+% sources, and are reproduced here as written.
+% The order of the bibitems is alphabetical by author, so that the printed
+% numbers [1]--[17] are the ones used in the text.
 % \bibliographystyle is omitted deliberately: the bibliography is an inline
 % thebibliography environment, so there is no BibTeX run and no .bbl, and
 % nothing in the source should suggest otherwise to arXiv's build.
+
+\smallskip\noindent\emph{Theorem and lemma numbers of the cited works are those
+of the originals.}
+
 \begin{thebibliography}{99}
+
+\bibitem{BoyleLind}
+M.~Boyle and D.~Lind,
+\emph{Expansive subdynamics},
+Trans. Amer. Math. Soc. \textbf{349} (1997), no.~1, 55--102.
 
 \bibitem{Colle23a}
 C.~F. Colle,
 \emph{On periodic decompositions, one-sided nonexpansive directions and Nivat's
 conjecture},
 Discrete Contin. Dyn. Syst. \textbf{43} (2023), no.~12, 4299--4327.
-Published.  \S\ref{ssec:external} uses its Theorem~1.9 and Lemma~4.6;
-Theorem~1.1 is the one-dimensional Morse--Hedlund theorem in the form used in
-Appendix~\ref{app:szabados}, and Theorem~1.7 the integer case of
-Remark~\ref{rem:szab-general}.
 
 \bibitem{Colle23b}
 C.~F. Colle,
 \emph{On periodic decompositions and nonexpansive lines},
 Math. Z. \textbf{303} (2023), art.~80.
-Published.  Its Theorem~1.6, quoted as Theorem~1.5 in \cite{CG}, is used only
-for the choice of the prime $p$ in Assumption~\ref{assu:CG}.
 
 \bibitem{CGalpha}
 C.~F. Colle and E.~Garibaldi,
@@ -2923,21 +2945,12 @@ Nonlinearity \textbf{33} (2020), 3620--3652.
 C.~F. Colle and E.~Garibaldi,
 \emph{A modular structure theorem for minimal periodic decompositions and
 periodicity of configurations with $P_\eta(4,n)\le 4n$},
-preprint, \texttt{arXiv:2606.10193v1} (8 June 2026).
-Not refereed.  Quoted here are its Definition~2.1 (full periodicity), its
-Proposition~3.1(ii), whose weak form is Assumption~\ref{assu:CG} and is the
-hypothesis of Theorem~\ref{thm:convex-nivat}, and its Theorem~2.8, which is
-proved in full in Appendix~\ref{app:szabados}.  Its Theorem~3.5,
-Definition~3.4, Proposition~3.1(i), Lemmas~2.10 and 2.11 and Claim~3.2 are
-\emph{not} quoted as hypotheses; see Remarks~\ref{rem:relation}
-and~\ref{rem:audit}.
+preprint, \texttt{arXiv:2606.10193v1} [math.DS], 8 June 2026.
 
 \bibitem{CyrKra15}
 V.~Cyr and B.~Kra,
 \emph{Nonexpansive $\Z^2$-subdynamics and Nivat's conjecture},
 Trans. Amer. Math. Soc. \textbf{367} (2015), no.~9, 6487--6537.
-The source of balanced sets and of the propagation argument, used here through
-\cite[Prop.~2.13]{Colle23a} and Appendix~\ref{app:szabados}.
 
 \bibitem{CyrKra16}
 V.~Cyr and B.~Kra,
@@ -2949,26 +2962,27 @@ C.~Epifanio, M.~Koskas and F.~Mignosi,
 \emph{On a conjecture on bidimensional words},
 Theoret. Comput. Sci. \textbf{299} (2003), 123--150.
 
+\bibitem{KM20}
+J.~Kari and E.~Moutot,
+\emph{Decidability and periodicity of low complexity tilings},
+in 37th International Symposium on Theoretical Aspects of Computer Science
+(STACS 2020), LIPIcs vol.~154, Art.~No.~14, 2020.
+
+\bibitem{KM23}
+J.~Kari and E.~Moutot,
+\emph{Decidability and periodicity of low complexity tilings},
+Theory Comput. Syst. \textbf{67} (2023), 125--148.
+
 \bibitem{KS}
 J.~Kari and M.~Szabados,
 \emph{An algebraic geometric approach to Nivat's conjecture},
 Inform. and Comput. \textbf{271} (2020), 104481.
-Low complexity implies a non-trivial annihilator, hence a periodic
-decomposition; Theorem~\ref{thm:KS} of \S\ref{ssec:external}.
-
-\bibitem{KM}
-J.~Kari and E.~Moutot,
-\emph{Decidability and periodicity of low complexity tilings},
-in 37th International Symposium on Theoretical Aspects of Computer Science
-(STACS 2020), LIPIcs vol.~154, Art.~No.~14, 2020;
-Theory Comput. Syst. \textbf{67} (2023), 125--148.
 
 \bibitem{Khe}
 A.~Khetan,
 \emph{A counterexample to Nivat's conjecture for a non-convex window of full
 affine span},
-preprint, \texttt{arXiv:2607.09830v2} (10 July 2026; revised 18 July 2026).
-Cited in the introduction for the necessity of a convexity hypothesis.
+preprint, \texttt{arXiv:2607.09830v2}, July 2026.
 
 \bibitem{MH38}
 M.~Morse and G.~A. Hedlund,
@@ -2977,9 +2991,9 @@ Amer. J. Math. \textbf{60} (1938), 815--866.
 
 \bibitem{Nivat}
 M.~Nivat,
-\emph{Invited talk at ICALP},
-Bologna, 1997.
-The conjecture was stated there; there is no written version by the author.
+\emph{Invited talk},
+24th International Colloquium on Automata, Languages and Programming
+(ICALP 1997), Bologna, 1997.
 
 \bibitem{QZ}
 A.~Quas and L.~Zamboni,
@@ -2995,11 +3009,7 @@ Theoret. Comput. Sci. \textbf{270} (2002), 857--863.
 M.~Szabados,
 \emph{Nivat's conjecture holds for sums of two periodic configurations},
 in SOFSEM 2018: Theory and Practice of Computer Science,
-Lecture Notes in Comput. Sci. vol.~10706, Springer, 2018, pp.~539--551;
-\texttt{arXiv:1710.05360}.
-Appendix~\ref{app:szabados} proves the $\Fp$ and convex form of Theorem~1 of
-this paper, following its argument but replacing the appeal to
-\cite[Lemma~39]{KS} in its Lemma~3.
+Lecture Notes in Comput. Sci. vol.~10706, Springer, 2018, pp.~539--551.
 
 \end{thebibliography}
 
