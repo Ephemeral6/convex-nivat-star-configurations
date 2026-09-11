@@ -3,8 +3,8 @@
 Source, compiled PDF and verification scripts for the paper
 
 > **The convex Nivat conjecture: a complexity lower bound for star
-> configurations, and a reduction conditional on the Colle–Garibaldi structure
-> theorem**
+> configurations, and a reduction that depends on Colle–Garibaldi at one step
+> only**
 > Guancheng Pan, Chengsong You, Junwei Zhou, Yongchao Chen (11 September 2026)
 
 Nivat's conjecture asserts that a configuration `ξ : Z² → A` over a finite
@@ -32,31 +32,43 @@ a window, and as the exact capacity of a family of quadratic characters
 independent modulo those relations — and the two cancel for every `S` and
 every `Z`.
 
-**Theorem 8.4 and Corollary 8.5 are conditional, and the condition is carried in
-their statements.** They assume the modular structure theorem of Colle and
-Garibaldi, [CG, Theorem 3.5] together with its Definition 3.4, where [CG] is
+**Theorem 8.15 and Corollary 8.16 are conditional, and the condition is carried
+in their statements.** The only hypothesis they assume is a weak form of
 
-> C. F. Colle and E. Garibaldi, *A modular structure theorem for minimal periodic
-> decompositions and periodicity of configurations with `P_η(4,n) ≤ 4n`*,
-> preprint, `arXiv:2606.10193` (8 June 2026).
+> [CG, Proposition 3.1(ii)] — C. F. Colle and E. Garibaldi, *A modular structure
+> theorem for minimal periodic decompositions and periodicity of configurations
+> with `P_η(4,n) ≤ 4n`*, preprint, `arXiv:2606.10193v1` (8 June 2026),
 
-**That preprint has not been refereed.** Under that hypothesis the paper derives
-the convex Nivat conjecture, and with it Nivat's conjecture. What the reduction
-itself contributes is Lemma 8.3: any decomposition of the shape that theorem
-delivers can be normalised into a star configuration, with no appeal to
-`F_p`-minimality or to the distinctness of the directions.
+which supplies the *second* of the two half-planes on which each component of a
+minimal periodic decomposition is fully periodic. **That preprint has not been
+refereed.** The first half-plane is no longer assumed: Proposition 8.9 proves it
+here, from Kari–Szabados and from Colle's two published papers, by a one-sided
+finite-state argument. What the reduction then contributes is Lemma 8.14: any
+decomposition of that shape can be normalised into a star configuration, with no
+appeal to `F_p`-minimality or to the distinctness of the directions. Under the
+one remaining assumption the paper derives the convex Nivat conjecture, and with
+it Nivat's conjecture.
+
+The chain is
+
+```
+[KS], [Colle23a] --(Prop 8.9)--> U_i --(Asm 8.12, [CG])--> V_i
+      --(Lem 8.14)--> star configuration --(Thm T)--> convex Nivat ==> Nivat
+```
 
 Appendix D proves [CG, Theorem 2.8] — the `F_p` and convex form of Szabados'
-theorem — in full, that being the one link in the chain behind [CG, Theorem 3.5]
-for which the source gives a sketch rather than a proof. The appendix uses
-nothing beyond the one-dimensional Morse–Hedlund theorem.
+theorem — in full, that being the one link behind Proposition 3.1(ii) for which
+the source gives a sketch rather than a proof. The appendix uses nothing beyond
+the one-dimensional Morse–Hedlund theorem. Remark 8.17 records how far a route
+avoiding [CG] altogether currently gets, and exactly which propagation lemma is
+still missing.
 
 ## Contents
 
 | Path | |
 |---|---|
 | `nivat.tex` | LaTeX source (amsart, no BibTeX run: the bibliography is inline) |
-| `nivat.pdf` | compiled paper, 31 pages |
+| `nivat.pdf` | compiled paper, 36 pages |
 | `anc/star.py` | the mechanism: star configurations, spectra, annihilators, zonotopes, affine relations |
 | `anc/verify.py` | Appendix C.2, Experiment 1 (default `N = 84`, `seed = 1`) |
 | `anc/verify2.py` | Appendix C.2, Experiment 2 (default `N = 157`, `seed = 7`) |
@@ -97,7 +109,7 @@ repeated builds of an unchanged source agree byte for byte.
 ## Status
 
 The paper is a preprint, prepared for arXiv submission; it has not been
-refereed. The reading of [CG] reported in Remarks 8.1′ and 8.1″ — including the
+refereed. The reading of [CG] reported in Remarks 8.11 and 8.13 — including the
 six items (a)–(f) and the checks against Colle's two published papers — is the
 authors' own audit record, and is reproduced in the paper as such. Corrections
 and counterexamples are welcome; please open an issue.
@@ -114,8 +126,8 @@ and counterexamples are welcome; please open an issue.
 @misc{PYZC2026convexnivat,
   author = {Pan, Guancheng and You, Chengsong and Zhou, Junwei and Chen, Yongchao},
   title  = {The convex {N}ivat conjecture: a complexity lower bound for star
-            configurations, and a reduction conditional on the
-            {C}olle--{G}aribaldi structure theorem},
+            configurations, and a reduction that depends on
+            {C}olle--{G}aribaldi at one step only},
   year   = {2026},
   note   = {Preprint},
   howpublished = {\url{https://github.com/Ephemeral6/convex-nivat-star-configurations}}
