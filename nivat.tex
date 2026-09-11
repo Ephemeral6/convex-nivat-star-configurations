@@ -1,0 +1,2623 @@
+% !TEX program = pdflatex
+%
+% The convex Nivat conjecture: a complexity lower bound for star
+% configurations, and a reduction conditional on the Colle--Garibaldi
+% structure theorem
+%
+% Build rules in force for this version:
+%   * Typesetting aligned with the authors' other public preprints: amsart 11pt,
+%     Latin Modern, 1.1in margins, the same link colour, the same reproducibility
+%     settings, and the same hand-built title block.
+%   * The internal numbering of the manuscript (Lemma 2.5, Theorem 7.3, Lemma 8.3,
+%     ...) is preserved EXACTLY, including the sections whose first statement is
+%     numbered .0 (Lemma 2.0, Lemma 3.0, Definition 8.0), the four primed remarks
+%     (2.1', 3.1', 8.1', 8.4') and the double-primed Remark 8.1'', and Section 8,
+%     whose statements are not in numerical order (Lemma 8.2 precedes
+%     Definition 8.0 and Theorem 8.1, which are the external input).
+%     Counters are therefore set by hand where the order demands it.
+%   * The manuscript's revision log ("修订说明 v3.1") is NOT reproduced: it
+%     records changes against drafts the reader does not have.  Nothing in it is
+%     lost -- every correction it lists is already carried by the text it
+%     produced (Remark 2.1', Remark 3.1', the componentwise reflection argument
+%     in Lemma 6.1, the explicit unit argument in Step 3 of Lemma 5.2, and
+%     Appendix C.3).
+%   * Two notational collisions of the manuscript are repaired, and only two:
+%       - the exponent map of the difference operator, written h(C) there, is
+%         written H_C here, because Lemma 1.1 simultaneously calls its local
+%         function h;
+%       - the line R*v_i, written \ell_i in 3.1 there, is written out as R v_i
+%         here, because \ell_i is the left-tail threshold of (S3) everywhere else.
+%     All other notation is the manuscript's.
+%   * Citations: the data of [CG] and [Khe] were checked against the arXiv
+%     abstract pages, and the statement AND number of the results of [CG] that
+%     are quoted were checked against the arXiv HTML of that paper.  Section 8
+%     and Appendix D quote internal numbers of [CG], [Colle23a], [Colle23b],
+%     [Sz] and [CyrKra15]: those numbers, and the readings of the results they
+%     name, are the manuscript's own audit record and are reproduced as the
+%     authors wrote them.  The remaining entries carry the data printed in the
+%     reference list of [CG]; where that is the source, the entry says so.
+\documentclass[11pt,reqno]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,longtable}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkcol}{rgb}{0.10,0.20,0.45}
+\usepackage[colorlinks=true,linkcolor=linkcol,citecolor=linkcol,
+            urlcolor=linkcol]{hyperref}
+
+% Reproducible output, as in the other preprints: omit the creation and
+% modification dates, the pdfTeX banner and the non-deterministic trailer id.
+\pdfinfoomitdate=1
+\pdfsuppressptexinfo=-1
+\pdftrailerid{}
+
+% ---------------------------------------------------------------------------
+% Numbering.  One counter for all statements, run within sections.  Sections are
+% numbered from 0, so that the notation section is Section 0 and every statement
+% carries the number it carries in the manuscript.
+% ---------------------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{dfn}[thm]{Definition}
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{obs}[thm]{Observation}
+\theoremstyle{plain}
+\newtheorem*{thmA}{Theorem A}
+\newtheorem*{thmB}{Theorem B}
+% The manuscript states its main result in Section 0 as an unnumbered
+% "Theorem T" and restates it, numbered, as Theorem 7.3.  Keeping that
+% arrangement is what gives Remark 0.1 its number.
+\newtheorem*{thmT}{Theorem T}
+% Primed remarks.  They are companions to the results they sit beside and are
+% numbered by hand precisely so that no later cross-reference number moves.
+\theoremstyle{remark}
+\newtheorem*{remgalois}{Remark 2.1$'$}
+\newtheorem*{remnogen}{Remark 3.1$'$}
+\newtheorem*{remcheck}{Remark 8.1$'$}
+\newtheorem*{remaudit}{Remark 8.1$''$}
+\newtheorem*{remminimal}{Remark 8.4$'$}
+\theoremstyle{definition}
+\newtheorem*{dfnhalf}{Definition}
+
+% Equations are numbered within sections.  Because sections start at 0 and the
+% equation counter is reset at each \section, the automatic numbers coincide
+% with the manuscript's -- (0.1), (0.2), (1.1), (2.0), ..., (8.1) -- with one
+% adjustment: Section 2's first display is (2.0), so its counter starts at -1.
+% This is done with the counter rather than with \tag so that every equation
+% gets its own hyperref destination.
+\numberwithin{equation}{section}
+
+% ---------------------------------------------------------------------------
+% Notation
+% ---------------------------------------------------------------------------
+\DeclareMathOperator{\Per}{Per}
+\DeclareMathOperator{\Conv}{Conv}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Newt}{Newt}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\sgn}{sign}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Orb}{Orb}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\one}{\mathbb{1}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\dbr}[1]{[\![#1]\!]}
+\newcommand{\su}{\mathsf{u}}
+\newcommand{\sw}{\mathsf{w}}
+
+\allowdisplaybreaks
+\setlength{\parskip}{0.15\baselineskip}
+\raggedbottom
+\emergencystretch=2.5em
+\setlength{\tabcolsep}{4pt}
+\predisplaypenalty=10000
+\medmuskip=4mu plus 2mu minus 1mu
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\title[Star configurations and the convex Nivat conjecture]
+      {The convex Nivat conjecture:\\
+       a complexity lower bound for star configurations,\\
+       and a reduction conditional on the\\
+       Colle--Garibaldi structure theorem}
+% ---------------------------------------------------------------------------
+% Title block.  Hand-built, and deliberately the same arrangement as the
+% authors' other preprints: names in a grid with superscript affiliation keys,
+% the key list at \small, the e-mail addresses, then the corresponding-author
+% line.  \@setauthors is redefined rather than worked around, because amsart
+% applies \MakeUppercase and \footnotesize to whatever it is handed and neither
+% survives contact with a tabular.
+%
+% The \author declarations are kept even though the block below, not the class,
+% prints the names: the running head and the PDF metadata read them.  Their
+% optional argument is the running-head form and deliberately carries no dagger.
+%
+% NO equal-contribution marks.  Who contributed equally has never been stated,
+% and inventing that mark would be a claim about people.
+% ---------------------------------------------------------------------------
+\author[G. Pan]{Guancheng Pan}
+\author[C. You]{Chengsong You}
+\author[J. Zhou]{Junwei Zhou}
+\author[Y. Chen]{Yongchao Chen}
+
+\newcommand{\afn}[1]{\textsuperscript{\normalfont #1}}
+\makeatletter
+\renewcommand{\@setauthors}{%
+  \begin{center}
+    \normalsize
+    \begin{tabular}{c@{\hspace{2.2em}}c}
+      \large Guancheng Pan\afn{1,2} & \large Chengsong You\afn{1,3}
+    \end{tabular}\\[0.5ex]
+    \begin{tabular}{c@{\hspace{2.2em}}c}
+      \large Junwei Zhou\afn{4,\dag} & \large Yongchao Chen\afn{1,5,\dag}
+    \end{tabular}\\[1.4ex]
+    \small
+    \textsuperscript{1}Apex Intelligence \quad
+    \textsuperscript{2}Chu Kochen Honors College, Zhejiang University\\
+    \textsuperscript{3}East China Normal University \quad
+    \textsuperscript{4}Independent Researcher \quad
+    \textsuperscript{5}Tsinghua University\\[0.8ex]
+    \texttt{3250101086@zju.edu.cn}, \texttt{youchengsong3@gmail.com}\\
+    \texttt{zjw330501@gmail.com}, \texttt{cyc@apexin.ai}\\[0.6ex]
+    \textsuperscript{\dag}Corresponding authors
+  \end{center}}
+\makeatother
+
+\date{11 September 2026}
+% The subject classification and the key words are printed as a centred block
+% under the abstract, not in amsart's first-page footer, so that page 1 reads
+% the same way in all of the authors' preprints.
+
+\begin{document}
+
+\begin{abstract}
+Nivat's conjecture asserts that a configuration $\xi\colon\Z^2\to\cA$ over a
+finite alphabet with $P_\xi(m,n)\le mn$ for some $m,n\ge1$ is periodic.  Its
+convex form replaces the rectangle by an arbitrary non-empty finite
+lattice-convex window $S$, that is, one with $S=\Conv(S)\cap\Z^2$.  This paper
+contains two results at two different levels, and it matters which is which.
+
+The first is unconditional and self-contained, and occupies
+\S\S\ref{sec:notation}--\ref{sec:quadratic}: we call $\theta=\sum_{i=1}^mF_i\colon\Z^2\to\Fp$ a \emph{star
+configuration} when each $F_i$ has a non-zero period $k_iv_i$, is not doubly
+periodic, and agrees with doubly periodic fields on the two half-planes
+$\{\pi_i<\ell_i\}$ and $\{\pi_i>r_i\}$, the primitive directions $v_i$ being
+pairwise non-parallel; and we prove that $P_\theta(S)\ge|S|+1$ for every
+non-empty finite lattice-convex $S$.  The proof attaches to $\theta$ an
+\emph{exceptional spectrum} $\Lambda_i$ of roots of unity in each direction, a
+Laurent polynomial $A=\prod_iA_i(T^{v_i})$ that divides every annihilator of
+$\theta$ modulo constants, and the zonotope $Z=\Newt(A)=\sum_i[0,d_iv_i]$.  The
+zonotope then appears twice, with opposite signs: it is the exact cost of the
+affine relations carried by a window ($\dim U_S\ge|S|+1-|R_Z(S)|$), and it is
+the exact capacity for a family of quadratic characters that are independent
+modulo those relations.  The two cancel, for every $S$ and every $Z$.
+
+The second result is a reduction, and it is \emph{conditional}.  Assuming the
+modular structure theorem of Colle and Garibaldi \cite[Theorem~3.5]{CG}, a June
+2026 preprint that has not been refereed, the convex Nivat conjecture holds, and
+with it Nivat's conjecture.  We show (Lemma~\ref{lem:normalise}) that any
+decomposition of the shape that theorem delivers can be normalised into a star
+configuration, with no appeal to $\Fp$-minimality, to the distinctness of the
+slopes, or to the position of the half-planes.  We also record what we checked
+in the dependency chain behind \cite[Theorem~3.5]{CG}
+(Remark~8.1$''$), and Appendix~\ref{app:szabados} supplies a complete proof of
+the one link in that chain for which the source gives only a sketch: the $\Fp$
+and convex form of Szabados' theorem on sums of two periodic configurations,
+\cite[Theorem~2.8]{CG}.  A further appendix reports a numerical verification of
+the main theorem and of the intermediate assertions of
+\S\S\ref{sec:spectrum}--\ref{sec:quotient}, including a counterexample to the
+natural over-generalisation of Lemma~\ref{lem:Ae-sectors}.
+\end{abstract}
+
+\maketitle
+
+\begin{center}\small
+\emph{2020 Mathematics Subject Classification.}\ Primary 37B51;
+Secondary 37B10, 68R15, 52C05, 13F20.\\
+\emph{Key words and phrases.}\ Nivat's conjecture; low pattern complexity;
+convex window; periodic decomposition; star configuration; annihilator;
+Newton polygon; zonotope.
+\end{center}
+
+\section*{Introduction}
+
+\subsection*{The problem}
+
+Let $\cA$ be a finite alphabet and $\xi\colon\Z^2\to\cA$ a configuration.  For a
+finite $Q\subset\Z^2$ write $P_\xi(Q)$ for the number of distinct patterns
+$\xi|_{u+Q}$, $u\in\Z^2$, and $P_\xi(m,n)=P_\xi(\dbr{m}\times\dbr{n})$ for the
+rectangular complexity, $\dbr{m}=\{0,\dots,m-1\}$.  The Morse--Hedlund theorem
+\cite{MH38} says that a bi-infinite word is periodic as soon as its complexity
+function satisfies $P(n)\le n$ for a single $n$.  Nivat asked, in his 1997 ICALP
+address \cite{Nivat}, whether the two-dimensional analogue holds:
+
+\begin{quote}
+\emph{if $P_\xi(m,n)\le mn$ for some $m,n\ge1$, is $\xi$ periodic?}
+\end{quote}
+
+The question is open.  Partial results fall into two families.  On the
+combinatorial and dynamical side, Epifanio--Koskas--Mignosi \cite{EKM},
+Quas--Zamboni \cite{QZ} and Sander--Tijdeman \cite{ST} proved periodicity under
+complexity bounds of the form $P_\xi(m,n)\le mn/C$; Cyr and Kra
+\cite{CyrKra15,CyrKra16} brought the constant down to $2$ and settled the
+short-rectangle case $P_\xi(k,n)\le kn$ for $k\le3$.  On the algebraic side,
+Kari and Szabados \cite{KS} observed that low complexity forces the existence of
+a non-trivial annihilating Laurent polynomial and deduced that the configuration
+decomposes as a sum of periodic configurations over $\Z$; Szabados \cite{Sz}
+settled the case of two components.  Colle \cite{Colle23a,Colle23b} developed
+the interaction between minimal periodic decompositions and one-sided
+nonexpansive directions, and Colle and Garibaldi \cite{CG} recently reached
+$k\le4$.  Kari and Moutot \cite{KM20,KM23} proved the related decidability
+statement for low-complexity tilings.
+
+The \emph{convex} form of the conjecture replaces the rectangle by an arbitrary
+window that is convex in the only sense available on a lattice: a finite
+$S\subset\Z^2$ is \emph{lattice-convex} if $S=\Conv(S)\cap\Z^2$.  A
+configuration has \emph{low convex pattern complexity} if $P_\xi(S)\le|S|$ for
+some non-empty finite lattice-convex $S$.  The convexity hypothesis is not
+decoration.  Khetan \cite{Khe} has constructed an exact cluster
+$F\subset\Z^2$ of cardinality $8$ with full affine span and an $F$-tiling whose
+orbit closure contains no $1$-periodic $F$-tiling; since every $F$-tiling has
+low complexity with respect to the window $-F$, this is a counterexample to the
+statement for non-convex windows of full affine span.
+
+\subsection*{Results}
+
+Our results are two, and it matters which is which.  The first is
+unconditional; the second is conditional on one citation, which is carried in
+its statement.
+
+Call $\theta\colon\Z^2\to\Fp$ a \emph{star configuration} if
+$\theta=\sum_{i=1}^mF_i$ with $m\ge2$, where each $F_i$ is periodic in a
+direction $v_i$, is not doubly periodic, and coincides with doubly periodic
+fields on two complementary half-planes orthogonal to nothing in particular but
+bounded by the lines $\pi_i=\det(v_i,\cdot)=\text{const}$, the primitive
+directions $v_1,\dots,v_m$ being pairwise non-parallel.  The precise axioms
+\textup{(S1)}--\textup{(S3)} are in \S\ref{ssec:star}.  Informally: $m$
+one-dimensionally periodic fields, each of which is doubly periodic outside a
+strip, superimposed in $m$ pairwise distinct directions.
+
+\begin{thmA}[Theorem~\ref{thm:main}]
+Let $\theta$ be a star configuration and let $S\subset\Z^2$ be non-empty,
+finite and lattice-convex.  Then $P_\theta(S)\ge|S|+1$.
+\end{thmA}
+
+Theorem~A is proved in \S\S\ref{sec:notation}--\ref{sec:quadratic} using no
+input from the literature beyond the facts that $\C[T_1^{\pm},T_2^{\pm}]$ is a
+unique factorisation domain, that Newton polygons are additive under
+multiplication (Ostrowski), the Chinese remainder theorem, Hilbert's
+Nullstellensatz, and the existence of unimodular triangulations of lattice
+polygons.
+
+\begin{thmB}[Theorem~\ref{thm:convex-nivat}; conditional]
+Assume Theorem~\ref{thm:CG} below, that is, \cite[Theorem~3.5]{CG} together with
+its Definition~3.4.  Let $\cA$ be finite and $\xi\colon\Z^2\to\cA$.  If
+$P_\xi(S)\le|S|$ for some non-empty finite lattice-convex $S$, then $\xi$ is
+periodic.  Consequently, if $P_\xi(m,n)\le mn$ for some $m,n\ge1$, then $\xi$ is
+periodic.
+\end{thmB}
+
+Theorem~B is a reduction of the convex conjecture to Theorem~A, and its
+hypothesis is a citation.  \cite{CG} is a preprint of June 2026 (v1, not
+refereed); the proof of its Theorem~3.5 rests on Colle
+\cite{Colle23a,Colle23b}, both published, and on Proposition~3.1 of \cite{CG}
+itself.  We have gone through that chain, and we record what we found
+(Remark~8.1$''$ and the paragraphs following it), but we do \emph{not} treat
+\cite[Theorem~3.5]{CG} as an established fact: it is written into the statement
+of Theorem~B as an explicit hypothesis.  What the reduction uses from it is only
+this: a non-periodic configuration of low convex complexity has, in its orbit
+closure, a non-periodic configuration that is a sum of periodic components, each
+of them fully periodic on two disjoint half-planes.  Neither $\Fp$-minimality,
+nor the distinctness of the slopes, nor any statement about where the
+half-planes lie is needed; Lemma~\ref{lem:normalise} derives all of that from
+the bare conclusion.  One link in the chain behind \cite[Theorem~3.5]{CG} is
+given in the source only as a sketch, namely the $\Fp$ and convex form of
+Szabados' theorem quoted there as Theorem~2.8;
+Appendix~\ref{app:szabados} proves that link in full, so that the chain contains
+no step which is merely indicated.
+
+\subsection*{The shape of the proof of Theorem~A}
+
+Let $H_i$ be a period of $F_i$ along $v_i$ that also preserves every tail field,
+and let $D=\prod_{i=1}^m(T^{H_i}-1)$.
+
+\emph{A dichotomy} (\S\ref{sec:firstcase}).  Applying $D$ to a function that
+depends on $\theta$ through a finite window kills everything except a bounded
+region, because outside the union of the pairwise intersections of $m$ strips in
+pairwise distinct directions at most one component is still varying.  If
+$D\one[\theta=a]\ne0$ for some colour $a$, the theorem follows for
+\emph{arbitrary} finite $S$, convex or not, by a one-line integral-domain
+argument.  The rest of the paper is the remaining case $D\one[\theta=a]\equiv0$.
+
+\emph{The exceptional spectrum and its zonotope} (\S\ref{sec:spectrum}).
+Pushing $\theta$ to infinity along $\pm H_i$ isolates the $i$-th component
+against a doubly periodic background, producing configurations
+$\Xi_i^\pm=F_i+B_i^\pm$ in the orbit closure together with their own pure tails
+$G_i^{\sigma,L},G_i^{\sigma,R}$.  The differences between them are invariant
+under $H_i$, hence decompose under the $\kappa_i$-th roots of unity; the set of
+roots that actually occur is the exceptional spectrum $\Lambda_i$, non-empty
+exactly because $F_i$ is not doubly periodic.  Set
+$A=\prod_iA_i(T^{v_i})$ with $A_i(t)=\prod_{\lambda\in\Lambda_i}(t-\lambda)$,
+and $Z=\Newt(A)=\sum_i[0,d_iv_i]$, $d_i=|\Lambda_i|$.  The key divisibility is
+Lemma~\ref{lem:divisibility}: if $f(T)\eta$ is constant for a scalar encoding
+$\eta$ of $\theta$, then $A\mid f$.  Counting, this says that a window $S$
+carries at most $|R_Z(S)|$ independent affine relations, where
+$R_Z(S)=\{r:r+Z\subseteq\Conv(S)\}$: the \emph{cost} of the zonotope.
+
+\emph{The quadratic witness} (\S\S\ref{sec:background}--\ref{sec:zonotope}).
+Linear characters alone cannot close the gap, and they should not: the deficit
+$|R_Z(S)|$ is real.  We produce $|R_Z(S)|$ further characters that are
+quadratic.  For that one needs a single vector $d$ with
+$D_z[\eta(z)\eta(z+d)]\ne0$ \emph{and} $d\in(Z-Z)\cap\Z^2$.  Existence of some
+such $d$ is \S\ref{sec:twopoint}; confinement to $Z-Z$ comes from a pair of
+recursions in the two variables $(d,z)$ (\S\ref{sec:quotient}) which say that
+the Laurent transform of the witness kills the ideal $(A(Y),A(X/Y))$ in
+$K[Y^{\pm}]$, $K=\C(X_1,X_2)$, whose quotient is spanned by monomials with
+exponents in $Z-Z$; and the passage from $d\in Z-Z$ to a \emph{pair} of lattice
+points of $Z$ differing by $d$ is a unimodular triangulation argument
+(\S\ref{sec:zonotope}).
+
+\emph{The cancellation} (\S\ref{sec:quadratic}).  Each $r\in R_Z(S)$ now yields
+a quadratic character $\Phi_r$ on the pattern set, and these are independent
+modulo the linear ones.  The zonotope's capacity is exactly its cost, for every
+window and every zonotope; that is Remark~\ref{rem:balance}.
+
+\subsection*{Organisation}
+
+\S\ref{sec:notation} fixes notation, the axioms of a star configuration, and the
+main theorem.  \S\ref{sec:firstcase} proves the dichotomy.
+\S\ref{sec:spectrum} constructs $\Lambda_i$, $A$, $Z$ and the dimension budget.
+\S\ref{sec:background} shows that $A$ applied to the colour field of $\theta$ is
+a doubly periodic background.  \S\ref{sec:twopoint} produces a non-vanishing
+two-point difference, \S\ref{sec:quotient} confines it to $Z-Z$, and
+\S\ref{sec:zonotope} converts that into a pair of lattice points of $Z$.
+\S\ref{sec:quadratic} assembles Theorem~A, and \S\ref{sec:reduction} deduces
+Theorem~B.  Appendix~\ref{app:skeleton} is a one-page skeleton of the argument.
+Appendix~\ref{app:edge} briefly describes, without proof and for the record
+only, a different route that was explored and is not used here.
+Appendix~\ref{app:numerics} reports the numerical verification.
+Appendix~\ref{app:szabados} proves the $\Fp$ and convex form of Szabados'
+theorem that \cite[Theorem~2.8]{CG} uses, the only step of the chain behind
+Theorem~\ref{thm:CG} for which the source gives a sketch rather than a proof.
+
+\setcounter{section}{-1}
+\section{Notation, hypotheses and the main theorem}\label{sec:notation}
+
+\subsection{Star configurations}\label{ssec:star}
+
+Let $p$ be a prime and $m\ge2$.  Let $v_1,\dots,v_m\in\Z^2$ be \emph{primitive}
+(coprime coordinates) and \emph{pairwise non-parallel}.  Write
+\[\pi_i(z)=\det(v_i,z)\qquad(z\in\Z^2),\]
+a surjective linear form $\Z^2\to\Z$, surjective because $v_i$ is primitive.
+
+Call $G\colon\Z^2\to\Fp$ \emph{doubly periodic} if its period group
+$\Per(G)=\{u\in\Z^2:T^uG=G\}$ contains two linearly independent vectors;
+equivalently, $\Per(G)$ is a finite-index sublattice of $\Z^2$.
+
+Let $F_i\colon\Z^2\to\Fp$ satisfy
+\begin{itemize}
+\item[\textup{(S1)}] $F_i$ has period $k_iv_i$ for some integer $k_i\ge1$;
+\item[\textup{(S2)}] $F_i$ is \emph{not} doubly periodic;
+\item[\textup{(S3)}] there are doubly periodic fields $L_i,R_i$ and integers
+      $\ell_i\le r_i+1$ with
+      \[F_i=L_i\ \text{ on }\ \{\pi_i<\ell_i\},\qquad
+        F_i=R_i\ \text{ on }\ \{\pi_i>r_i\}.\]
+\end{itemize}
+(If one starts with $\ell_i>r_i+1$, shrinking $\ell_i$ to $r_i+1$ keeps
+\textup{(S3)}.)  We call $\{\pi_i<\ell_i\}$ and $\{\pi_i>r_i\}$ the \emph{left}
+and \emph{right tail regions} of component $i$, call $L_i,R_i$ its \emph{left}
+and \emph{right tails}, and call $\{\ell_i\le\pi_i\le r_i\}$ the
+\emph{transition strip} (possibly empty).  We do not require $L_i=R_i$, do not
+require either to be constant, and do not require $k_i=1$.  Put
+\[\theta=\sum_{i=1}^mF_i\colon\ \Z^2\to\Fp,\]
+and call $\theta$ a \emph{star configuration}.
+
+\subsection{Complexity and the main theorem}\label{ssec:main}
+
+For finite $Q\subset\Z^2$ let $\theta|_{u+Q}$ denote the function
+$q\mapsto\theta(u+q)$ and
+\[P_\theta(Q)=\#\{\theta|_{u+Q}:u\in\Z^2\}.\]
+Call a finite $S\subset\Z^2$ \emph{lattice-convex} if $S=\Conv(S)\cap\Z^2$.
+
+\begin{thmT}
+Let $\theta$ be a star configuration and let $S\subset\Z^2$ be non-empty,
+finite and lattice-convex.  Then
+\[P_\theta(S)\ \ge\ |S|+1 .\]
+\end{thmT}
+
+\begin{rem}[Periodic backgrounds]\label{rem:background}
+If a doubly periodic field $B$ is added to $\theta$, absorb $B$ into $F_1$ and
+replace the tangential period of $F_1$ by a multiple that also preserves $B$;
+such a multiple exists because $\Per(B)$ has finite index, so
+$\Per(B)\cap\Z k_1v_1\ne0$.  Then $F_1+B$ is still not doubly periodic
+(otherwise $F_1=(F_1+B)-B$ would be), and $L_1+B$, $R_1+B$ are still doubly
+periodic.  Hence Theorem~T covers an arbitrary doubly periodic
+background.
+\end{rem}
+
+\subsection{Translations, differences and basic conventions}\label{ssec:conv}
+
+Write $T^uf(z)=f(z+u)$.  A \emph{Laurent polynomial} is a finite sum
+$f=\sum_uc_uT^u$ with complex coefficients unless stated otherwise, with support
+$\supp(f)=\{u:c_u\ne0\}$ and Newton polygon $\Newt(f)=\Conv(\supp(f))$.  The
+ring $\C[T_1^{\pm},T_2^{\pm}]$ is an integral domain and a unique factorisation
+domain, and its units are exactly the monomials $cT^u$ with $c\in\C^\times$.
+
+\emph{Colour indicators, the encoding, the differences and all linear algebra
+take place in characteristic zero}; only the summation of the original
+components happens in $\Fp$.  In particular $\one[\theta=a]$ takes values in
+$\{0,1\}\subset\Z$.
+
+\smallskip\noindent\textbf{The common period lattice and the vectors $H_i$.}
+Put
+\[\Gamma:=\bigcap_{j=1}^m\bigl(\Per(L_j)\cap\Per(R_j)\bigr),\]
+a finite intersection of finite-index sublattices, hence of finite index; choose
+$N\in\Z_{>0}$ with $N\Z^2\subseteq\Gamma$.  For each $i$ we have
+$Nk_iv_i\in\Gamma$, so we may put
+\[H_i:=\kappa_iv_i,\qquad
+  \kappa_i:=\min\{\kappa\in k_i\Z_{>0}:\ \kappa v_i\in\Gamma\}.\]
+Thus \emph{$H_i$ preserves $F_i$ (by \textup{(S1)}) and preserves every
+$L_j,R_j$, $j=1,\dots,m$}.
+
+\smallskip\noindent\textbf{The difference operator and its formal exponents.}
+Put
+\[D=\prod_{i=1}^m\bigl(T^{H_i}-1\bigr),\qquad
+  I_a=\one[\theta=a],\qquad e_\theta=(I_a)_{a\in\Fp}.\]
+Then $D\ne0$: each factor is non-zero and $\C[T^{\pm}]$ is an integral domain.
+For $C\subseteq[m]:=\{1,\dots,m\}$ write $H_C=\sum_{i\in C}H_i$, and call
+\[\cE=\{H_C:C\subseteq[m]\},\qquad
+  \cE_i=\{H_C:C\subseteq[m]\setminus\{i\}\}\]
+the \emph{formal exponent sets}.  For an arbitrary function $g$ one has the
+formal expansion
+\begin{equation}
+(Dg)(z)=\sum_{C\subseteq[m]}(-1)^{m-|C|}\,g\bigl(z+H_C\bigr),
+\label{eq:Dexp}
+\end{equation}
+valid as an operator identity irrespective of whether the vectors $H_C$ for
+different $C$ coincide.  Thus $\supp(D)\subseteq\cE$, and for $m\ge3$ the
+inclusion may be strict, since distinct subsets may have equal sums (for
+instance if $H_3=H_1+H_2$).  \emph{Every pairing argument made on a formal
+expansion below is indexed by subsets $C$, never by the points $H_C$.}
+Likewise, for $Q_i:=\prod_{j\ne i}(T^{H_j}-1)$ one has $D=(T^{H_i}-1)Q_i$ and
+\begin{equation}
+(Q_ig)(z)=\sum_{C\subseteq[m]\setminus\{i\}}(-1)^{m-1-|C|}\,g\bigl(z+H_C\bigr).
+\label{eq:Qexp}
+\end{equation}
+
+\section{Finite differences and the first case}\label{sec:firstcase}
+
+\subsection{Differencing turns a local function into one of finite support}
+
+\begin{lem}\label{lem:finite-support}
+Let $h(z)=\varphi\bigl(\theta|_{z+W}\bigr)$ with $W\subset\Z^2$ finite.  Then
+$Dh$ has finite support.
+\end{lem}
+
+\begin{proof}
+Put $M=\cE+W$, a finite set, and $\diam_i=\max_{s\in M}|\pi_i(s)|$.  Define the
+\emph{widened strips}
+\[\Sigma_i=\bigl\{z:\ \ell_i-\diam_i\le\pi_i(z)\le r_i+\diam_i\bigr\},\]
+and call direction $i$ \emph{active at the anchor $z$} if $z\in\Sigma_i$.  If
+$i$ is not active at $z$, then for every $s\in M$ the values $\pi_i(z+s)$ and
+$\pi_i(z)$ lie both in $\{\pi_i<\ell_i\}$ or both in $\{\pi_i>r_i\}$, so on
+$z+M$ the field $F_i$ is identically one pure tail
+$\varepsilon_i\in\{L_i,R_i\}$.
+
+\smallskip\noindent\emph{Claim: if at most one direction is active at $z$, then
+$Dh(z)=0$.}  Let $J$ be the set of active directions, $|J|\le1$.  Take
+$j_0\in J$ if $J\ne\varnothing$, and $j_0=1$ otherwise.  On $z+M$,
+\[\theta=G+B,\qquad
+  G=\begin{cases}F_{j_0},&J=\{j_0\}\\ 0,&J=\varnothing\end{cases},\qquad
+  B=\sum_{j\notin J}\varepsilon_j ,\]
+where $B$ is doubly periodic and preserved by every $H_l$, and $G$ is preserved
+by $H_{j_0}$ by \textup{(S1)}.  Hence $G+B$ is preserved by $H_{j_0}$.  Expand
+$D=(T^{H_{j_0}}-1)Q_{j_0}$ using \eqref{eq:Qexp}:
+\[Dh(z)=\sum_{C\subseteq[m]\setminus\{j_0\}}(-1)^{m-1-|C|}
+  \Bigl[h\bigl(z+H_C+H_{j_0}\bigr)-h\bigl(z+H_C\bigr)\Bigr].\]
+Fix $C$.  Since $H_C$ and $H_C+H_{j_0}$ both lie in $\cE$, the two windows
+$z+H_C+W$ and $z+H_C+H_{j_0}+W$ are contained in $z+M$, where $\theta=G+B$.  So
+for $y\in W$,
+\[\theta\bigl(z+H_C+H_{j_0}+y\bigr)=(G+B)\bigl(z+H_C+y+H_{j_0}\bigr)
+ =(G+B)\bigl(z+H_C+y\bigr)=\theta\bigl(z+H_C+y\bigr),\]
+so the two $W$-patterns agree and the bracket vanishes.  This proves the claim.
+
+\smallskip\noindent\emph{Conclusion.}  Therefore
+$\supp(Dh)\subseteq\bigcup_{i\ne j}(\Sigma_i\cap\Sigma_j)$.  As
+$v_i\not\parallel v_j$, the intersection of two strips of bounded width in
+non-parallel directions is bounded, so $Dh$ has finite support.
+\end{proof}
+
+\subsection{The integral-domain argument}
+
+\begin{lem}\label{lem:domain}
+Let $J\colon\Z^2\to\C$ be non-zero with finite support and let $f$ be a non-zero
+Laurent polynomial.  Then $f(T)J\ne0$.
+\end{lem}
+
+\begin{proof}
+Write $\widehat J(X)=\sum_zJ(z)X^{-z}\in\C[X_1^{\pm},X_2^{\pm}]$, which is
+non-zero.  For $f=\sum_uc_uT^u$,
+\[\sum_z\bigl(f(T)J\bigr)(z)X^{-z}
+  =\sum_uc_u\sum_zJ(z+u)X^{-z}
+  =\sum_uc_u\sum_{z'}J(z')X^{-z'+u}
+  =\Bigl(\sum_uc_uX^{u}\Bigr)\widehat J(X).\]
+Both factors are non-zero Laurent polynomials and the ring is an integral
+domain, so the product is non-zero.
+\end{proof}
+
+\subsection{The first case}
+
+\begin{prop}\label{prop:case-A}
+If $DI_a\ne0$ for some $a\in\Fp$, then $P_\theta(S)\ge|S|+1$ for
+\emph{every} non-empty finite $S\subset\Z^2$; no convexity is needed.
+\end{prop}
+
+\begin{proof}
+Suppose $P_\theta(S)\le|S|$.  Write $\cL=\{\theta|_{u+S}:u\in\Z^2\}$, so
+$|\cL|\le|S|$.  On $\cL$ consider the $|S|+1$ functions
+\[\mathbf 1;\qquad \gamma\mapsto\one[\gamma(s)=a]\quad(s\in S).\]
+They lie in a space of dimension $\le|\cL|\le|S|$, hence are linearly
+dependent: there are rationals $c_0,(c_s)_{s\in S}$, not all zero, with
+\[\sum_{s\in S}c_s\,\one[\gamma(s)=a]=c_0\qquad\text{for all }\gamma\in\cL .\]
+Substituting $\gamma=\theta|_{u+S}$ gives $q(T)I_a=c_0$ with
+$q=\sum_sc_sT^s$.  If $q=0$ then all $c_s=0$ and hence $c_0=0$, a
+contradiction; so $q\ne0$.
+
+Apply $D$ to both sides.  The right-hand side gives $Dc_0=0$, since a constant
+is killed by $T^{H_1}-1$; the left-hand side gives $q(T)\,DI_a$.  By
+Lemma~\ref{lem:finite-support} and the hypothesis, $DI_a$ is non-zero with
+finite support, so $q(T)DI_a\ne0$ by Lemma~\ref{lem:domain}.  Contradiction.
+\end{proof}
+
+\noindent\emph{From now on we assume}
+\begin{equation}
+DI_a=0\quad\text{for every }a\in\Fp. \label{eq:caseB}
+\end{equation}
+Consequently $D\,w(\theta)=\sum_aw(a)DI_a=0$ for every function
+$w\colon\Fp\to\Z$.
+
+\begin{rem}[The dichotomy does not depend on the choice of the $H_i$]
+\label{rem:dichotomy-stable}
+Replacing $H_i$ by a positive multiple $n_iH_i$ produces
+$D'=\prod_i(T^{n_iH_i}-1)$, which is a multiple of $D$ because
+$T^{nH}-1=(T^H-1)(1+T^H+\cdots+T^{(n-1)H})$.  Hence $DI_a=0$ implies
+$D'I_a=0$; conversely, if $DI_a\ne0$ then it is non-zero of finite support by
+Lemma~\ref{lem:finite-support}, and Lemma~\ref{lem:domain} gives
+$D'I_a=(D'/D)(T)\,DI_a\ne0$.  So whether \eqref{eq:caseB} holds does not depend
+on the particular $\kappa_i$ chosen, as long as $H_i$ preserves all the tail
+fields.
+\end{rem}
+
+\section{Exceptional spectra, the encoding, and the dimension budget for
+affine relations}\label{sec:spectrum}
+
+\setcounter{thm}{-1}
+\setcounter{equation}{-1}% the first display of this section is (2.0)
+\subsection{Isolating configurations}\label{ssec:isolating}
+
+Fix $i$.  For $j\ne i$ we have
+$\pi_j(H_i)=\det(v_j,H_i)=\kappa_i\det(v_j,v_i)\ne0$, so
+$\pi_j(nH_i)\to\pm\infty$; hence on any fixed finite set $F_j$ is eventually
+identically equal, as $n\to+\infty$, to
+\[\varepsilon_j^+=\begin{cases}R_j,&\pi_j(H_i)>0,\\
+                               L_j,&\pi_j(H_i)<0,\end{cases}\]
+while $F_i$ is preserved by $H_i$.  So $T^{nH_i}\theta$ stabilises on every
+finite set, with limit
+\[\Xi_i^+=F_i+B_i^+,\qquad B_i^+=\sum_{j\ne i}\varepsilon_j^+ .\]
+Letting $n\to-\infty$ gives $\Xi_i^-=F_i+B_i^-$, with the opposite tail
+choices: $\varepsilon_j^-$ is $L_j$ when $\pi_j(H_i)>0$ and $R_j$ otherwise.
+Both belong to the orbit closure $X_\theta=\overline{\{T^u\theta:u\in\Z^2\}}$ in
+the product topology.  Since $\kappa_i>0$ we have
+$\sgn\pi_j(H_i)=\sgn\pi_j(v_i)$, so that
+\begin{equation}
+\varepsilon_j^\sigma=\begin{cases}R_j,&\sigma\pi_j(v_i)>0,\\
+                                  L_j,&\sigma\pi_j(v_i)<0.\end{cases}
+\label{eq:tailchoice}
+\end{equation}
+
+By \textup{(S3)},
+\[\Xi_i^\sigma=G_i^{\sigma,L}:=L_i+B_i^\sigma\ \text{ on }\ \{\pi_i<\ell_i\},
+  \qquad
+  \Xi_i^\sigma=G_i^{\sigma,R}:=R_i+B_i^\sigma\ \text{ on }\ \{\pi_i>r_i\},\]
+and $G_i^{\sigma,L},G_i^{\sigma,R}$ are doubly periodic and preserved by
+$\Gamma$.  They too belong to $X_\theta$: take $(v_i,u_i)$ a basis of $\Z^2$
+with $\det(v_i,u_i)=1$ and put $u=Nu_i\in\Gamma$, so that $\pi_i(u)=N>0$.  For
+fixed $z$ and $n$ large, $\pi_i(z+nu)>r_i$, whence
+\[\bigl(T^{nu}\Xi_i^\sigma\bigr)(z)=R_i(z+nu)+B_i^\sigma(z+nu)
+  =R_i(z)+B_i^\sigma(z)=G_i^{\sigma,R}(z),\]
+that is, $T^{nu}\Xi_i^\sigma\to G_i^{\sigma,R}$; using $-u$ instead gives
+$G_i^{\sigma,L}$.
+
+We record that \emph{$H_i$ preserves $\Xi_i^\sigma$, and every $H_j$ preserves
+each of $G_i^{\sigma,L},G_i^{\sigma,R}$}, the latter being sums of tails.
+
+\subsection{Spectral projections, exceptional difference fields, and
+\texorpdfstring{$\Lambda_i$}{Lambda\_i}}\label{ssec:spectra}
+
+Take an integral basis $(v_i,u_i)$ with $\det(v_i,u_i)=1$ and write
+$z=sv_i+tu_i$; then $\pi_i(z)=t$ and $s=\det(z,u_i)$.  Call
+$\{t=\text{const}\}$ a \emph{transverse row}.  Recall $H_i=\kappa_iv_i$.
+
+\begin{lem}[Spectral projection]\label{lem:spectral}
+Let $d\colon\Z^2\to\C$ satisfy $T^{H_i}d=d$.  For $\lambda^{\kappa_i}=1$ put
+\[P_\lambda:=\frac1{\kappa_i}\sum_{k=0}^{\kappa_i-1}\lambda^{-k}\,T^{kv_i},
+  \qquad
+  \widehat d_t(\lambda):=\frac1{\kappa_i}\sum_{k=0}^{\kappa_i-1}\lambda^{-k}\,
+  d(kv_i+tu_i).\]
+Then:
+\begin{enumerate}
+\item $(P_\lambda d)(sv_i+tu_i)=\lambda^s\,\widehat d_t(\lambda)$, and
+      $\sum_{\lambda}P_\lambda d=d$;
+\item $T^{v_i}P_\lambda d=\lambda\,P_\lambda d$;
+\item $P_\lambda$ is a Laurent polynomial in $T$, hence commutes with every
+      $T^u$ and with every Laurent polynomial $f(T)$;
+\item for $f(T)=\sum_{\alpha,\beta}f_{\alpha\beta}T^{\alpha v_i+\beta u_i}$,
+\[\bigl(f(T)P_\lambda d\bigr)(sv_i+tu_i)
+  =\lambda^{s}\sum_{\alpha,\beta}f_{\alpha\beta}\lambda^{\alpha}\,
+    \widehat d_{t+\beta}(\lambda)
+  =\lambda^s\bigl[f(\lambda,Y)\,\widehat d_{\bullet}(\lambda)\bigr](t),\]
+      where $f(\lambda,Y):=\sum_{\alpha,\beta}f_{\alpha\beta}\lambda^\alpha
+      Y^\beta$ acts, as a Laurent polynomial in the single variable $Y$, on
+      functions of $t$, with $Y$ the shift $t\mapsto t+1$.
+\end{enumerate}
+\end{lem}
+
+\begin{proof}
+Parts 1 and 2 are the discrete Fourier decomposition on $\Z/\kappa_i$, carried
+out row by row:
+$(P_\lambda d)(sv_i+tu_i)=\frac1{\kappa_i}\sum_k\lambda^{-k}
+ d((s+k)v_i+tu_i)=\lambda^s\cdot\frac1{\kappa_i}\sum_{k'}\lambda^{-k'}
+ d(k'v_i+tu_i)$, re-indexing by $\kappa_i$-periodicity, while
+$\sum_\lambda\lambda^{s-k}=\kappa_i\one[k\equiv s]$ gives completeness.  Part 3
+is clear, and part 4 is a direct computation from part 1 and the definition of
+$T^{\alpha v_i+\beta u_i}$.
+\end{proof}
+
+Say that $\lambda$ \emph{occurs in} $d$ if $P_\lambda d\ne0$, that is, if
+$\widehat d_t(\lambda)\ne0$ for some row $t$.
+
+Define the \emph{exceptional difference fields}
+\[d_{i,\sigma,\epsilon,a}(z)=\one\bigl[\Xi_i^\sigma(z)=a\bigr]
+  -\one\bigl[G_i^{\sigma,\epsilon}(z)=a\bigr]\in\{-1,0,1\}
+  \qquad(\sigma\in\{+,-\},\ \epsilon\in\{L,R\},\ a\in\Fp).\]
+
+\begin{itemize}
+\item[\textup{(P1)}] $d_{i,\sigma,R,a}\equiv0$ on $\{\pi_i>r_i\}$, and
+      $d_{i,\sigma,L,a}\equiv0$ on $\{\pi_i<\ell_i\}$.
+\item[\textup{(P2)}] Both $\Xi_i^\sigma$ and $G_i^{\sigma,\epsilon}$ are
+      preserved by $H_i$, so $T^{H_i}d_{i,\sigma,\epsilon,a}
+      =d_{i,\sigma,\epsilon,a}$ and Lemma~\ref{lem:spectral} applies.
+\end{itemize}
+
+Put
+\[\Lambda_i=\bigl\{\lambda:\ \lambda^{\kappa_i}=1,\ \exists\,\sigma,\epsilon,a
+  \text{ such that }\lambda\text{ occurs in }d_{i,\sigma,\epsilon,a}\bigr\}.\]
+
+\begin{lem}\label{lem:Lambda-nonempty}
+$\Lambda_i\ne\varnothing$.
+\end{lem}
+
+\begin{proof}
+Otherwise every $d_{i,\sigma,\epsilon,a}$ vanishes identically, by part 1 of
+Lemma~\ref{lem:spectral}.  Taking $\sigma=+$ and $\epsilon=R$ gives
+$\Xi_i^+=G_i^{+,R}$; subtracting $B_i^+$ gives $F_i=R_i$, so $F_i$ is doubly
+periodic, contradicting \textup{(S2)}.
+\end{proof}
+
+Put
+\begin{align}
+A_i(t)&=\prod_{\lambda\in\Lambda_i}(t-\lambda),\qquad
+  d_i=\deg A_i=|\Lambda_i|\ge1, \label{eq:Ai}\\
+A(T)&=\prod_{i=1}^mA_i\bigl(T^{v_i}\bigr),\qquad
+  Z=\sum_{i=1}^m[0,d_iv_i]\subset\R^2 . \label{eq:AZ}
+\end{align}
+
+\begin{itemize}
+\item[\textup{(P3)}] For all $\sigma,\epsilon,a$ one has
+      $A_i(T^{v_i})\,d_{i,\sigma,\epsilon,a}=0$.  Indeed, by
+      Lemma~\ref{lem:spectral} only the terms with $\lambda\in\Lambda_i$ in
+      $d=\sum_\lambda P_\lambda d$ are non-zero, and
+      $A_i(T^{v_i})P_\lambda d=A_i(\lambda)P_\lambda d=0$.
+\end{itemize}
+
+The elements of $\Lambda_i$ are distinct $\kappa_i$-th roots of unity, so $A_i$
+is monic with $A_i(0)=\prod_{\lambda}(-\lambda)\ne0$.  Hence
+\begin{equation}
+\Newt\bigl(A_i(T^{v_i})\bigr)=[0,d_iv_i],\qquad
+\Newt(A)=\sum_i[0,d_iv_i]=Z, \label{eq:NewtA}
+\end{equation}
+the second equality by Minkowski additivity of Newton polygons (Ostrowski: over
+an integral domain, $\Newt(fg)=\Newt(f)+\Newt(g)$).
+
+\begin{remgalois}[Galois stability of $\Lambda_i$]
+Each $d_{i,\sigma,\epsilon,a}$ is integer-valued, so for every
+$\tau\in\Gal(\Q(\zeta_{\kappa_i})/\Q)$ one has
+$\tau\bigl(\widehat d_t(\lambda)\bigr)=\widehat d_t(\tau\lambda)$.  Hence
+$\lambda$ occurs if and only if $\tau\lambda$ occurs, $\Lambda_i$ is a union of
+Galois orbits, $A_i$ is a product of distinct cyclotomic polynomials,
+$A_i\in\Z[t]$ and $A\in\Z[T^{\pm}]$.  Nothing below depends on this
+(Lemma~\ref{lem:budget} handles the coefficient field by invariance of rank
+under field extension), but it does mean that every object of
+\S\ref{sec:spectrum} can be discussed over $\Q$.
+\end{remgalois}
+
+\subsection{A spectrum-preserving encoding}\label{ssec:encoding}
+
+\begin{lem}\label{lem:encoding}
+There is an injection $w\colon\Fp\to\Z$ such that for every $i$ and every
+$\lambda\in\Lambda_i$, the scalar difference field
+\[\delta_{i,\sigma,\epsilon}:=w(\Xi_i^\sigma)-w\bigl(G_i^{\sigma,\epsilon}\bigr)
+  =\sum_aw(a)\,d_{i,\sigma,\epsilon,a}\]
+still has $\lambda$ occurring in it, for some pair $\sigma,\epsilon$.
+\end{lem}
+
+\begin{proof}
+Regard $(w(a))_{a\in\Fp}$ as a vector in $\Q^p$.  For each $\lambda\in\Lambda_i$
+there are, by definition, $\sigma,\epsilon,t$ for which the vector
+$\bigl(\widehat{d_{i,\sigma,\epsilon,a}}\bigr)_t(\lambda)\in\C^p$, indexed by
+$a$, is non-zero.  By linearity of the Fourier transform,
+\[\bigl(\widehat{\delta_{i,\sigma,\epsilon}}\bigr)_t(\lambda)
+  =\sum_aw(a)\,\bigl(\widehat{d_{i,\sigma,\epsilon,a}}\bigr)_t(\lambda)\]
+is a non-zero complex linear form in $w$; its zero set inside $\Q^p$ is a proper
+$\Q$-subspace of $\Q^p$, since otherwise the form would vanish on a $\Q$-basis
+of $\Q^p$ and hence identically.  There are $\sum_i|\Lambda_i|$ such conditions.
+Injectivity excludes a further $\binom p2$ proper hyperplanes
+$\{w(a)=w(a')\}$.  Finitely many proper subspaces cannot cover $\Q^p$, so a
+rational $w$ satisfying all the conditions exists; multiplying by a common
+denominator makes it integer-valued without affecting non-vanishing or
+injectivity.
+\end{proof}
+
+Fix such a $w$ and put $\eta=w(\theta)\colon\Z^2\to\Z$.  By \eqref{eq:caseB},
+$D\eta=0$.
+
+\subsection{One-sided vanishing}\label{ssec:onesided}
+
+\begin{lem}\label{lem:onesided}
+Let $d\colon\Z^2\to\C$ satisfy $T^{H_i}d=d$, vanish identically on a half-plane
+$\{\pi_i>c\}$ or on a half-plane $\{\pi_i<c\}$, and let $\lambda$ occur in $d$.
+If a Laurent polynomial $f$ satisfies $f(T)d=0$, then
+$\bigl(T^{v_i}-\lambda\bigr)\mid f$.
+\end{lem}
+
+\begin{proof}
+By part 3 of Lemma~\ref{lem:spectral}, $f(T)P_\lambda d=P_\lambda f(T)d=0$.
+Write $c_\lambda(t)=\widehat d_t(\lambda)$, so $c_\lambda(t)=0$ whenever $d$
+vanishes on row $t$, and $g(Y):=f(\lambda,Y)=\sum_\beta g_\beta Y^\beta$.  By
+part 4 of Lemma~\ref{lem:spectral},
+\[0=\bigl(f(T)P_\lambda d\bigr)(sv_i+tu_i)
+  =\lambda^s\sum_\beta g_\beta\,c_\lambda(t+\beta)\qquad\text{for all }s,t,\]
+that is, $g(Y)c_\lambda=0$; and $c_\lambda\not\equiv0$ because $\lambda$
+occurs.
+
+\emph{Case: $d$ vanishes on $\{\pi_i>c\}$.}  Then $c_\lambda(t)=0$ for $t>c$, so
+$t_0:=\max\{t:c_\lambda(t)\ne0\}$ exists.  If $g\ne0$, let
+$\beta_-=\min\{\beta:g_\beta\ne0\}$ and evaluate at $t=t_0-\beta_-$: for
+$\beta>\beta_-$ one has $t_0-\beta_-+\beta>t_0$ and $c_\lambda$ vanishes there,
+so only the term $\beta=\beta_-$ survives, giving
+$g_{\beta_-}c_\lambda(t_0)=0$, a contradiction.
+
+\emph{Case: $d$ vanishes on $\{\pi_i<c\}$.}  Symmetrically, take
+$t_0=\min\{t:c_\lambda(t)\ne0\}$ and $\beta_+=\max\{\beta:g_\beta\ne0\}$ and
+evaluate at $t=t_0-\beta_+$; only the term $\beta=\beta_+$ survives.
+
+So $g\equiv0$.  Write $f$ as an element of $\C[X^{\pm},Y^{\pm}]$ with
+$X=T^{v_i}$ and $Y=T^{u_i}$; since $(v_i,u_i)$ is a basis of $\Z^2$ this is an
+automorphism of the Laurent ring.  With $f=\sum_\beta Y^\beta f_\beta(X)$, the
+identity $g\equiv0$ says $f_\beta(\lambda)=0$ for every $\beta$, whence
+$(X-\lambda)\mid f_\beta(X)$ — a one-variable Laurent polynomial vanishing at a
+non-zero point is divisible by $X-\lambda$ — and therefore $(X-\lambda)\mid f$.
+\end{proof}
+
+\subsection{Divisibility}\label{ssec:divisibility}
+
+\begin{lem}\label{lem:divisibility}
+Let $f$ be a non-zero Laurent polynomial with complex coefficients such that
+$f(T)\eta=c$ is constant.  Then $A\mid f$.
+\end{lem}
+
+\begin{proof}
+\emph{(a) The relation passes to the orbit closure.}  The map
+$z\mapsto\bigl(f(T)\eta\bigr)(z)-c$ depends on $\theta$ only through its values
+on $z+\supp(f)$, so it is a local function of $\theta$.  It vanishes on every
+translate of $\theta$; local functions are continuous for the product topology,
+so it vanishes on every member $\chi$ of $X_\theta$: $f(T)w(\chi)=c$.
+
+\emph{(b) Subtraction.}  Take $\chi=\Xi_i^\sigma$ and $\chi=G_i^{\sigma,\epsilon}$,
+both in $X_\theta$ by \S\ref{ssec:isolating}, and subtract the two identities:
+$f(T)\delta_{i,\sigma,\epsilon}=0$.
+
+\emph{(c) One prime factor at a time.}  Fix $\lambda\in\Lambda_i$.  By
+Lemma~\ref{lem:encoding} there are $\sigma,\epsilon$ with $\lambda$ occurring in
+$\delta_{i,\sigma,\epsilon}$; by \textup{(P1)} this difference field vanishes on
+a half-plane; by \textup{(P2)} it is preserved by $H_i$.  Lemma~\ref{lem:onesided}
+gives $T^{v_i}-\lambda\mid f$.
+
+\emph{(d) Assembling.}  Under the automorphism $X=T^{v_i}$, $Y=T^{u_i}$ the
+element $T^{v_i}-\lambda$ becomes $X-\lambda$, and
+$\C[X^{\pm},Y^{\pm}]/(X-\lambda)\cong\C[Y^{\pm}]$ is an integral domain, so
+$T^{v_i}-\lambda$ is prime.  Primes coming from different directions $i\ne k$
+are non-associate: being associate would force
+$T^{v_i}-\lambda=cT^u(T^{v_k}-\mu)$, and comparing supports gives
+$\{0,v_i\}=\{u,u+v_k\}$, hence $v_i=\pm v_k$, contradicting non-parallelism.
+Primes from the same direction with $\lambda\ne\lambda'$ are also
+non-associate: comparing supports forces $u=0$ and then comparing coefficients
+forces $\lambda=\lambda'$.  In a unique factorisation domain, pairwise
+non-associate primes each dividing $f$ have their product dividing $f$:
+$A=\prod_i\prod_{\lambda\in\Lambda_i}(T^{v_i}-\lambda)\mid f$.
+\end{proof}
+
+\subsection{The dimension budget for affine relations}\label{ssec:budget}
+
+For a lattice-convex $S$ put
+\[R_Z(S)=\bigl\{r\in\Z^2:\ r+Z\subseteq\Conv(S)\bigr\},\]
+\[U_S=\spn_{\Q}\Bigl\{\mathbf 1,\ \ \gamma\mapsto w\bigl(\gamma(s)\bigr)\ (s\in S)
+      \Bigr\}\ \subseteq\ \{\cL\to\Q\}.\]
+
+\begin{lem}\label{lem:budget}
+$\dim_{\Q}U_S\ \ge\ |S|-|R_Z(S)|+1$.
+\end{lem}
+
+\begin{proof}
+$U_S$ is generated by $|S|+1$ elements, so
+$\dim_{\Q}U_S=(|S|+1)-\dim_{\Q}\cR$, where
+\[\cR=\Bigl\{(c_0,(c_s)_{s\in S})\in\Q^{1+|S|}:\
+   \sum_{s\in S}c_s\,\eta(u+s)=c_0\ \text{ for all }u\in\Z^2\Bigr\}.\]
+$\cR$ is the $\Q$-solution space of a (possibly infinite) homogeneous linear
+system with integer coefficients; writing $\cR_{\C}$ for its $\C$-solution
+space, $\cR_{\C}=\cR\otimes_{\Q}\C$ and
+$\dim_{\C}\cR_{\C}=\dim_{\Q}\cR$, the dimension of the solution space of a
+rational linear system being unchanged by extension of the base field.
+
+Let $(c_0,(c_s))\in\cR_{\C}$ be non-zero and put $f=\sum_sc_sT^s$.  If $f=0$
+then $c_0=0$ and the element is zero; so $f\ne0$, and $f(T)\eta=c_0$ with
+$\supp(f)\subseteq S$.  By Lemma~\ref{lem:divisibility}, valid for complex $f$,
+we may write $f=Ag$ with $g\ne0$.  By \eqref{eq:NewtA} and Newton-polygon
+additivity,
+\[\Newt(f)=\Newt(A)+\Newt(g)=Z+\Newt(g).\]
+From $\supp(f)\subseteq S$ we get $\Newt(f)\subseteq\Conv(S)$, so for every
+$r\in\supp(g)$,
+\[r+Z\subseteq\Newt(g)+Z=\Newt(f)\subseteq\Conv(S),\]
+that is, $r\in R_Z(S)$.  Hence $\supp(g)\subseteq R_Z(S)$.
+
+The map $\cR_{\C}\to\{g:\supp(g)\subseteq R_Z(S)\}$, $(c_0,f)\mapsto g=f/A$, is
+$\C$-linear and injective ($c_0$ is determined by $f$, $A\ne0$, and division in
+an integral domain is unique), so
+\[\dim_{\Q}\cR=\dim_{\C}\cR_{\C}\le|R_Z(S)| .\qedhere\]
+\end{proof}
+
+\begin{rem}\label{rem:empty-RZ}
+By lattice-convexity, $r\in R_Z(S)$ implies
+$(r+Z)\cap\Z^2\subseteq\Conv(S)\cap\Z^2=S$.  If $R_Z(S)=\varnothing$, then
+Lemma~\ref{lem:budget} gives $\dim U_S\ge|S|+1$; but $U_S$ is a space of
+functions on the finite set $\cL$, so
+$P_\theta(S)=|\cL|\ge\dim U_S\ge|S|+1$ and the main theorem holds.  This case
+covers point and segment windows, since $Z$ has non-empty interior ($m\ge2$ and
+$v_1\not\parallel v_2$).  \emph{From now on we assume $R_Z(S)\ne\varnothing$.}
+\end{rem}
+
+\section{\texorpdfstring{$A$}{A} applied to the colour field yields a doubly
+periodic background}\label{sec:background}
+
+\setcounter{thm}{-1}
+\subsection{Realised sectors and adjacent sectors}\label{ssec:sectors}
+
+The complement $\R^2\setminus\bigcup_i\R v_i$ has exactly $2m$ connected
+components, open cones: order the $2m$ rays $\{\sigma v_i:\sigma=\pm,\,i\in[m]\}$
+by angle; the components are the \emph{sectors} between consecutive rays.  On
+each sector every $\pi_i$ has constant sign; write $\epsilon(K)\in\{+,-\}^m$ for
+the sign vector of the sector $K$, and call these $2m$ sign vectors
+\emph{realised}.  (For $m\ge3$ the remaining $2^m-2m$ sign vectors are not
+realised.)  For a realised $\epsilon$ put
+\[\Theta_\epsilon:=\sum_i\varepsilon_i^{\epsilon_i},\qquad
+  \varepsilon_i^{+}=R_i,\quad \varepsilon_i^{-}=L_i,\]
+which is doubly periodic and preserved by every $H_j$, as is its colour field
+$e_{\Theta_\epsilon}=(\one[\Theta_\epsilon=a])_a$.
+
+\begin{lem}[Sectors adjacent along a ray]\label{lem:adjacent}
+Let the ray $\sigma v_i$ be the common boundary ray of two sectors $K,K'$.
+Then $\epsilon(K)$ and $\epsilon(K')$ differ exactly in the coordinate $i$, and
+for $j\ne i$ one has
+$\epsilon(K)_j=\epsilon(K')_j=\sgn\bigl(\sigma\pi_j(v_i)\bigr)$.  Consequently
+\[\{\Theta_{\epsilon(K)},\Theta_{\epsilon(K')}\}=\{G_i^{\sigma,L},\ G_i^{\sigma,R}\}.\]
+In the angular order, the $2m$ sectors form a $2m$-cycle under the relation of
+sharing a boundary ray.
+\end{lem}
+
+\begin{proof}
+The ray $\sigma v_i$ lies on $\R v_i$ and on no $\R v_j$ with $j\ne i$, the
+directions being pairwise non-parallel.  A small circular arc centred at
+$\sigma v_i$ crosses only $\R v_i$, so the sign vectors of the two sectors on
+either side differ only in coordinate $i$; for $j\ne i$, the sign of $\pi_j$ is
+constant on the arc and equals
+$\sgn\pi_j(\sigma v_i)=\sgn(\sigma\pi_j(v_i))$.  By \eqref{eq:tailchoice},
+$\varepsilon_j^{\epsilon(K)_j}=\varepsilon_j^\sigma$ is precisely the tail
+choice made in $B_i^\sigma$, so $\Theta_{\epsilon(K)}$ and
+$\Theta_{\epsilon(K')}$ are $R_i+B_i^\sigma$ and $L_i+B_i^\sigma$ in the order
+dictated by $\epsilon_i$.  The cycle structure comes from the angular ordering.
+\end{proof}
+
+\begin{lem}\label{lem:Ae-sectors}
+For every ray $\sigma v_i$,
+\[A(T)\,e_{G_i^{\sigma,R}}=A(T)\,e_{G_i^{\sigma,L}} .\]
+Consequently $A(T)e_{\Theta_\epsilon}$ takes one and the same value for all
+\emph{realised} $\epsilon$; write
+\[b=(b_a)_{a\in\Fp}:=A(T)e_{\Theta_\epsilon}.\]
+This $b$ is doubly periodic and preserved by every $H_j$.
+\end{lem}
+
+\begin{proof}
+Colour by colour,
+\[\one[G_i^{\sigma,R}=a]-\one[G_i^{\sigma,L}=a]=d_{i,\sigma,L,a}-d_{i,\sigma,R,a},\]
+which is killed by $A_i(T^{v_i})$ by \textup{(P3)}, hence by $A$.  By
+Lemma~\ref{lem:adjacent} the backgrounds of two sectors adjacent along a ray are
+exactly $G_i^{\sigma,R}$ and $G_i^{\sigma,L}$, so their values of $Ae$ agree;
+and the $2m$ sectors form a cycle under this adjacency, hence a connected graph,
+so $Ae_{\Theta_\epsilon}$ is the same for all realised sectors.  Double
+periodicity and $H_j$-invariance follow from the corresponding properties of
+$\Theta_\epsilon$ together with the fact that $A$ commutes with translations.
+\end{proof}
+
+\begin{remnogen}[The lemma does not extend to unrealised tail
+choices]
+The generalisation ``$Ae_{\Theta_\varepsilon}=Ae_{\Theta_{\varepsilon'}}$ for
+all $\varepsilon,\varepsilon'\in\{L,R\}^m$, realised or not'' is \emph{false}.
+The reason is that $\Lambda_i$ is defined using only the backgrounds $B_i^\pm$,
+whereas a mixed tail choice $B$ may have periods along $v_i$ that $B_i^\pm$ do
+not have, so the spectrum of $\one[R_i+B=a]-\one[L_i+B=a]$ can fall outside
+$\Lambda_i$.  An explicit counterexample is in Appendix~\ref{app:counterexample}.
+Lemma~\ref{lem:Ae-finite} uses only realised sectors, so the main line is
+unaffected.
+\end{remnogen}
+
+\subsection{\texorpdfstring{$Ae_\theta-b$}{Ae-b} has finite
+support}\label{ssec:Ae-finite}
+
+\begin{lem}\label{lem:Ae-finite}
+$Ae_\theta-b$ has finite support.
+\end{lem}
+
+\begin{proof}
+Write $M_A=\supp(A)$.  Choose $c_i\ge\max(|\ell_i|,|r_i|)$ so that
+$\{\pi_i<-c_i\}\subseteq\{\pi_i<\ell_i\}$ and
+$\{\pi_i>c_i\}\subseteq\{\pi_i>r_i\}$, and put
+\[\rho_i=c_i+\max_{s\in M_A}|\pi_i(s)|,\qquad \Sigma_i=\{z:|\pi_i(z)|\le\rho_i\}.\]
+Call $i$ \emph{active at $z$} if $z\in\Sigma_i$; otherwise all of $z+M_A$ lies
+in one and the same tail region of component $i$, the one on the side
+$\sgn\pi_i(z)$.
+
+\emph{(a) No active direction.}  Then $|\pi_i(z)|>\rho_i>0$ for every $i$; put
+$\epsilon_i=\sgn\pi_i(z)$.  Regarded as a point of $\R^2$, $z$ lies on no
+$\R v_i$ and has sign vector $\epsilon$, so $\epsilon$ is realised; and
+$\theta=\Theta_\epsilon$ on $z+M_A$.  Hence
+$(Ae_\theta)(z)=(Ae_{\Theta_\epsilon})(z)=b(z)$.
+
+\emph{(b) At least two active directions.}  Then $z\in\Sigma_i\cap\Sigma_j$ with
+$i\ne j$, an intersection of two strips of bounded width in non-parallel
+directions, which is bounded and so contains only finitely many lattice points.
+
+\emph{(c) Exactly one active direction $i$.}  Write $z=tv_i+qu_i$ in the basis
+$(v_i,u_i)$, so $\pi_i(z)=q$ and $|q|\le\rho_i$.  For $j\ne i$,
+\[\pi_j(z)=t\,\pi_j(v_i)+q\,\pi_j(u_i),\qquad \pi_j(v_i)=\det(v_j,v_i)\ne0 .\]
+If
+\begin{equation}
+|t|\ >\ \frac{\rho_i\max_{j\ne i}|\pi_j(u_i)|+\max_{j\ne i}\rho_j}
+             {\min_{j\ne i}|\pi_j(v_i)|}, \label{eq:tbound}
+\end{equation}
+then for every $j\ne i$ and every $s\in M_A$,
+\[|\pi_j(z+s)|\ \ge\ |t|\,|\pi_j(v_i)|-|q|\,|\pi_j(u_i)|-|\pi_j(s)|
+  \ >\ \rho_j-|\pi_j(s)|\ \ge\ \rho_j-\max_{s'\in M_A}|\pi_j(s')|=c_j,\]
+and, because $|t|\,|\pi_j(v_i)|>|q|\,|\pi_j(u_i)|+|\pi_j(s)|$, also
+$\sgn\pi_j(z+s)=\sgn\bigl(t\,\pi_j(v_i)\bigr)$.  So all of $z+M_A$ lies in the
+tail region of component $j$ determined by $\sgn(t\pi_j(v_i))$.  By
+\eqref{eq:tailchoice} these are exactly the tail choices made in
+$B_i^{\sgn(t)}$, so on $z+M_A$
+\[\theta=F_i+B_i^{\sgn(t)}=\Xi_i^{\sigma},\qquad\sigma=\sgn(t),\]
+whence $(Ae_\theta)(z)=\bigl(Ae_{\Xi_i^{\sigma}}\bigr)(z)$.  By \textup{(P3)},
+$A_i(T^{v_i})$ kills
+$e_{\Xi_i^\sigma}-e_{G_i^{\sigma,R}}=\bigl(d_{i,\sigma,R,a}\bigr)_a$, so
+\[\bigl(Ae_{\Xi_i^\sigma}\bigr)(z)=\bigl(Ae_{G_i^{\sigma,R}}\bigr)(z)=b(z),\]
+the last step because $G_i^{\sigma,R}$ is the background of one of the realised
+sectors adjacent along the ray $\sigma v_i$ (Lemma~\ref{lem:adjacent}).
+
+Only finitely many $t$ violate \eqref{eq:tbound}, and these combine with
+$|q|\le\rho_i$ to give finitely many lattice points.  Combining (a), (b), (c),
+$\supp(Ae_\theta-b)$ is finite.
+\end{proof}
+
+\subsection{Conclusion}
+
+\begin{prop}\label{prop:Ae-b}
+$A(T)e_\theta=b$.  In particular
+\[A\eta=b_\eta:=\sum_aw(a)b_a\]
+is a doubly periodic field preserved by every $H_i$.
+\end{prop}
+
+\begin{proof}
+By \eqref{eq:caseB}, $De_\theta=0$; and $b$ is preserved by every $H_i$, so
+$Db=0$.  Hence $D(Ae_\theta-b)=A\,De_\theta-Db=0$.  By
+Lemma~\ref{lem:Ae-finite} this function has finite support, so
+Lemma~\ref{lem:domain} (with $D\ne0$) forces it to vanish.
+\end{proof}
+
+\section{At least one two-point difference is non-zero}\label{sec:twopoint}
+
+Put $Q_i=\prod_{j\ne i}\bigl(T^{H_j}-1\bigr)$ as in \eqref{eq:Qexp}, and
+$f_i=Q_i\,\eta$.  From $D=(T^{H_i}-1)Q_i$ and $D\eta=0$ it follows that $f_i$
+has period $H_i$.
+
+\begin{lem}\label{lem:fi}
+The support of $f_i$ is contained in a strip of bounded width in the direction
+$v_i$, and $f_i\ne0$.
+\end{lem}
+
+\begin{proof}
+\emph{(a) A global identity.}  We have $f_i=T^{nH_i}f_i$ for every $n$.  Let
+$n\to+\infty$: on every fixed finite set $T^{nH_i}\theta\to\Xi_i^+$, the
+convergence being eventual pointwise stabilisation, so
+$T^{nH_i}\eta\to w(\Xi_i^+)$ and therefore
+\begin{equation}
+f_i=Q_i\,w\bigl(\Xi_i^+\bigr). \label{eq:fi-Xi}
+\end{equation}
+Each factor $T^{H_j}-1$ with $j\ne i$ annihilates $w(G_i^{+,R})$, since $H_j$
+preserves that pure-tail field, so
+\begin{equation}
+f_i=Q_i\,\delta_i,\qquad
+\delta_i:=w(\Xi_i^+)-w\bigl(G_i^{+,R}\bigr). \label{eq:fi-delta}
+\end{equation}
+Using $G_i^{+,L}$ instead gives $f_i=Q_i\,\delta_i'$ with
+$\delta_i'=w(\Xi_i^+)-w(G_i^{+,L})$.
+
+\emph{(b) A strip of bounded width.}  By \textup{(P1)}, $\delta_i\equiv0$ on
+$\{\pi_i>r_i\}$ and $\delta_i'\equiv0$ on $\{\pi_i<\ell_i\}$.  Put
+$c=\max_{s\in\cE_i}|\pi_i(s)|$.  By \eqref{eq:fi-delta} and \eqref{eq:Qexp},
+$f_i(z)\ne0$ forces $\delta_i(z+s)\ne0$ for some $s\in\cE_i$, whence
+$\pi_i(z)\le r_i+c$; the other identity gives $\pi_i(z)\ge\ell_i-c$.  So
+$\supp(f_i)\subseteq\{\ell_i-c\le\pi_i\le r_i+c\}$.
+
+\emph{(c) Non-vanishing.}  First, $\delta_i\ne0$: otherwise
+$w(\Xi_i^+)=w(G_i^{+,R})$, and injectivity of $w$ gives $\Xi_i^+=G_i^{+,R}$;
+subtracting $B_i^+$ gives $F_i=R_i$, which is doubly periodic, contradicting
+\textup{(S2)}.
+
+Since $\delta_i$ vanishes on $\{\pi_i>r_i\}$ but is not identically zero,
+\[\pi^*=\max\{\pi_i(z):\delta_i(z)\ne0\}\ (\le r_i)\]
+exists.  Choose $z^*$ with $\delta_i(z^*)\ne0$ and $\pi_i(z^*)=\pi^*$.
+
+Expand $Q_i$ formally as in \eqref{eq:Qexp}.  We have
+$\pi_i(H_C)=\sum_{j\in C}\pi_i(H_j)$ with every $\pi_i(H_j)\ne0$ for $j\ne i$.
+Put
+\[C_{\min}=\{j\ne i:\pi_i(H_j)<0\}.\]
+For any $C\subseteq[m]\setminus\{i\}$ with $C\ne C_{\min}$,
+\[\pi_i\bigl(H_C\bigr)-\pi_i\bigl(H_{C_{\min}}\bigr)
+  =\sum_{j\in C\setminus C_{\min}}\pi_i(H_j)
+   -\sum_{j\in C_{\min}\setminus C}\pi_i(H_j)>0,\]
+because the terms of the first sum are positive, those of the second are
+negative, and at least one of the two sums is non-empty.  So
+$\pi_i(H_{C_{\min}})$ is the \emph{unique} minimum.  This is a statement about
+the $\pi_i$-projections and is unaffected by any coincidences among the points
+$H_C$ themselves.
+
+Evaluate at $z=z^*-H_{C_{\min}}$:
+\[f_i(z)=\sum_{C}(-1)^{m-1-|C|}\delta_i\bigl(z+H_C\bigr).\]
+The term $C=C_{\min}$ contributes $\pm\delta_i(z^*)\ne0$; for $C\ne C_{\min}$,
+\[\pi_i\bigl(z+H_C\bigr)=\pi^*+\Bigl(\pi_i(H_C)-\pi_i(H_{C_{\min}})\Bigr)>\pi^*,\]
+so $\delta_i$ vanishes there.  Hence $f_i(z)=\pm\delta_i(z^*)\ne0$.
+\end{proof}
+
+\begin{lem}\label{lem:J-nonzero}
+For every $d$ the function $J(d,\cdot):=D_z\bigl[\eta(z)\eta(z+d)\bigr]$ has
+finite support; and there exists $d$ with $J(d,\cdot)\ne0$.
+\end{lem}
+
+\begin{proof}
+\emph{Finite support:} $z\mapsto\eta(z)\eta(z+d)$ is a local function of
+$\theta$, with window $W=\{0,d\}$; apply Lemma~\ref{lem:finite-support}.
+
+\emph{Non-vanishing:} choose $i\ne j$, possible since $m\ge2$.  By
+Lemma~\ref{lem:fi} choose $x_i,x_j$ with $f_i(x_i)\ne0$ and $f_j(x_j)\ne0$.  Put
+$d_0=x_j-x_i$ and
+\[C(z)=f_i(z)\,f_j(z+d_0).\]
+Then $C(x_i)=f_i(x_i)f_j(x_j)\ne0$.  Now $\supp(f_i)$ lies in a strip of bounded
+width in the direction $v_i$ and $\supp\bigl(f_j(\cdot+d_0)\bigr)$ in one of
+direction $v_j$, with $v_i\not\parallel v_j$, so $\supp(C)$ is bounded.  By
+Lemma~\ref{lem:domain}, $DC\ne0$.
+
+On the other hand, expanding formally by \eqref{eq:Qexp},
+\[C(z)=\Bigl(\sum_{C_1}\pm\eta\bigl(z+H_{C_1}\bigr)\Bigr)
+       \Bigl(\sum_{C_2}\pm\eta\bigl(z+d_0+H_{C_2}\bigr)\Bigr)
+      =\sum_{C_1,C_2}\pm\,\eta(z+u_1)\eta(z+u_2),\]
+with $u_1=H_{C_1}$ and $u_2=d_0+H_{C_2}$.  By translation invariance of $D$,
+\[DC=\sum_{C_1,C_2}\pm\,T^{u_1}\Bigl(D_z\bigl[\eta(z)\eta(z+u_2-u_1)\bigr]\Bigr)
+    =\sum_{C_1,C_2}\pm\,T^{u_1}J\bigl(u_2-u_1,\cdot\bigr).\]
+If every $J(d,\cdot)$ vanished, then $DC=0$, a contradiction.
+\end{proof}
+
+\section{The bi-recursion and the quotient algebra}\label{sec:quotient}
+
+\subsection{The bi-recursion}
+
+Regard $J$ as a function of the pair $(d,z)$:
+$J(d,z)=D_z\bigl[\eta(z)\eta(z+d)\bigr]$.  Write $T_d^sJ(d,z)=J(d+s,z)$ and
+$T_z^sJ(d,z)=J(d,z+s)$.
+
+\begin{lem}\label{lem:birecursion}
+\begin{equation}
+A(T_d)\,J=0,\qquad A\bigl(T_zT_d^{-1}\bigr)\,J=0 . \label{eq:birec}
+\end{equation}
+\end{lem}
+
+\begin{proof}
+\emph{First identity.}  For any Laurent polynomial $g=\sum_sg_sT^s$,
+\[g(T_d)J(d,z)=\sum_sg_s\,D_z\bigl[\eta(z)\eta(z+d+s)\bigr]
+             =D_z\Bigl[\eta(z)\bigl(g(T)\eta\bigr)(z+d)\Bigr].\]
+Take $g=A$; by Proposition~\ref{prop:Ae-b}, $(A\eta)(z+d)=b_\eta(z+d)$.
+Expanding $D_z$ by \eqref{eq:Dexp},
+\[D_z\bigl[\eta(z)b_\eta(z+d)\bigr]
+  =\sum_C(-1)^{m-|C|}\,\eta\bigl(z+H_C\bigr)\,b_\eta\bigl(z+H_C+d\bigr).\]
+Each $H_C$ is a sum of vectors $H_i$ and so preserves $b_\eta$; therefore
+$b_\eta(z+H_C+d)=b_\eta(z+d)$ and
+\[=b_\eta(z+d)\sum_C(-1)^{m-|C|}\,\eta\bigl(z+H_C\bigr)
+  =b_\eta(z+d)\,\bigl(D\eta\bigr)(z)=0 .\]
+
+\emph{Second identity.}  The operator $\bigl(T_zT_d^{-1}\bigr)^s$ sends $(d,z)$
+to $(d-s,z+s)$: the first observation point moves, $z\mapsto z+s$, while the
+second, $z+d$, does not.  Hence
+\begin{align*}
+g\bigl(T_zT_d^{-1}\bigr)J(d,z)
+ &=\sum_sg_s\,D_{z'}\bigl[\eta(z')\eta(z'+d-s)\bigr]\Big|_{z'=z+s}\\
+ &=\sum_C(-1)^{m-|C|}\sum_sg_s\,\eta\bigl(z+s+H_C\bigr)\,
+    \eta\bigl(z+H_C+d\bigr)\\
+ &=\sum_C(-1)^{m-|C|}\bigl(g(T)\eta\bigr)\bigl(z+H_C\bigr)\,
+    \eta\bigl(z+H_C+d\bigr).
+\end{align*}
+Take $g=A$: then $(A\eta)(z+H_C)=b_\eta(z+H_C)=b_\eta(z)$, so the sum equals
+\[b_\eta(z)\sum_C(-1)^{m-|C|}\,\eta\bigl(z+H_C+d\bigr)
+ =b_\eta(z)\cdot\bigl(D\eta\bigr)(z+d)=0 .\qedhere\]
+\end{proof}
+
+\subsection{The quotient algebra}\label{ssec:quotient}
+
+Let $X=(X_1,X_2)$ be \emph{independent indeterminates}, $K=\C(X_1,X_2)$, and
+$R=K[Y_1^{\pm1},Y_2^{\pm1}]$.  For $u\in\Z^2$ write $Y^u=Y_1^{u_1}Y_2^{u_2}$ and
+$X^u=X_1^{u_1}X_2^{u_2}$; the monomials $\{Y^u\}_{u\in\Z^2}$ are a $K$-basis of
+$R$.  Put
+\[a_i=A_i\bigl(Y^{v_i}\bigr),\quad c_i=A_i\bigl(X^{v_i}Y^{-v_i}\bigr),\quad
+  a=\prod_ia_i=A(Y),\quad c=\prod_ic_i=A(X/Y).\]
+
+\begin{lem}\label{lem:quotient}
+As a $K$-vector space, $R/(a,c)$ is spanned by the images of
+$\{Y^d:d\in(Z-Z)\cap\Z^2\}$.
+\end{lem}
+
+\begin{proof}
+\textbf{Step 1: no common zeros, and the Chinese remainder theorem.}  Extend to
+$\overline K$ and test in $(\overline K^\times)^2$.  Note that $\C$ is
+algebraically closed, so an element of $\overline K$ that is algebraic over $\C$
+lies in $\C$, whereas $X^{u}$ with $u\ne0$ is transcendental over $\C$.
+
+\emph{(i) $a_i$ and $c_i$ have no common zero.}  From $a_i=0$ we get
+$Y^{v_i}=\lambda\in\Lambda_i$; from $c_i=0$ we get
+$X^{v_i}Y^{-v_i}=\mu\in\Lambda_i$.  Multiplying, $X^{v_i}=\lambda\mu\in\C$, a
+contradiction.
+
+\emph{(ii) If $a_i=a_k=0$ with $i\ne k$, then every $c_j\ne0$.}  From
+$Y^{v_i}=\lambda$, $Y^{v_k}=\lambda'$ and $\Delta=\det(v_i,v_k)\ne0$, the
+elements $Y_1^{\Delta}$ and $Y_2^{\Delta}$ are products of integer powers of
+$\lambda,\lambda'$, so $Y_1,Y_2$ are algebraic over $\C$ and hence lie in
+$\C^\times$.  If some $c_j=0$ then $X^{v_j}=\mu Y^{v_j}\in\C$, a contradiction.
+
+\emph{(iii) If $c_j=c_l=0$ with $j\ne l$, then every $a_i\ne0$.}  Put $W=X/Y$,
+that is $W_1=X_1/Y_1$ and $W_2=X_2/Y_2$.  From $W^{v_j}=\mu$ and
+$W^{v_l}=\mu'$ we get, as in (ii), $W_1,W_2\in\C^\times$, that is
+$Y_1=\alpha X_1$ and $Y_2=\beta X_2$ with $\alpha,\beta\in\C^\times$.  If some
+$a_i=0$ then $Y^{v_i}=\lambda$, that is
+$\alpha^{v_{i1}}\beta^{v_{i2}}X^{v_i}=\lambda$ and $X^{v_i}\in\C$, a
+contradiction.
+
+By (ii), for $i\ne k$ the ideal $(a_i,a_k,c)$ has no zero in
+$(\overline K^\times)^2$, so it equals $(1)$ in $\overline K[Y^{\pm}]$ by the
+Nullstellensatz, and descends to $R$ by faithful flatness of
+$R\to\overline K[Y^\pm]$: $(a_i,a_k,c)=R$.  That is, the $a_i$ are pairwise
+coprime in $R/(c)$.  By the Chinese remainder theorem,
+\[R/(a,c)=R\big/\bigl(\textstyle\prod_ia_i,\ c\bigr)\ \simeq\ \prod_iR/(a_i,c).\]
+In $R/(a_i)$: by (i), $(a_i,c_i)=R$, so $c_i$ is a unit; by (iii), for
+$j\ne l$ with $j,l\ne i$ one has $(a_i,c_j,c_l)=R$, so the $c_j$ are pairwise
+coprime in $R/(a_i)$.  A second application of the Chinese remainder theorem
+gives
+\[R/(a_i,c)=R\big/\bigl(a_i,\ \textstyle\prod_jc_j\bigr)
+  \simeq\prod_{j\ne i}R/(a_i,c_j),\]
+and combining, with the isomorphism given by the natural projections,
+\begin{equation}
+R/(a,c)\ \simeq\ \prod_{i\ne j}R/(a_i,c_j). \label{eq:CRT}
+\end{equation}
+
+\textbf{Step 2: a monomial spanning set for each factor.}  Fix $i\ne j$.  Put
+$\su=Y^{v_i}$ and $\sw=Y^{-v_j}$, let
+$\mathfrak L=\Z v_i+\Z(-v_j)$ and $\nu=[\Z^2:\mathfrak L]=|\det(v_i,v_j)|$.
+Take the $\nu$ lattice points $r_1,\dots,r_\nu$ of the half-open fundamental
+domain
+\[\Pi=\{\alpha v_i-\beta v_j:\ 0\le\alpha<1,\ 0\le\beta<1\},\]
+a complete set of representatives for $\Z^2/\mathfrak L$.  Then $R$ is free as a
+$K[\su^{\pm},\sw^{\pm}]$-module with basis $\{Y^{r_n}\}$.
+
+The ideal $(a_i,c_j)$ is generated by the elements $a_i=A_i(\su)$ and
+$c_j=A_j\bigl(X^{v_j}\sw\bigr)$ of the subring $K[\su^\pm,\sw^\pm]$, so
+\[R/(a_i,c_j)\simeq\bigoplus_{n=1}^{\nu}Y^{r_n}\cdot
+  K[\su^\pm,\sw^\pm]\big/\bigl(A_i(\su),A_j(X^{v_j}\sw)\bigr).\]
+Now $A_i(\su)$ has degree $d_i$ in $\su$ with both extreme coefficients non-zero
+($A_i$ is monic and $A_i(0)\ne0$), so any integer power of $\su$ reduces into
+the $K$-span of $\{\su^0,\dots,\su^{d_i-1}\}$; and $A_j(X^{v_j}\sw)$ has degree
+$d_j$ in $\sw$ with leading coefficient $X^{d_jv_j}\ne0$ and constant term
+$A_j(0)\ne0$, so any integer power of $\sw$ reduces into the span of
+$\{\sw^0,\dots,\sw^{d_j-1}\}$.  Hence
+\begin{equation}
+\Bigl\{Y^{\,r_n+\alpha v_i-\beta v_j}:\ 1\le n\le \nu,\ 0\le\alpha<d_i,\
+0\le\beta<d_j\Bigr\} \label{eq:spanning}
+\end{equation}
+spans $R/(a_i,c_j)$.  Since $r_n\in\Pi$ — its $v_i$-coefficient and its
+$(-v_j)$-coefficient both lie in $[0,1)$ — all the exponents in
+\eqref{eq:spanning} lie in
+\begin{equation}
+P_{ij}:=[0,d_iv_i]+[0,-d_jv_j]. \label{eq:Pij}
+\end{equation}
+
+\textbf{Step 3: projection onto a factor.}  Put
+\[E_{ij}=\prod_{k\ne i}a_k\ \prod_{l\ne j}c_l .\]
+In the decomposition \eqref{eq:CRT}:
+\begin{itemize}
+\item on a factor $(i',j')$ with $i'\ne i$: the factor $a_{i'}$ occurs in
+      $E_{ij}$ and is $\equiv0$ there, so $E_{ij}\equiv0$;
+\item on a factor $(i,j')$ with $j'\ne j$: the factor $c_{j'}$ occurs and is
+      $\equiv0$, so $E_{ij}\equiv0$;
+\item on the factor $(i,j)$: by (i), (ii), (iii), the ideals $(a_i,c_j,a_k)$ for
+      $k\ne i$ and $(a_i,c_j,c_l)$ for $l\ne j$ have no zero in
+      $(\overline K^\times)^2$, hence equal $R$ by the Nullstellensatz and
+      faithfully flat descent.  Now $(a_i,c_j,x)=R$ means precisely that there
+      is $w\in R$ with $wx\equiv1\pmod{(a_i,c_j)}$, so each $a_k$ and each $c_l$
+      is a unit in $R/(a_i,c_j)$, and so is their product $E_{ij}$.
+\end{itemize}
+
+Therefore the image of $E_{ij}\cdot\eqref{eq:spanning}$ spans the factor
+$(i,j)$ and vanishes on all the others.  Every monomial exponent occurring in
+$E_{ij}\cdot Y^{e}$ lies in $\Newt(E_{ij})+e$, and
+\begin{align*}
+\Newt(E_{ij})+P_{ij}
+ &\subseteq\sum_{k\ne i}[0,d_kv_k]+\sum_{l\ne j}[0,-d_lv_l]+P_{ij}\\
+ &=\sum_{k}[0,d_kv_k]+\sum_{l}[0,-d_lv_l]=Z+(-Z)=Z-Z,
+\end{align*}
+using $\Newt(a_k)=[0,d_kv_k]$, $\Newt(c_l)=[0,-d_lv_l]$ and the fact that the
+Newton polygon of a product is the Minkowski sum.  Taking the union over all
+$i\ne j$ gives the spanning statement.
+\end{proof}
+
+\subsection{The witness lies in
+\texorpdfstring{$Z-Z$}{Z-Z}}\label{ssec:witness}
+
+\begin{prop}\label{prop:witness}
+There is $d\in(Z-Z)\cap\Z^2$ with $d\ne0$ and $J(d,\cdot)\ne0$.
+\end{prop}
+
+\begin{proof}
+By Lemma~\ref{lem:J-nonzero} each $J(d,\cdot)$ has finite support, so
+\[\widehat J(d;X)=\sum_zJ(d,z)X^{-z}\ \in\ \C[X_1^{\pm},X_2^{\pm}]\subset K\]
+is well defined, the supports for different $d$ being allowed to differ.  Define
+a \emph{$K$-linear} functional $L\colon R\to K$ by setting
+$L(Y^d)=\widehat J(d;X)$ on the $K$-basis and extending $K$-linearly.  That $L$
+is $K$-linear, and not merely $\C$-linear, is what makes the next step work:
+coefficients $X^s\in K$ may be pulled out of $L$.
+
+\smallskip\noindent\emph{$L$ kills the ideal $(a,c)$.}  Write $A=\sum_sA_sT^s$,
+so that $a=A(Y)=\sum_sA_sY^s$ and $c=A(X/Y)=\sum_sA_sX^sY^{-s}$.
+
+By the first identity of \eqref{eq:birec}, for every $(d,z)$ we have
+$\sum_sA_s\,J(d+s,z)=0$.  Taking the Laurent transform in $z$,
+\[\sum_sA_s\,\widehat J(d+s;X)=0
+  \ \Longrightarrow\ L\bigl(Y^{d}\cdot a\bigr)=\sum_sA_sL\bigl(Y^{d+s}\bigr)=0 .\]
+
+By the second identity of \eqref{eq:birec}, for every $(d,z)$ we have
+$\sum_sA_s\,J(d-s,z+s)=0$.  Taking the Laurent transform in $z$ and noting
+\[\sum_zJ(d-s,z+s)X^{-z}=\sum_{z'}J(d-s,z')X^{-z'+s}=X^{s}\widehat J(d-s;X),\]
+we get $\sum_sA_sX^s\widehat J(d-s;X)=0$, that is
+$L\bigl(Y^d\cdot c\bigr)=\sum_sA_sX^sL(Y^{d-s})=0$.
+
+For an arbitrary $g=\sum_dg_dY^d\in R$ with $g_d\in K$, $K$-linearity gives
+$L(ga)=\sum_dg_dL(Y^da)=0$, and likewise $L(gc)=0$.  So $L$ vanishes on
+$(a,c)$ and descends to $\bar L\colon R/(a,c)\to K$.
+
+\smallskip\noindent\emph{Conclusion.}  If $J(d,\cdot)=0$ for every
+$d\in(Z-Z)\cap\Z^2$, then $\bar L$ vanishes on a spanning set supplied by
+Lemma~\ref{lem:quotient}, hence $\bar L=0$, hence $L=0$, hence
+$\widehat J(d;X)=0$ for \emph{every} $d$, that is $J\equiv0$ — contradicting
+Lemma~\ref{lem:J-nonzero}.
+
+\smallskip\noindent\emph{$d\ne0$.}  We have $J(0,z)=D_z[\eta(z)^2]$, and
+$\eta^2=w'(\theta)$ with $w'(a)=w(a)^2$ is a single-site colour function, so
+$D\eta^2=0$ by \eqref{eq:caseB}.
+\end{proof}
+
+\section{Putting two points into one integral zonotope}\label{sec:zonotope}
+
+\begin{lem}\label{lem:zonotope}
+Let $Z=\sum_{i=1}^m[0,d_iv_i]$ with integers $d_i\ge1$, $v_i\in\Z^2$, $m\ge2$
+and $v_1\not\parallel v_2$.  Then
+\begin{equation}
+(Z-Z)\cap\Z^2\ =\ \bigl(Z\cap\Z^2\bigr)-\bigl(Z\cap\Z^2\bigr).
+\label{eq:ZZ}
+\end{equation}
+\end{lem}
+
+\begin{proof}
+The inclusion ``$\supseteq$'' is clear.
+
+``$\subseteq$'': put $c_0=\sum_id_iv_i\in\Z^2$.  For $x=\sum_ix_i\in Z$ with
+$x_i\in[0,d_iv_i]$ we have $c_0-x=\sum_i(d_iv_i-x_i)$ with
+$d_iv_i-x_i\in[0,d_iv_i]$, so $c_0-x\in Z$; that is, $c_0-Z\subseteq Z$.
+Applying this once more, $Z=c_0-(c_0-Z)\subseteq c_0-Z$, so $c_0-Z=Z$ and
+$-Z=Z-c_0$.  Hence
+\[Z-Z=Z+(-Z)=Z+Z-c_0=2Z-c_0 .\]
+
+Let $d\in(Z-Z)\cap\Z^2$ and put $x=d+c_0\in 2Z\cap\Z^2$.
+
+The vertices of $Z$ are subset sums of the vectors $d_iv_i$ and so are lattice
+points; thus $Z$ is a two-dimensional lattice polygon.  Take a \emph{unimodular
+triangulation} of $Z$: every two-dimensional lattice polygon can be subdivided
+into lattice triangles of area $\tfrac12$ whose vertices are lattice points of
+$Z$.  Since $x/2\in Z$, it lies in some unimodular triangle $\triangle ABC$
+(boundary included), and $(B-A,C-A)$ is a basis of $\Z^2$.  Write
+\[\tfrac12x=A+\alpha(B-A)+\beta(C-A),\qquad \alpha,\beta\ge0,\ \alpha+\beta\le1 .\]
+Then $x-2A=(2\alpha)(B-A)+(2\beta)(C-A)$.  The left-hand side is a lattice point
+and $(B-A,C-A)$ is a lattice basis, so $2\alpha,2\beta\in\Z_{\ge0}$ with
+$2\alpha+2\beta\le2$.  The cases are:
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+$(2\alpha,2\beta)$ & $x$ & decomposition\\
+\midrule
+$(0,0)$ & $2A$                        & $A+A$\\
+$(1,0)$ & $2A+(B-A)=A+B$              & $A+B$\\
+$(0,1)$ & $A+C$                       & $A+C$\\
+$(2,0)$ & $2A+2(B-A)=2B$              & $B+B$\\
+$(0,2)$ & $2C$                        & $C+C$\\
+$(1,1)$ & $2A+(B-A)+(C-A)=B+C$        & $B+C$\\
+\bottomrule
+\end{tabular}
+\end{center}
+In every case $x=p+q$ with $p,q\in\{A,B,C\}\subseteq Z\cap\Z^2$.
+
+Finally $d=x-c_0=p-(c_0-q)$, and $c_0-q\in c_0-Z=Z$ is a lattice point.
+\end{proof}
+
+\begin{cor}\label{cor:pair}
+The vector $d$ of Proposition~\ref{prop:witness} can be written $d=q_1-q_0$ with
+$q_0,q_1\in Z\cap\Z^2$.  Putting $q=q_0$, both $q$ and $q+d$ lie in
+$Z\cap\Z^2$.
+\end{cor}
+
+\section{Quadratic characters make up the whole linear
+deficit}\label{sec:quadratic}
+
+Fix $d$ and $q$ as in Proposition~\ref{prop:witness} and
+Corollary~\ref{cor:pair}, and put
+\[h(z)=\eta(z)\,\eta(z+d),\qquad J:=Dh\ne0\ \text{of finite support}.\]
+
+\begin{lem}\label{lem:capacity}
+For every $r\in R_Z(S)$ one has $r+q\in S$ and $r+q+d\in S$.
+\end{lem}
+
+\begin{proof}
+We have $r+Z\subseteq\Conv(S)$ and $q,q+d\in Z\cap\Z^2$, so
+\[r+q,\ r+q+d\ \in\ (r+Z)\cap\Z^2\ \subseteq\ \Conv(S)\cap\Z^2=S .\qedhere\]
+\end{proof}
+
+Consequently, for each $r\in R_Z(S)$ the \emph{quadratic scalar character}
+\[\Phi_r\colon\ \cL\to\Q,\qquad
+  \Phi_r(\gamma)=w\bigl(\gamma(r+q)\bigr)\cdot w\bigl(\gamma(r+q+d)\bigr)\]
+is well defined, and
+$\Phi_r\bigl(\theta|_{u+S}\bigr)=\eta(u+r+q)\,\eta(u+r+q+d)=h(u+r+q)$.
+
+\begin{lem}\label{lem:independence}
+The family $\{\Phi_r\}_{r\in R_Z(S)}$ is linearly independent in
+$\{\cL\to\Q\}/U_S$.
+\end{lem}
+
+\begin{proof}
+Suppose not: there are $(c_r)$, not all zero, and $\psi\in U_S$ with
+$\sum_rc_r\Phi_r=\psi$ on $\cL$.  Substituting $\gamma=\theta|_{u+S}$,
+\[\sum_{r\in R_Z(S)}c_r\,h(u+r+q)=c_0+\sum_{s\in S}\mu_s\,\eta(u+s)
+  \qquad\text{for all }u .\]
+Apply $D$ in $u$ to both sides.  The right-hand side gives
+$Dc_0+\sum_s\mu_s\,T^s(D\eta)=0$ by \eqref{eq:caseB}; the left-hand side gives
+$\bigl(\sum_rc_rT^{r+q}\bigr)(Dh)=\bigl(\sum_rc_rT^{r+q}\bigr)J$.
+
+So $\bigl(\sum_rc_rT^{r+q}\bigr)J=0$.  The exponents $r+q$ for $r\in R_Z(S)$ are
+distinct and the $(c_r)$ are not all zero, so that Laurent polynomial is
+non-zero; and $J$ is non-zero of finite support.  This contradicts
+Lemma~\ref{lem:domain}.
+\end{proof}
+
+\begin{thm}[Theorem~T]\label{thm:main}
+$P_\theta(S)\ \ge\ |S|+1$.
+\end{thm}
+
+\begin{proof}
+The case $R_Z(S)=\varnothing$ is Remark~\ref{rem:empty-RZ}.  Assume
+$R_Z(S)\ne\varnothing$ and put
+\[V=U_S+\spn_{\Q}\{\Phi_r:r\in R_Z(S)\}\ \subseteq\ \{\cL\to\Q\}.\]
+By Lemma~\ref{lem:independence}, $\dim V=\dim U_S+|R_Z(S)|$; by
+Lemma~\ref{lem:budget},
+\[\dim V\ \ge\ \bigl(|S|-|R_Z(S)|+1\bigr)+|R_Z(S)|=|S|+1 .\]
+On the other hand $V$ is a space of functions on the finite set $\cL$, so
+$\dim V\le|\cL|=P_\theta(S)$.
+\end{proof}
+
+\begin{rem}[The balance]\label{rem:balance}
+The zonotope $Z$ enters the proof twice and with opposite signs: it is the
+\emph{cost} of the affine relations, Lemma~\ref{lem:budget} subtracting
+$|R_Z(S)|$, and it is the \emph{capacity} of the quadratic witness,
+Lemma~\ref{lem:capacity} supplying exactly $|R_Z(S)|$ positions.  The two cancel
+exactly, independently of the shape of $S$ and of the size of $Z$.  The
+numerical experiments of Appendix~\ref{app:numerics} show that
+Lemma~\ref{lem:budget} is an equality on every instance of Case~B that we
+generated.
+\end{rem}
+
+\section{Reduction to the convex Nivat conjecture}\label{sec:reduction}
+
+\subsection{Half-planes and full periodicity}\label{ssec:halfplanes}
+
+\begin{dfnhalf}
+A \emph{half-plane} is a set of the form
+$\cH=\{z\in\Z^2:\langle z,n\rangle>c\}$ or
+$\cH=\{z\in\Z^2:\langle z,n\rangle\ge c\}$ with $n\in\R^2\setminus\{0\}$ and
+$c\in\R$; we call $n$ its normal.  For an integer vector $g$: if
+$\langle g,n\rangle\ge0$ then $\cH+g\subseteq\cH$; if $\langle g,n\rangle>0$
+then $\bigcup_{N\ge0}(\cH-Ng)=\Z^2$.
+\end{dfnhalf}
+
+Following Colle and Garibaldi \cite[Definition~2.1]{CG}, say that
+$G\colon\Z^2\to\Fp$ is \emph{fully periodic on $\cH$} if there are
+$\R$-linearly independent $h,h'\in\Z^2$ with $\cH+h\subseteq\cH$,
+$\cH+h'\subseteq\cH$, $G(z+h)=G(z)$ and $G(z+h')=G(z)$ for all $z\in\cH$.  The
+restriction of a doubly periodic field to any half-plane is fully periodic: take
+two independent vectors of its period lattice pointing into $\cH$.  Conversely:
+
+\setcounter{thm}{1}
+\begin{lem}[Global extension]\label{lem:extend}
+If $G$ is fully periodic on a half-plane $\cH$, with vectors $h,h'$, then there
+is a doubly periodic field $\widetilde G$ with
+$\Per(\widetilde G)\supseteq\Z h+\Z h'$ and $\widetilde G=G$ on $\cH$.
+\end{lem}
+
+\begin{proof}
+Put $g=h+h'$.  We have $\langle h,n\rangle,\langle h',n\rangle\ge0$ and they
+cannot both vanish, since then $h$ and $h'$ would both be parallel to the
+boundary and hence to each other, contradicting independence; so
+$\langle g,n\rangle>0$.
+
+\emph{Step 1.}  For $z\in\cH$ and $k\ge0$: $z+kh\in\cH$ and $G(z+kh)=G(z)$, by
+induction on $k$; likewise for $h'$ and for $g$.
+
+\emph{Definition.}  For $z\in\Z^2$ pick $N\ge0$ with $z+Ng\in\cH$ and set
+$\widetilde G(z)=G(z+Ng)$.  This is well defined: if $N\le N'$ both work, then
+$G(z+N'g)=G\bigl((z+Ng)+(N'-N)g\bigr)=G(z+Ng)$ by Step 1.  Taking $N=0$ shows
+$\widetilde G=G$ on $\cH$.
+
+\emph{Periodicity.}  Given $z$, pick $N$ with $z+Ng\in\cH$; then also
+$z+h+Ng\in\cH$, so
+$\widetilde G(z+h)=G\bigl((z+Ng)+h\bigr)=G(z+Ng)=\widetilde G(z)$ by Step 1.
+The same for $h'$.
+\end{proof}
+
+\subsection{The external input}\label{ssec:external}
+
+Theorem~\ref{thm:CG} below is quoted as an explicit hypothesis of
+Theorem~\ref{thm:convex-nivat}, and not as an established fact.  What follows is
+a transcription of Definition~3.4 and Theorem~3.5 of Colle and Garibaldi
+\cite{CG}, at the end of their \S3.  There, ``pairwise distinct slopes'' is
+read, as in their Definition~4.1, as saying that the boundary directions of
+$U_1,\dots,U_m$ are pairwise distinct; $U_i$ and $V_i$ are disjoint, hence
+parallel.  Lemma~\ref{lem:normalise} below uses neither the condition on the
+slopes nor minimality.
+
+\setcounter{thm}{-1}
+\begin{dfn}[{\cite[Definition~3.4]{CG}}: $\Z_p$-star configuration]
+\label{dfn:zpstar}
+Let $p$ be a prime and let $\vartheta\in\cA^{\Z^2}$, with
+$\cA\subset\dbr{p}=\{0,\dots,p-1\}$, be a \emph{non-periodic} configuration.
+Then $\vartheta$ is a \emph{$\Z_p$-star configuration} if there are a
+$\Z_p$-minimal periodic decomposition $\vartheta=\vartheta_1+\cdots+\vartheta_m$,
+each $\vartheta_i\colon\Z^2\to\Z_p$ periodic, and rational half-planes
+$U_1,\dots,U_m,V_1,\dots,V_m\subset\Z^2$, the boundary slopes of
+$U_1,\dots,U_m$ being pairwise distinct and $V_i$ having the same slope as
+$U_i$, such that $U_i\cap V_i=\varnothing$ and such that $\vartheta_i|_{U_i}$
+and $\vartheta_i|_{V_i}$ are fully periodic for every $i$, ``fully periodic''
+being understood as in \S\ref{ssec:halfplanes}, that is as in
+\cite[Definition~2.1]{CG}.
+\end{dfn}
+
+\begin{thm}[{\cite[Theorem~3.5]{CG}}]\label{thm:CG}
+Let $\xi\in\cA^{\Z^2}$ with $\cA\subset\Z_{>0}$ finite, and suppose that $\xi$
+is non-periodic and has low convex pattern complexity, that is $P_\xi(S)\le|S|$
+for some non-empty finite lattice-convex $S$.  Then, for some prime $p$ with
+$\cA\subset\dbr{p}$, the orbit closure $X_\xi$ contains a $\Z_p$-star
+configuration $\vartheta$.
+\end{thm}
+
+By Definition~\ref{dfn:zpstar}, such a $\vartheta$ is non-periodic, each
+component $\vartheta_i$ has a period $h_i\ne0$, and each is fully periodic on
+two disjoint half-planes.  That is the whole of the input to
+Lemma~\ref{lem:normalise}.
+
+In the two remarks and the three paragraphs that follow we report what we
+checked in the sources.  They use the notation of the cited papers
+($\mathrm{NEL}$, $\mathrm{ONED}$, regions, the supports $\cS_\varphi$, and the
+internal numbering of \cite{CG}, \cite{Colle23a} and \cite{Colle23b}), which is
+not set up in this paper; nothing in \S\S\ref{sec:notation}--\ref{sec:quadratic}
+or in the statement of Theorem~\ref{thm:convex-nivat} depends on them.
+
+\begin{remcheck}[The record of what we checked]
+Earlier versions of this paper carried the non-periodicity of $\vartheta$ as a
+separate additional hypothesis~\textup{(N)}, on the ground that
+\cite[Theorem~1.2]{CG}, the $\Z$-coefficient form of Theorem~3.5 stated in
+\S1.2 of that paper, puts no lower bound on the order of $\vartheta$ and so,
+read literally, is satisfied trivially by any fully periodic $\vartheta\in
+X_\xi$.  Having gone through the whole text we confirm that it is not needed as
+an extra hypothesis: (a) the first sentence of Definition~3.4 requires
+$\vartheta$ to be non-periodic; (b) the proof of Theorem~3.5 states explicitly
+that ``in both cases we obtain a non-periodic $\vartheta\in X_\eta$'', and then
+invokes \cite[Theorem~1.5]{Colle23b} to choose $p$ for which the reduction
+modulo $p$ of a $\Z$-minimal decomposition is still a $\Z_p$-minimal
+decomposition of the same order, and finally its own Proposition~3.1 to
+construct $U_i$ and $V_i$; (c) the proof of Theorem~4.5 writes ``by the
+definition of a $\Z_p$-star configuration, $\vartheta$ is non-periodic'', and
+the opening paragraph of \S4, where ``$m=1$ is trivial'', rests on the same
+point.  So non-periodicity is part of Theorem~\ref{thm:CG} and not an extra
+hypothesis of ours.  The proof of Theorem~\ref{thm:CG} depends on Colle
+\cite{Colle23a} (published, 2023) and \cite{Colle23b} (published, 2023), and on
+the new Proposition~3.1 of the preprint \cite{CG} (with its Claim~3.3); we do
+not reprove any of these.  Lemma~\ref{lem:normalise} uses only the three items
+``non-periodic, components periodic, each fully periodic on two disjoint
+half-planes'' from Definition~\ref{dfn:zpstar}, so the reduction would go
+through equally if one quoted only the form of \cite[Theorem~1.2]{CG} and added
+non-periodicity by hand.
+\end{remcheck}
+
+\begin{remaudit}[Reading the proof in \cite{CG}]
+The chain of the proof of \cite[Theorem~3.5]{CG} is: $\eta$ non-periodic with a
+non-trivial annihilator $\Rightarrow$ (by \cite[Theorem~1.9]{Colle23a}) there is
+$\ell\in\mathrm{NEL}(\eta)$ with $\pm\boldsymbol\ell\in\mathrm{ONED}(\eta)$
+$\Rightarrow$ (repeating the two cases of \cite[Lemma~4.6]{Colle23a}, which use
+Propositions~2.13--2.14, Lemma~3.5, Lemma~4.2 and Claims~4.7--4.15 of that
+paper) one obtains a non-periodic $\vartheta\in X_\eta$ and an
+$(\boldsymbol\ell,\boldsymbol\ell')$-region on which $\vartheta$ is fully
+periodic $\Rightarrow$ (by \cite[Theorem~1.5]{Colle23b}) one chooses $p$ for
+which the reduction modulo $p$ of a $\Z$-minimal decomposition is a
+$\Z_p$-minimal decomposition of the same order $\Rightarrow$ (by
+Proposition~3.1) one obtains $U_i$ and $V_i$.  The material new to \cite{CG}
+here is Lemma~2.10, Lemma~2.11 and Proposition~3.1.  We went through these three
+line by line.
+\begin{enumerate}
+\item[\textup{(a)}] The layer propagation of Lemma~2.10 is correct: after the
+factor $X^{h_k}-1$ has been removed, $\cS_{\hat\varphi}$ has no edge parallel to
+$\ell_k$, so a single vertex can be placed outside the region and the
+propagation proceeds half-line by half-line.
+\item[\textup{(b)}] Lemma~2.11 is correct, but its proof writes the translation
+along $v_{\ell''}$ as a multiple of the period $u''$; one should first pass to a
+subsequence lying in a fixed residue class modulo $u''$ and argue there.
+\item[\textup{(c)}] Claim~3.2, which excludes $\iota'\ne\iota+m-1$ using
+Lemma~2.11 and Proposition~2.6, is correct.
+\item[\textup{(d)}] The inductive step of Proposition~3.1(i) applies the
+induction hypothesis to the partial sum $\vartheta_1+\cdots+\vartheta_{m-1}$
+without checking that this partial sum satisfies the hypothesis
+$\boldsymbol\ell_1,\boldsymbol\ell_{m-1}\in\mathrm{ONED}$.  This is repairable:
+the proof of (i) uses the $\mathrm{ONED}$ hypothesis only in order to place the
+two asymptotic directions of the region on edges of $\cS_\varphi$ (Lemma~2.9 and
+Claim~3.2), and the directions of the region of the partial sum are
+$\boldsymbol\ell_1$ and $\boldsymbol\ell_{m-1}$ anyway, so it suffices to
+restate the induction hypothesis as ``for every configuration of minimal order
+$m'$ which is fully periodic on some
+$(\boldsymbol\ell_\iota,\boldsymbol\ell_{\iota+m'-1})$-region''.  The conclusion
+is unaffected.
+\item[\textup{(e)}] Claim~3.3(a) deduces from Theorem~2.8 (the $\Z_p$ and convex
+form of Szabados' theorem) and from Boyle--Lind that $\theta$ is
+$\ell_j$-periodic; the passage ``$\theta_j$ fully periodic $\Rightarrow$
+$\vartheta_j$ fully periodic'' is correct, because translating the
+$h_j$-periodic $\vartheta_j$ along $\ell_j$ produces only finitely many
+translates.  In Claim~3.3(b), the ``maximal convex region $L_\alpha$'', the
+largest interval in the union of entire layers along $\ell_k$ containing a given
+strip, is well defined; there the translation $t_{n_\alpha}+s_\alpha\sigma
+t_k\tau$ has to be a positive multiple of $\tau v_{\ell_j}$ for the hypothesis
+of the Claim to apply, which does hold at the three places where Step~3 uses it
+($j=p-1$, $k=p$, $\tau=1$ and $j=2$, $k=1$, $\tau=-1$), since $\sigma\tau=1$ in
+each; but the general statement of the Claim does not record this constraint.
+\item[\textup{(f)}] The angular argument of Step~3, that $v_{\ell_{p-1}}$ points
+into the interior of $U_i$ for $i\le p-2$ and of $V_i$ for $i\ge p+1$, rests on
+$\boldsymbol\ell_1,\dots,\boldsymbol\ell_m$ lying in a half-circle and on
+$\boldsymbol\ell_{i+m}=-\boldsymbol\ell_i$, and is correct.
+\end{enumerate}
+Items~(b), (d) and (e) are gaps in the exposition; each can be filled as
+described.  We found no substantive error.
+\end{remaudit}
+
+\noindent\textbf{The check against \cite{Colle23a}} (the published version).
+\cite[Theorem~1.9]{Colle23a} reads: a configuration with $\cA\subset\Z$ and a
+non-trivial annihilator is fully periodic provided that for every line $\ell$
+either $-\boldsymbol\ell\notin\mathrm{ONED}$ or
+$\boldsymbol\ell\notin\mathrm{ONED}$.  It carries \emph{no} hypothesis that the
+non-periodic configurations in the orbit closure have the same order; that
+hypothesis appears only in \cite[Theorem~1.10]{Colle23a}, a standing assumption
+of its \S4.1, and in its Claims~4.11 and 4.16.  When the proof of
+\cite[Theorem~3.5]{CG} repeats the two cases of \cite[Lemma~4.6]{Colle23a} it
+uses only Claims~4.7--4.10 (first case) and 4.12--4.15 (second case), and the
+role of Claims~4.11 and 4.16 — locating the second asymptotic direction of the
+region — is taken over by its own Claim~3.2, which derives it from the minimal
+decomposition of $\vartheta$ itself.  Those claims, and Propositions~2.13--2.14,
+Lemmas~2.6--2.8, 3.5, 4.2 and 4.5, do not depend on the equal-order assumption.
+The proof of \cite[Theorem~1.9]{Colle23a} itself uses the periodic-limit theorem
+of Kari and Moutot \cite{KM20,KM23} and the Boyle--Lind theorem.  Hence
+Theorem~3.5 holds for an arbitrary non-periodic $\eta$ of low convex complexity,
+and Remark~8.4$'$ below, on minimal-order counterexamples, is only a safeguard
+and is no longer necessary.
+
+\noindent\textbf{The check against \cite{Colle23b}} (arXiv:2204.06658v1).  The
+result cited as ``\cite[Theorem~1.5]{Colle23b}'' in \cite{CG} is Theorem~1.6 of
+that version: for $\cA\subset\Z_+$ and a $\Z$-minimal decomposition
+$\eta=\eta_1+\cdots+\eta_m$, there is a prime $p$ with $\cA\subset\dbr{p}$ for
+which $\bar\eta=\bar\eta_1+\cdots+\bar\eta_m$ is a $\Z_p$-minimal decomposition;
+this agrees with the way \cite{CG} restates it.  Its proof chooses $p$ so that
+the values of the finite-alphabet configurations $\varphi_i\eta_i+N_i\one$ lie
+in $\dbr{p}$, shows first, by Proposition~2.9 of that paper with $R=\Z$, that no
+$\bar\eta_i$ is fully periodic, and then derives a contradiction from Lemma~3.1
+there (if a shorter $\Z_p$-decomposition existed, some $\bar\eta_i$ would be
+fully periodic).  The proof of that Lemma~3.1 uses the fact that the reflected
+convex supports of two annihilators have no parallel edges to conclude
+$\mathrm{ONED}=\varnothing$, then Boyle--Lind for full periodicity, peeling off
+one component at a time; the proof of Proposition~2.9 for an arbitrary $R$ (its
+Lemma~2.8, the ``division by $X^v-1$'' construction, together with its
+Proposition~2.7) we also read through.  Neither contains an error.  The other
+results of \cite{Colle23b} quoted in \cite{CG} — its Lemma~2.4, its
+Proposition~2.7, a rewriting of \cite[Lemma~5.10]{CyrKra15}, and its
+Proposition~2.9 — match in number and in content.
+
+\noindent\textbf{The one link that is given only as a sketch.}  Claim~3.3(a) of
+\cite{CG}, and through it its Proposition~3.1(ii) and the existence of the
+half-planes $V_i$, uses its Theorem~2.8, the $\Z_p$ and convex form of Szabados'
+theorem that a minimal decomposition of order two does not have low convex
+complexity.  We checked where that version is to be found: it is \emph{not} in
+\cite{Colle23b}; the published version of \cite{Colle23a} states, as its
+Theorem~1.7, only the $\Z$-coefficient convex form, citing Szabados \cite{Sz},
+whose own statement is over $\Z$ and for rectangles; the arXiv version of
+\cite{Colle23a} carries a remark that the same proof works over a finite field;
+and \cite{CG} gives a sketch of the rewriting (a pigeonhole argument producing
+agreement with a translate on a strip, its Proposition~2.7 of \cite{Colle23b}
+giving $\mathrm{ONED}$ in both directions for two edge directions, and the
+propagation of balanced sets from Cyr--Kra \cite{CyrKra15} and
+\cite[Lemma~4]{Sz}).  Every step of the sketch concerns only pattern counting
+for finite-alphabet configurations and the geometry of generating sets, and none
+of it involves the arithmetic of the coefficient ring, so that the $\Z_p$ form
+is plausible; but nowhere is it written out.  Theorem~A does not depend on
+Theorem~2.8; \S\ref{sec:reduction} depends on it indirectly, through \cite{CG}.
+\textbf{Appendix~\ref{app:szabados} gives a complete proof of
+\cite[Theorem~2.8]{CG}} (Theorem~\ref{thm:szabados} and
+Corollary~\ref{cor:szabados}, using nothing beyond the one-dimensional
+Morse--Hedlund theorem), so that this link is no longer a sketch and Claim~3.3(a)
+of \cite{CG} may quote Theorem~\ref{thm:szabados} directly.
+
+\subsection{Normalisation}\label{ssec:normalisation}
+
+\setcounter{thm}{2}
+\begin{lem}[Normalisation]\label{lem:normalise}
+Let $\theta\colon\Z^2\to\Fp$ be non-periodic and suppose
+$\theta=\sum_{i=1}^mG_i$, where each $G_i\colon\Z^2\to\Fp$ has a non-zero period
+$h_i$ and there are disjoint half-planes $U_i,V_i$ on which $G_i$ is fully
+periodic.  Then $\theta$ is a star configuration.
+\end{lem}
+
+Call a family $(G_i,h_i,U_i,V_i)_{i=1}^m$ with these properties an
+\emph{admissible decomposition} of $\theta$, of length $m$.  Since $\theta$ is
+non-periodic, every admissible decomposition has $m\ge2$: for $m=1$ we would
+have $\theta=G_1$ periodic.
+
+\begin{proof}
+\emph{Step $(\gamma)$: alignment of the components that are not doubly
+periodic.}  Let $G$ have a non-zero period $h$, not be doubly periodic, and be
+fully periodic on disjoint half-planes $U$ with normal $n$ and $V$ with normal
+$n'$.  \emph{Claim: $\langle h,n\rangle=0$.}  Let $\widetilde G$ be the global
+extension of $G|_U$ from Lemma~\ref{lem:extend} and put
+$\Gamma_U:=\Per(\widetilde G)$, of finite index.  Suppose
+$\langle h,n\rangle\ne0$; replacing $h$ by $-h$ we may assume
+$\langle h,n\rangle>0$.  For $z\in U$ we have $z+h\in U$, so
+$\widetilde G(z+h)=G(z+h)=G(z)=\widetilde G(z)$: the $\Gamma_U$-periodic
+function $\widetilde G(\cdot+h)-\widetilde G$ vanishes on $U$.  But a
+$\Gamma_U$-periodic function vanishing on a half-plane vanishes everywhere:
+$\Gamma_U$ contains some $N'\Z^2$ and hence a vector $g$ with
+$\langle g,n\rangle>0$, and any $z$ is translated into $U$ by $z+Ng$ for $N$
+large.  So $\widetilde G$ has period $h$.  Now for any $z$ pick $N$ with
+$z+Nh\in U$: then $G(z)=G(z+Nh)=\widetilde G(z+Nh)=\widetilde G(z)$, that is
+$G=\widetilde G$ is doubly periodic, a contradiction.
+
+Hence $n\perp h$.  Write $h=kv$ with $v$ primitive and $k\ge1$, after changing
+the sign of $h$ if necessary, and put $\pi=\det(v,\cdot)$.  Since
+$v^\perp=(-v_2,v_1)$ satisfies $\langle z,v^\perp\rangle=\pi(z)$ and
+$n\parallel v^\perp$, we have $\langle z,n\rangle=\kappa\,\pi(z)$ for some
+$\kappa\in\R^\times$, so $U$ is either $\{\pi<\ell\}$ or $\{\pi>r\}$ with
+$\ell,r\in\Z$.  The same applies to $V$.  If $U$ and $V$ were both of the type
+$\{\pi<\cdot\}$, or both of the type $\{\pi>\cdot\}$, they would intersect; so
+one is $\{\pi<\ell\}$ and the other is $\{\pi>r\}$, and disjointness says
+exactly $\ell\le r+1$.  Taking $\widetilde L,\widetilde R$ to be the global
+extensions of $G$ on these two half-planes, $G$ satisfies \textup{(S1)} with
+period $kv$, \textup{(S2)}, and \textup{(S3)}.
+
+\emph{Operation A: absorbing a doubly periodic component.}  Suppose $G_i$ is
+doubly periodic and $m\ge2$; pick $k\ne i$.  Since $\Per(G_i)$ has finite index,
+$\Per(G_i)\cap\Z h_k$ contains some $h_k'\ne0$, and $G_k':=G_k+G_i$ has period
+$h_k'$.  On $U_k$ we have $G_k'=\widetilde G_k+G_i$ by
+Lemma~\ref{lem:extend}, the restriction of a doubly periodic field, hence fully
+periodic; likewise on $V_k$.  Deleting $G_i$ and replacing $G_k$ by $G_k'$ gives
+an admissible decomposition of length $m-1$.
+
+\emph{Operation C: merging parallel components.}  Suppose $G_i,G_k$ with $i\ne
+k$ are both not doubly periodic and $h_i\parallel h_k$.  By Step $(\gamma)$
+there is a primitive $v$ with $h_i=\pm k_iv$, $h_k=\pm k_kv$, and
+$\{U_i,V_i\}=\bigl\{\{\pi<\ell_i\},\{\pi>r_i\}\bigr\}$,
+$\{U_k,V_k\}=\bigl\{\{\pi<\ell_k\},\{\pi>r_k\}\bigr\}$, where
+$\pi=\det(v,\cdot)$.  Then $G_i+G_k$ has period $\lcm(k_i,k_k)\,v$, equals
+$\widetilde L_i+\widetilde L_k$ on $\{\pi<\min(\ell_i,\ell_k)\}$ and
+$\widetilde R_i+\widetilde R_k$ on $\{\pi>\max(r_i,r_k)\}$, both restrictions of
+doubly periodic fields and hence fully periodic; and these two half-planes are
+disjoint, since
+$\min(\ell_i,\ell_k)\le\ell_i\le r_i+1\le\max(r_i,r_k)+1$.  Merging gives an
+admissible decomposition of length $m-1$.
+
+\emph{Termination and conclusion.}  Starting from the given admissible
+decomposition, repeat: if some component is doubly periodic, apply Operation~A;
+otherwise, if some pair is parallel, apply Operation~C.  Each step strictly
+decreases the length, so the process terminates.  At termination no component is
+doubly periodic, the periods are pairwise non-parallel, and $m\ge2$.  By
+Step~$(\gamma)$ every component satisfies \textup{(S1)}--\textup{(S3)} and the
+primitive directions $v_i$ are pairwise non-parallel.  So $\theta$ is a star
+configuration.
+\end{proof}
+
+\subsection{The convex Nivat conjecture}\label{ssec:nivat}
+
+\begin{remminimal}[Counterexamples of minimal order]
+For a non-periodic configuration $\xi$ of low convex complexity with
+$\cA\subset\Z_+$, write $\ord(\xi)$ for the length of a $\Z$-minimal periodic
+decomposition of $\xi$; by \cite{KS} a configuration of low complexity has a
+non-trivial annihilator and hence a finite periodic decomposition, so $\ord$ is
+finite.  If the convex Nivat conjecture has a counterexample, then one may take
+a counterexample $\xi$ with $\ord(\xi)$ minimal, and for such a $\xi$ every
+non-periodic $\xi'\in X_\xi$ is again a counterexample, with
+$\ord(\xi')=\ord(\xi)$.
+
+\emph{Proof.}  Every finite-window pattern of $\xi'$ is a pattern of $\xi$, so
+$\xi'$ has low convex complexity; being non-periodic it is a counterexample, and
+minimality gives $\ord(\xi')\ge\ord(\xi)=:m$.  Conversely write
+$\xi=\sum_{i\le m}\xi_i$ minimal, with $\xi_i$ of period $h_i$; the directions
+are pairwise distinct, since two components with parallel periods could be
+merged, contradicting minimality.  Then $\varphi=\prod_i(X^{h_i}-1)$ annihilates
+$\xi$; an annihilation relation is a linear identity on a finite window and
+therefore passes to the orbit closure, so $\varphi$ annihilates $\xi'$, and by
+\cite{KS} the configuration $\xi'$ has a periodic decomposition with at most $m$
+terms, that is $\ord(\xi')\le m$.\hfill$\square$
+\end{remminimal}
+
+Consequently every result of \cite{Colle23a} proved under the standing
+assumption that the non-periodic configurations of the orbit closure all have
+the same order — including \cite[Theorem~1.10]{Colle23a}, the Szabados
+conjecture and the NEL/ONED symmetry — is available for a counterexample $\xi$
+of minimal order.  By the check recorded in \S\ref{ssec:external},
+\cite[Theorem~3.5]{CG} does not itself need that assumption, so this remark is
+only a safeguard; it costs a paragraph, and it buys a reduction that is
+insensitive to the way \cite{Colle23a} is quoted.
+
+\setcounter{thm}{3}
+\begin{thm}[Convex Nivat conjecture, conditional on {\cite[Theorem~3.5]{CG}}]
+\label{thm:convex-nivat}
+Assume Theorem~\ref{thm:CG}, that is \cite[Theorem~3.5]{CG} together with its
+Definition~3.4.  Let $\xi\colon\Z^2\to\cA$ with $\cA$ finite, and suppose there
+is a non-empty finite lattice-convex $S$ with $P_\xi(S)\le|S|$.  Then $\xi$ is
+periodic.
+\end{thm}
+
+\begin{proof}
+Suppose the conjecture has a counterexample.  Embed the alphabet into $\Z_{>0}$
+by an injective encoding, which changes neither the number of patterns nor
+periodicity, and use Remark~8.4$'$ to choose a counterexample of minimal $\ord$,
+still written $\xi$; it is non-periodic and has low convex complexity.  By
+Theorem~\ref{thm:CG} take the prime $p$ and the $\Z_p$-star configuration
+$\vartheta\in X_\xi$, with the decomposition $\vartheta=\sum_i\vartheta_i$ over
+$\Z_p=\Fp$, the periods $h_i$ and the half-planes $U_i,V_i$ of
+Definition~\ref{dfn:zpstar}.
+
+\emph{(1) The complexity does not increase.}  Since $\cA\subset\dbr{p}$, reading
+the values of $\vartheta$ in $\Fp$ merges no colours: as an $\Fp$-valued
+configuration, $\vartheta$ has the same pattern set and the same periodicity as
+it has as an $\cA$-valued one.  Every finite-window pattern of a configuration
+in $X_\xi$ is a pattern of $\xi$, a limit in the product topology agreeing with
+some translate on any finite window.  Hence
+\begin{equation}
+P_\vartheta(S)\ \le\ P_\xi(S)\ \le\ |S| .
+\label{eq:complexity}
+\end{equation}
+
+\emph{(2) Normalisation.}  By Definition~\ref{dfn:zpstar}, $\vartheta$ is
+non-periodic, $\vartheta=\sum_i\vartheta_i$ over $\Fp$ with each $\vartheta_i$
+of period $h_i$ and fully periodic on the disjoint half-planes $U_i,V_i$.  By
+Lemma~\ref{lem:normalise}, $\vartheta$ is a star configuration, with some
+$m'\ge2$.
+
+\emph{(3) Contradiction.}  By Theorem~\ref{thm:main},
+$P_\vartheta(S)\ge|S|+1$, contradicting \eqref{eq:complexity}.
+\end{proof}
+
+\begin{cor}[Nivat's conjecture, under the hypothesis of
+Theorem~\ref{thm:convex-nivat}]\label{cor:nivat}
+Under the same hypothesis: if $P_\xi\bigl([1,n]\times[1,k]\bigr)\le nk$ for some
+$n,k\ge1$, then $\xi$ is periodic.
+\end{cor}
+
+\begin{proof}
+A rectangle is lattice-convex; apply Theorem~\ref{thm:convex-nivat}.
+\end{proof}
+
+\appendix
+
+\section{Skeleton of the proof}\label{app:skeleton}
+
+\[
+\begin{array}{rl}
+\text{\S\ref{sec:firstcase}} &
+  \exists a:DI_a\ne0\ \Longrightarrow\ \text{Theorem~\ref{thm:main} at once, no
+  convexity needed;}\\
+  &\text{otherwise }DI_a\equiv0\text{ and }D\eta=0 .\\[3pt]
+\text{\S\ref{sec:spectrum}} &
+  \Lambda_i=\text{exceptional spectrum},\ A=\prod_iA_i(T^{v_i}),\
+  Z=\Newt(A);\\
+  & f(T)\eta=\text{const}\Rightarrow A\mid f\ \Longrightarrow\
+  \dim U_S\ge|S|-|R_Z(S)|+1 .\\[3pt]
+\text{\S\ref{sec:background}} &
+  Ae\text{ agrees on adjacent realised sectors}\Rightarrow Ae_\theta=b,\
+  \text{doubly periodic, all }H_i\text{-invariant}.\\[3pt]
+\text{\S\ref{sec:twopoint}} &
+  f_i=Q_i\eta\ne0\text{ and transversally bounded}\ \Longrightarrow\
+  \exists d:\ J(d,\cdot)=D_z[\eta(z)\eta(z+d)]\ne0 .\\[3pt]
+\text{\S\ref{sec:quotient}} &
+  A(T_d)J=A(T_zT_d^{-1})J=0;\ \ R/(a,c)\text{ spanned by }Y^{Z-Z}
+  \ \Longrightarrow\ d\in(Z-Z)\cap\Z^2 .\\[3pt]
+\text{\S\ref{sec:zonotope}} &
+  (Z-Z)\cap\Z^2=(Z\cap\Z^2)-(Z\cap\Z^2)\ \Longrightarrow\ d=q_1-q_0,\
+  q_0,q_1\in Z .\\[3pt]
+\text{\S\ref{sec:quadratic}} &
+  |R_Z(S)|\text{ quadratic characters independent modulo }U_S
+  \ \Longrightarrow\ P_\theta(S)\ge|S|+1 .\\[3pt]
+\text{\S\ref{sec:reduction}} &
+  \text{\cite[Thm.~3.5]{CG}}
+  \xrightarrow{\text{Lem.\ \ref{lem:normalise}}}\text{star configuration}
+  \xrightarrow{\text{Thm.\ \ref{thm:main}}}\text{convex Nivat}
+  \Longrightarrow\text{Nivat}.
+\end{array}
+\]
+
+Dependencies: \S\S\ref{sec:notation}--\ref{sec:quadratic} are self-contained,
+using only the standard facts that $\C[T^\pm]$ is a unique factorisation domain,
+Newton-polygon additivity (Ostrowski), the Chinese remainder theorem, the
+Nullstellensatz, and the existence of unimodular triangulations of lattice
+polygons.  The only external input to \S\ref{sec:reduction} is
+Theorem~\ref{thm:CG}, that is \cite[Theorem~3.5]{CG} together with its
+Definition~3.4; the proof of that theorem rests in turn on Colle
+\cite{Colle23a,Colle23b}, both published, and on Proposition~3.1 of \cite{CG},
+and the result \cite[Theorem~2.8]{CG} on which the latter depends is proved in
+full in Appendix~\ref{app:szabados}.
+
+\section{Independent edge-increment results, not part of the proof
+chain}\label{app:edge}
+
+Before the argument of \S\S\ref{sec:notation}--\ref{sec:reduction} took its
+present form, the same question was approached along a different route, by
+comparing $P_\theta(S)$ with $P_\theta(S\setminus E)$ for an edge $E$ of the
+polygon $\Conv(S)$ and controlling the increment through the combinatorics of
+the edge directions of $\Conv(S)$ against the directions $v_i$.  That route
+produced a number of statements of independent interest: an exact identity
+for the lattice width of $\Conv(S)$ in a given direction in terms of its edge
+data, a divisibility relation between the determinants of three consecutive
+edge directions, a propagation principle for sums of functions each of which
+depends on a single one of the projections $\pi_i$ and which vanish on enough
+consecutive layers, a description of the
+periods surviving after repeated differencing, a count of the far-field
+patterns along an edge, and lower bounds of the form
+$P_\theta(S)-P_\theta(S\setminus E)\ge2$ for short edges and of the form
+$P_\theta(S)-P_\theta(S\setminus E)\ge$ (a row-length quantity) in general.
+None of them is used above, their proofs are not reproduced here, and the
+notation they require is not set up in this paper; they will be treated
+separately.  Nothing in \S\S\ref{sec:notation}--\ref{sec:reduction} depends
+on any of them.
+
+\section{Numerical verification}\label{app:numerics}
+
+The scripts are \texttt{star.py} (construction, enumeration and all checks),
+\texttt{verify.py} and \texttt{verify2.py} (the two randomised experiments),
+and \texttt{lemma31.py} (the counterexample of \S\ref{app:counterexample}).
+They depend only on \texttt{numpy} and are supplied as ancillary files together
+with their output for the stated seeds; every number below is read off that
+output.
+
+\subsection{Method}\label{app:method}
+
+\begin{itemize}
+\item \emph{Configurations.}  Each component is specified by a primitive
+direction $v_i$, a tangential period $k_i$, an arbitrary value table on the
+transition strip $[\ell_i,r_i]$, and left and right tails $L_i,R_i$ given, in
+the basis $(v_i,u_i)$ of \S\ref{ssec:conv}, as doubly periodic tables in
+$(t\bmod a,\ s\bmod k_i)$.  Axioms \textup{(S1)} and \textup{(S3)} hold by
+construction.  Axiom \textup{(S2)} is decided exactly: $F_i$ is doubly
+periodic if and only if it coincides with the global extension of its left
+tail (a doubly periodic function vanishing on a half-plane vanishes
+identically), and that coincidence is tested on the strip and on one full
+period beyond it.  With $M$ the least common multiple of all the $k_j$ and of
+all the tail period indices, the lattice $\Gamma$ of \S\ref{ssec:conv}
+contains $M\Z^2$, and the program uses $H_i=Mk_iv_i$; by
+Remark~\ref{rem:dichotomy-stable} this choice, which need not be the minimal
+one, does not affect the Case~A/Case~B decision, and it does not affect
+$\Lambda_i$ either, since refining the period only adds zero Fourier
+coefficients.
+
+\item \emph{Pattern counts.}  The $S$-patterns are enumerated at all anchors
+of the square box of radius $R=90$ and again of radius $R=180$.  Away from
+the crossing region of the strips the patterns along each strip are
+$H_i$-periodic and, inside a sector, $M\Z^2$-periodic, so the count is exact
+as soon as the box is larger than the crossing region plus one period plus
+$\diam(S)$; the two counts agreed on every window of every configuration
+reported below.
+
+\item \emph{Deciding the case.}  $DI_a$ is computed on the box of radius $40$
+from the formal expansion \eqref{eq:Dexp}; all-zero for every colour $a$ means
+Case~B.
+
+\item \emph{Spectrum and zonotope.}  The fields $\Xi_i^\pm$ and
+$G_i^{\sigma,\epsilon}$ are built as in \S\ref{ssec:isolating}; for each
+difference field $d_{i,\sigma,\epsilon,a}$ a length-$\kappa_i$ DFT is taken
+row by row over all rows within $2M+2$ of the strip (outside the strip the
+rows repeat with period $M$), and the union of the frequencies with
+coefficient of modulus above $10^{-9}$ gives $\Lambda_i$, $d_i$ and $Z$.  The
+set $R_Z(S)$ is decided by testing whether all subset sums of the $d_iv_i$,
+translated by $r$, lie in $\Conv(S)$.
+
+\item \emph{Ranks.}  The encoding $w$ is a random injection into
+$\{1,\dots,100\}$.  The rank of the $|\cL|\times(|S|+1)$ matrix
+$\bigl(1,\,w(\gamma(s))_{s\in S}\bigr)_{\gamma\in\cL}$ is computed over
+$\mathbb F_q$ with $q=2^{31}-1$ and reported as $\dim U_S$; it is a lower
+bound for the rational rank, which is the direction needed to verify
+Lemma~\ref{lem:budget}.  In Case~B with $R_Z(S)\ne\varnothing$ the matrix is
+extended by the columns $\Phi_r(\gamma)=w(\gamma(r+q))\,w(\gamma(r+q+d))$,
+$r\in R_Z(S)$, of \S\ref{sec:quadratic}, and the rank $H_2(S)$ of the
+extended matrix is compared with $\dim U_S+|R_Z(S)|$
+(Lemma~\ref{lem:independence}) and with $|S|+1$ (Theorem~\ref{thm:main}).
+
+\item \emph{Witness and background.}  In Case~B, for every non-zero
+$d\in(Z-Z)\cap\Z^2$ the function $J(d,\cdot)$ is computed on the box of
+radius $40$ and the non-zero instances are collected
+(Proposition~\ref{prop:witness}); the first of them, with a $q$ as in
+Corollary~\ref{cor:pair}, is the pair $(d,q)$ used for the $\Phi_r$.  The
+polynomial $A$ is built with complex coefficients from the $\Lambda_i$, and
+$Ae_\theta$ is checked to be $M\Z^2$-periodic on the box
+(Proposition~\ref{prop:Ae-b}).
+\end{itemize}
+
+\subsection{Results}\label{app:results}
+
+\noindent\textbf{Experiment 1} (script \texttt{verify.py}, seed $1$).  We
+generated $84$ random star configurations with $p\in\{2,3,5\}$, $m\in\{2,3\}$,
+directions drawn without
+repetition from the $8$ primitive vectors
+$(1,0),(0,1),(1,\pm1),(1,\pm2),(2,\pm1)$, $k_i\in\{1,2,3\}$, tail periods of
+$1$ or $2$ rows, strip widths $1$ to $3$ with $\ell_i\in\{-1,0,1\}$, all
+tables uniformly random over $\mathbb F_p$ subject to \textup{(S2)}; component
+$1$ has independently drawn left and right tails, the other components have
+$L_i=R_i$.  Windows: the $2\times3$, $3\times3$, $2\times4$ and $4\times2$
+rectangles, the $6$-point triangle with vertices $(0,0),(2,0),(0,2)$, the
+$8$-point hexagon with vertices $(1,0),(2,0),(3,1),(2,2),(1,2),(0,1)$, the
+$5$-point rhombus with vertices $(0,0),(1,1),(2,0),(1,-1)$, and the $3$-point
+segment $\{0,1,2\}\times\{0\}$.  Result: $81$ configurations in Case~A and
+$3$ in Case~B; $P_\theta(S)\ge|S|+1$ held on all $8$ windows of all $84$
+configurations.  The three Case-B instances have $d_i\in\{3,6\}$, so $Z$ is
+larger than every window and $R_Z(S)=\varnothing$ throughout; on them
+$\dim U_S$ was exactly $|S|+1$ on every window, the witness $d$ existed
+($192$, $310$ and $28$ non-zero $d$ respectively), and $Ae_\theta$ was doubly
+periodic to within $2\cdot10^{-15}$.  These are instances of
+Remark~\ref{rem:empty-RZ}; Experiment~2 targets $R_Z(S)\ne\varnothing$.
+
+\noindent\textbf{Experiment 2} (script \texttt{verify2.py}, seed $7$).  We
+generated $157$ configurations of the form $\sum_iw_i\circ\pi_i$, so $k_i=1$
+and constant
+tails: each $w_i\colon\Z\to\mathbb F_p$ takes a constant value $c_i$ outside a
+window of length $1$ to $4$ and arbitrary values inside it, with $L_i=R_i=c_i$;
+$p\in\{2,3,5\}$, $m=2$ with probability $0.7$ and $m=3$ with probability
+$0.3$, directions drawn from the $11$ primitive vectors
+$(1,0),(0,1),(1,\pm1),(1,\pm2),(2,\pm1),(1,\pm3),(3,1)$.  Windows: the
+$3\times4$, $4\times4$, $5\times3$ and $4\times3$ rectangles, the $15$-point
+triangle with vertices $(0,0),(4,0),(0,4)$, the $17$-point hexagon with
+vertices $(1,0),(3,0),(4,2),(3,4),(1,4),(0,2)$, the $13$-point rhombus with
+vertices $(0,0),(2,2),(4,0),(2,-2)$, and the $12$-point parallelogram with
+vertices $(0,0),(3,0),(5,2),(2,2)$.  Result: $128$ in Case~A and $29$ in
+Case~B, all with $d_i=1$; $P_\theta(S)\ge|S|+1$ held on all $8$ windows of all
+$157$ configurations, and every check listed in \S\ref{app:method} passed on
+every Case-B instance.  Of the $29$ Case-B configurations, $14$ have
+$R_Z(S)\ne\varnothing$ for at least one window, giving $35$
+configuration--window pairs with $R_Z(S)\ne\varnothing$ and
+$|R_Z(S)|\in\{1,2,3,4,5\}$; all $35$ have $m=2$ (no Case-B instance with
+$m=3$ and $R_Z(S)\ne\varnothing$ was produced by this generator).
+Representative rows of the output:
+
+\begin{center}\small
+\begin{tabular}{@{}cllcccccccc@{}}
+\toprule
+$p$ & directions & $S$ & $|S|$ & $P_\theta(S)$ & $d_i$ & $|R_Z(S)|$ &
+$\dim U_S$ & $|S|+1-|R_Z(S)|$ & $H_2(S)$ & $d$\\
+\midrule
+$3$ & $(1,2),(1,0)$ & $4\times4$ & $16$ & $35$ & $(1,1)$ & $4$ & $13$ & $13$ & $17$ & $(-1,-1)$\\
+$3$ & $(1,2),(1,0)$ & hexagon & $17$ & $37$ & $(1,1)$ & $5$ & $13$ & $13$ & $18$ & $(-1,-1)$\\
+$3$ & $(1,2),(1,-2)$ & hexagon & $17$ & $45$ & $(1,1)$ & $3$ & $15$ & $15$ & $18$ & $(-1,-1)$\\
+$5$ & $(1,-3),(1,0)$ & $4\times4$ & $16$ & $37$ & $(1,1)$ & $2$ & $15$ & $15$ & $17$ & $(-1,1)$\\
+$2$ & $(2,-1),(1,2)$ & hexagon & $17$ & $41$ & $(1,1)$ & $2$ & $16$ & $16$ & $18$ & $(-2,0)$\\
+$5$ & $(2,1),(1,2)$ & $4\times4$ & $16$ & $54$ & $(1,1)$ & $1$ & $16$ & $16$ & $17$ & $(-2,-2)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+On all $35$ pairs with $R_Z(S)\ne\varnothing$ the value of $\dim U_S$ was
+\emph{exactly} $|S|+1-|R_Z(S)|$ (over $\mathbb F_q$), so the space of affine
+relations consists of exactly the multiples of $A$ and Lemma~\ref{lem:budget}
+is tight; and $H_2(S)$ was exactly $\dim U_S+|R_Z(S)|=|S|+1$, so the quadratic
+characters make up the deficit exactly, as in \S\ref{sec:quadratic}.  On the
+$116$ two-component configurations of Experiment~2 the criterion of
+Observation~\ref{obs:m2} below agreed with the computed case in all $116$
+instances, and the Case-B direction pairs had $|\det(v_1,v_2)|\in
+\{2,3,4,5,6,7,10\}$.
+
+\begin{obs}[A criterion for Case~B when $m=2$]\label{obs:m2}
+Suppose $m=2$ and both components satisfy $L_i=R_i$; write
+$\delta_i=F_i-L_i$ for the deviation field, supported in strip $i$.  Replace
+$H_i$ by a sufficiently large multiple, which by
+Remark~\ref{rem:dichotomy-stable} does not change the Case~A/Case~B decision,
+and expand the four-point template $\{z,z+H_1,z+H_2,z+H_1+H_2\}$ at an anchor
+$z$: $\delta_1$ is constant along the $H_1$-pairs and $\delta_2$ along the
+$H_2$-pairs, so $De_\theta(z)=0$ if and only if at least one of the two pairs of
+constants agrees.  Hence \emph{Case~B holds if and only if
+$\supp\delta_1\cap\supp\delta_2=\varnothing$}, that is, no point is deviated by
+both components at once.  In particular, when $k_i=1$, the tails are constant
+and equal, and $|\det(v_1,v_2)|=1$, one is always in Case~A: the map
+$(\pi_1,\pi_2)\colon\Z^2\to\Z^2$ is then surjective and the two deviation sets
+must meet.  Case~B occurs only for $|\det|\ge2$.  The sample of Experiment~2 was
+generated at random and then sorted by the numerical test; the criterion
+explains why Case~B appeared only on direction pairs with $|\det|\ge2$.
+\end{obs}
+
+\subsection{A counterexample to the generalisation of
+Lemma~\ref{lem:Ae-sectors}}\label{app:counterexample}
+
+(\texttt{lemma31.py}.)  Take $p=2$, $m=3$, $v_1=(1,0)$, $v_2=(0,-1)$,
+$v_3=(1,-1)$.  Tails: $L_1=0$ and $R_1=\one[x\text{ even}]$; $L_2=L_3=0$ and
+$R_2=R_3=\one[3\mid x]$; the transition strip of each component is constant
+$1$, of width $1$.  Here $\pi_2(v_1)=\pi_3(v_1)=1>0$, so
+$B_1^+=R_2+R_3\equiv0$ and $B_1^-=L_2+L_3=0$, and the program computes
+$\Lambda_1=\{\pm1\}$ (with $\kappa_1=12$ and frequencies $\{0,6\}$), so that
+$A_1(T^{v_1})=T^{2v_1}-1$.
+
+\begin{itemize}
+\item For the pairs of realised sectors adjacent along the rays $\pm v_1$,
+namely $(R_1,R_2,R_3)$ with $(L_1,R_2,R_3)$ and $(R_1,L_2,L_3)$ with
+$(L_1,L_2,L_3)$: the difference after applying $A_1(T^{v_1})$ is $0$, up to a
+floating-point error of $1.3\cdot10^{-16}$, for both colours.
+
+\item For the mixed choice $(R_1,R_2,L_3)$ against $(L_1,R_2,L_3)$ — here
+$B=R_2+L_3=\one[3\mid x]$, and the sign vector $(+,+,-)$ corresponds to the cone
+$\{y>0,\ x>0,\ x+y<0\}=\varnothing$, which is not realised: the difference after
+applying $A_1(T^{v_1})$ has maximum absolute value $2$.
+\end{itemize}
+
+By hand: along the $x$-direction,
+$\Delta_1=\one[R_1+B=1]-\one[L_1+B=1]$ takes the values $(-1,0,1,0,1,0)$ for
+$x\bmod6=0,\dots,5$, whereas its translate by $x\mapsto x+2$ is
+$(1,0,1,0,-1,0)$.  The two differ, so $\Delta_1$ is not killed by
+$T^{2v_1}-1$: its spectrum contains cube roots of unity, and those are not in
+$\Lambda_1$.  This is why \S\ref{sec:background} can only assert that $Ae$ is
+constant across the \emph{realised} sectors, where $B=B_i^\sigma$ — and that is
+exactly, and only, what Lemma~\ref{lem:Ae-finite} needs.
+
+\section{The \texorpdfstring{$\Fp$}{Fp} and convex form of Szabados'
+theorem}\label{app:szabados}
+
+This appendix proves \cite[Theorem~2.8]{CG} in full, and so removes the one step
+in the chain behind Theorem~\ref{thm:CG} which \S\ref{ssec:external} reports as
+being only sketched in the source.  The proof follows Szabados \cite{Sz} —
+pigeonhole, balanced sets, and the one-dimensional Morse--Hedlund theorem — with
+two changes.  The coefficient ring is $\Fp$: every argument below uses only
+equality of values and the fact that a certain difference is periodic in a given
+direction, and none of it touches the arithmetic of the ring.  And the window is
+an arbitrary lattice-convex set instead of a rectangle: in
+Lemma~\ref{lem:balanced} one deletes, at each step, whichever of the two extreme
+rows is the shorter.  In addition, Lemma~3 of \cite{Sz} rests on Lemma~39 of
+Kari and Szabados \cite{KS}; we replace it by two self-contained arguments,
+Lemma~\ref{lem:strip-period}, which uses the explicit shape of the annihilator,
+and step~(6) of Lemma~\ref{lem:propagation}, which uses the two-sided recursion
+supplied by the generating property.  Apart from the one-dimensional
+Morse--Hedlund theorem, nothing external is quoted here.
+
+\setcounter{subsection}{-1}
+\subsection{The statements}\label{app:szab-statements}
+
+\begin{thm}\label{thm:szabados}
+Let $p$ be a prime, let $\theta_1,\theta_2\colon\Z^2\to\Fp$ have periods
+$h_1,h_2\in\Z^2\setminus\{0\}$ respectively, with $h_1$ and $h_2$ linearly
+independent over $\R$, and put $\theta=\theta_1+\theta_2$.  If $P_\theta(S)\le|S|$
+for some non-empty finite lattice-convex $S$, then $\theta$ is periodic.
+\end{thm}
+
+\begin{cor}[{\cite[Theorem~2.8]{CG}}]\label{cor:szabados}
+Let $\eta\colon\Z^2\to\Fp$ and let $\eta=\eta_1+\eta_2$ be an $\Fp$-minimal
+periodic decomposition, of order $2$ — that is, a decomposition into periodic
+$\Fp$-configurations with as few summands as possible, here two.  Then $\eta$
+does not have low convex complexity.
+\end{cor}
+
+\begin{proof}
+Order $2$ forces $\eta$ to be non-periodic, a periodic configuration having a
+minimal decomposition of length $1$, and it forces the two periods to point in
+different directions, components with parallel periods being mergeable into one,
+against minimality.  If $\eta$ had low convex complexity,
+Theorem~\ref{thm:szabados} would make it periodic, a contradiction.
+\end{proof}
+
+Claim~3.3(a) of \cite{CG} applies its Theorem~2.8 to
+$\theta=\bigl(\sum_{i\ne k}\theta_i\bigr)+\theta_k$, the two summands having
+periods $\tilde h_j\in\ell_j$ and $h_k$ in different directions;
+Theorem~\ref{thm:szabados} applies to that verbatim.
+
+\subsection{Notation}\label{app:szab-notation}
+
+Let $\su$ be the primitive vector in the direction of $h_1$, so that
+$h_1=c_1\su$ with $c_1\ge1$, and let $\pi:=\det(\su,\cdot)\colon\Z^2\to\Z$,
+which is surjective.  The \emph{rows} are the fibres $L_t:=\pi^{-1}(t)$;
+neighbouring lattice points of a row differ by $\su$.  Put $\Delta:=\pi(h_2)\ne0$
+and, replacing $h_2$ by $-h_2$ if necessary, assume $\Delta>0$.  For integers
+$a\le b$ the \emph{strip} $\mathrm{St}[a,b]:=\{v:a\le\pi(v)\le b\}$, of
+\emph{width} $b-a$, is the union of the rows $L_a,\dots,L_b$ and is invariant
+under $\pm\su$.  For a non-empty finite $F\subset\Z^2$ put
+$\operatorname{ht}(F):=\max\pi(F)-\min\pi(F)$; $F$ \emph{fits into}
+$\mathrm{St}[a,b]$ if some translate of it is contained there, that is if
+$\operatorname{ht}(F)\le b-a$.  For a non-empty finite lattice-convex $F$ write
+$E_+(F):=F\cap L_{\max\pi(F)}$ and $E_-(F):=F\cap L_{\min\pi(F)}$, the top and
+bottom rows; lattice convexity makes every non-empty row of $F$ a run of
+consecutive lattice points.
+
+For a finite $F\subset\Z^2$ write
+$\mathrm{Pat}(F,\theta):=\{\theta|_{v+F}:v\in\Z^2\}$, the patterns being
+regarded as functions $w\mapsto\theta(v+w)$ on $F$, so that
+$P_\theta(F)=|\mathrm{Pat}(F,\theta)|$ in the notation of \S\ref{ssec:main},
+with $P_\theta(\varnothing)=1$; $X_\theta$
+is the orbit closure, so that every finite-window pattern of an $x\in X_\theta$
+is a pattern of $\theta$.  ``$x=\theta$ on $U$'' means $x(v)=\theta(v)$ for all
+$v\in U$.  Inside this appendix the letter $D$ denotes auxiliary finite sets and
+never the difference operator of \S\ref{ssec:conv}, which does not occur here.
+
+\subsection{Two algebraic facts}\label{app:szab-algebra}
+
+For $s\in\Z$, the $h_2$-periodicity of $\theta_2$ gives
+\begin{equation}
+\theta(v+sh_2)-\theta(v)=\theta_1(v+sh_2)-\theta_1(v),
+\quad\text{which is $h_1$-periodic in $v$.}
+\label{eq:D-diff}
+\end{equation}
+Consequently: if $T^{sh_2}\theta$, that is $v\mapsto\theta(v+sh_2)$, agrees with
+$\theta$ on a set $F$, then it agrees with $\theta$ on $F+\Z h_1$.
+
+\begin{lem}[Periodicity on a strip implies periodicity]\label{lem:strip-period}
+Suppose $b-a\ge\Delta$ and $q\ge1$, and that $\theta(v+q\su)=\theta(v)$ for all
+$v\in\mathrm{St}[a,b]$.  Then $\theta$ has period $qh_1$.
+\end{lem}
+
+\begin{proof}
+The strip is invariant under $+\su$, so $\theta(v+qh_1)=\theta(v)$ for
+$v\in\mathrm{St}[a,b]$, applying the hypothesis $c_1$ times.  Put
+$\psi(v):=\theta(v+qh_1)-\theta(v)$; since $\theta_1$ has period $h_1$ we have
+$\psi(v)=\theta_2(v+qh_1)-\theta_2(v)$, so $\psi$ has period $h_2$, and
+$\psi=0$ on $\mathrm{St}[a,b]$.  Write $h_2=gh_2'$ with $h_2'$ primitive and
+take any lattice line $L=\{v_0+sh_2':s\in\Z\}$ in the direction $h_2'$.  Then
+$\psi|_L$ is periodic in $s$ with period $g$, while
+$\pi(v_0+sh_2')=\pi(v_0)+s\,\pi(h_2')$ runs through an arithmetic progression of
+common difference $\pi(h_2')=\Delta/g\ge1$; a closed interval $[a,b]$ of length
+$b-a\ge\Delta=g\cdot(\Delta/g)$ contains at least $g$ of its terms, so $L$ meets
+$\mathrm{St}[a,b]$ in at least $g$ consecutive of its points.  A function of
+period $g$ vanishing at $g$ consecutive points vanishes identically, so
+$\psi|_L\equiv0$.  As $L$ was arbitrary, $\psi\equiv0$.
+\end{proof}
+
+\subsection{Balanced sets}\label{app:szab-balanced}
+
+\begin{dfn}\label{dfn:balanced}
+Let $B$ be a non-empty finite lattice-convex set, let $\sigma\in\{+,-\}$ and put
+$E:=E_\sigma(B)$.  Call $B$ \emph{$\sigma$-balanced} if
+\begin{itemize}
+\item[\textup{(i)}] $P_\theta(B)\le|B|$;
+\item[\textup{(ii)}] $P_\theta(B)<P_\theta(B\setminus E)+|E|$;
+\item[\textup{(iii)}] every non-empty row of $B$ contains at least $|E|-1$
+      points.
+\end{itemize}
+\end{dfn}
+
+\begin{lem}[Existence]\label{lem:balanced}
+Let $S$ be a non-empty finite lattice-convex set with $P_\theta(S)\le|S|$.  Then
+there are a sign $\sigma$ and a $\sigma$-balanced set $B\subseteq S$.
+\end{lem}
+
+\begin{proof}
+Construct $D_0:=S\supsetneq D_1\supsetneq\cdots\supsetneq D_K=\varnothing$ as
+follows: if $D_i\ne\varnothing$, choose $\sigma_i$ with
+$|E_{\sigma_i}(D_i)|\le|E_{-\sigma_i}(D_i)|$ — either sign will do when $D_i$
+has a single row, where $E_+=E_-=D_i$ — and put
+$D_{i+1}:=D_i\setminus E_{\sigma_i}(D_i)$.  Each $D_i$ is again lattice-convex:
+after an extreme row has been deleted the remaining points lie in an open
+half-plane, so the lattice points of their convex hull still belong to $D_i$ and
+do not lie on the deleted row.  Put $f(i):=P_\theta(D_i)-|D_i|$; then $f(0)\le0$
+and $f(K)=1$, so there is a smallest $i$ with $f(i+1)>0$, and for it
+$f(i)\le0<f(i+1)$.  Let $B:=D_i$, $\sigma:=\sigma_i$ and $E:=E_\sigma(B)$.
+Condition~(i) is $f(i)\le0$.  For (ii),
+$P_\theta(B)\le|B|=|B\setminus E|+|E|<P_\theta(B\setminus E)+|E|$.
+
+For (iii), write $n=|E|$ and $E'=E_{-\sigma}(B)$, so $|E'|\ge n$.  For a real
+$t\in[\min\pi(B),\max\pi(B)]$ let $\lambda(t)$ be the length of the intersection
+of the convex polygon $\Conv(B)$ with the line $\{\pi=t\}$; $\lambda$ is concave,
+by the concavity of the length of parallel chords of a convex set.  On the two
+extreme rows that intersection is exactly $\Conv(E)$, respectively $\Conv(E')$,
+a supporting line meeting the polygon in the convex hull of the vertices it
+carries, of lengths $(n-1)|\su|$ and $(|E'|-1)|\su|\ge(n-1)|\su|$.  Hence
+$\lambda(t)\ge(n-1)|\su|$ for every $t$.  A closed segment of length at least
+$(n-1)|\su|$ on a lattice line whose consecutive points are $|\su|$ apart
+contains at least $n-1$ lattice points, and these belong to $B$ by lattice
+convexity.
+\end{proof}
+
+\subsection{Ambiguity strips and the propagation lemma}\label{app:szab-prop}
+
+\begin{dfn}\label{dfn:ambiguity}
+Say that $\theta$ \emph{has the $+$-ambiguity strip} $\mathrm{St}[a,b]$, where
+$a\le b$, if there is an $x\in X_\theta$ with $x=\theta$ on
+$\mathrm{St}[a,b-1]$ — an empty condition when $a=b$ — and $x\ne\theta$ at some
+point of $L_b$.  The $-$-ambiguity strips are defined symmetrically, replacing
+$\su$ by $-\su$.
+\end{dfn}
+
+\begin{lem}[Propagation]\label{lem:propagation}
+Let $B$ be $+$-balanced and put $n:=|E_+(B)|$.  If $\theta$ has some
+$+$-ambiguity strip $\mathrm{St}[a,b]$ into which $B$ fits, that is with
+$b-a\ge\operatorname{ht}(B)$, then $\theta$ is periodic.
+\end{lem}
+
+\begin{proof}
+\emph{(1) Placing $B$.}  Translate $B$ so that $\max\pi(B)=b$; then
+$B\subseteq\mathrm{St}[a,b]$, and $E:=E_+(B)=B\cap L_b=\{e_1,\dots,e_n\}$ with
+$e_{l+1}=e_l+\su$, while $B_0:=B\setminus E\subseteq\mathrm{St}[a,b-1]$, possibly
+empty.  Put $t_-:=\min\pi(B)$.  Take a witness $x\in X_\theta$ of the ambiguity:
+$x=\theta$ on $\mathrm{St}[a,b-1]$ and $x\ne\theta$ somewhere on $L_b$.  Note
+that $B_0+i\su\subseteq\mathrm{St}[a,b-1]$ for every $i\in\Z$, so $x=\theta$ on
+each $B_0+i\su$.
+
+\emph{(2) Two determination rules.}  For $0\le i\le n$ put
+$D_i:=B_0\cup\{e_1,\dots,e_i\}$ and $D'_i:=B_0\cup\{e_{n-i+1},\dots,e_n\}$.  By
+(ii) of Definition~\ref{dfn:balanced}, $P_\theta(D_n)-|D_n|<P_\theta(D_0)-|D_0|$,
+so there is a $k\in\{0,\dots,n-1\}$ with
+$P_\theta(D_{k+1})-|D_{k+1}|<P_\theta(D_k)-|D_k|$, that is
+$P_\theta(D_{k+1})<P_\theta(D_k)+1$; the restriction map
+$\mathrm{Pat}(D_{k+1},\theta)\to\mathrm{Pat}(D_k,\theta)$ being onto, this forces
+$P_\theta(D_{k+1})=P_\theta(D_k)$ and makes that map a bijection.  Hence:
+\begin{itemize}
+\item[\textup{(R$_+$)}] for every $y\in X_\theta$ and $v\in\Z^2$, the value
+$y(e_{k+1}+v)$ is determined by $y|_{D_k+v}$.
+\end{itemize}
+In the same way there is a $k'\in\{0,\dots,n-1\}$ with
+\begin{itemize}
+\item[\textup{(R$_-$)}] for every $y\in X_\theta$ and $v\in\Z^2$, the value
+$y(e_{n-k'}+v)$ is determined by $y|_{D'_{k'}+v}$.
+\end{itemize}
+
+\emph{(3) Claim: $x|_{D_k+i\su}\ne\theta|_{D_k+i\su}$ for every $i\in\Z$.}
+Suppose $x=\theta$ on $D_k+i_0\su$.  If $k=0$, then $D_0=B_0$, and (1) together
+with \textup{(R$_+$)} gives $x(e_1+i\su)=\theta(e_1+i\su)$ for every $i$, that is
+$x=\theta$ on $L_b$, against the choice of the witness.  So let $k\ge1$.  By
+\textup{(R$_+$)}, $x(e_{k+1}+i_0\su)=\theta(e_{k+1}+i_0\su)$; hence $x=\theta$ on
+$D_k+(i_0+1)\su$, whose points are those of $B_0+(i_0+1)\su$, by (1), together
+with the points $e_l+(i_0+1)\su=e_{l+1}+i_0\su$ for $1\le l\le k$, which lie in
+$D_k+i_0\su$ when $l\le k-1$ and are the point just treated when $l=k$.  By
+induction $x=\theta$ on $D_k+i\su$ for every $i\ge i_0$, hence on the half-line
+$\{e_1+s\su:s\ge i_0\}\subset L_b$.  Now go left.  If $k'=0$, then (1) and
+\textup{(R$_-$)} give $x=\theta$ on $\{e_n+i\su:i\in\Z\}=L_b$, a contradiction.
+If $k'\ge1$, choose $i_1$ with $n-k'+i_1\ge i_0$; the points
+$e_1+(n-k'+i_1)\su,\dots,e_1+(n-1+i_1)\su$ of the top row of $D'_{k'}+i_1\su$
+then lie on that half-line, so $x=\theta$ on $D'_{k'}+i\su$ for every $i\ge i_1$.
+By \textup{(R$_-$)}, $x(e_{n-k'}+i_1\su)=\theta(e_{n-k'}+i_1\su)$, whence
+$x=\theta$ on $D'_{k'}+(i_1-1)\su$, whose top-row points
+$e_l+(i_1-1)\su=e_{l-1}+i_1\su$, $n-k'+1\le l\le n$, either lie in
+$D'_{k'}+i_1\su$ or are the point just treated.  Descending induction gives
+$x=\theta$ on $D'_{k'}+i\su$ for every $i\in\Z$, and the top rows of these sets
+cover all of $L_b$, against the choice of the witness.  The claim follows.
+
+\emph{(4) Counting.}  By (3) and (1), for each $i$ the patterns $x|_{B+i\su}$ and
+$\theta|_{B+i\su}$ are two $B$-patterns of $\theta$ which agree on $B_0+i\su$
+and differ somewhere.  So every pattern $\gamma$ in
+$\Gamma:=\{\theta|_{B_0+i\su}:i\in\Z\}\subseteq\mathrm{Pat}(B_0,\theta)$ has at
+least two extensions to a $B$-pattern, $N(\gamma)\ge2$.  But
+\[\sum_{\gamma\in\mathrm{Pat}(B_0,\theta)}\bigl(N(\gamma)-1\bigr)
+  =P_\theta(B)-P_\theta(B_0)<|E|=n\]
+by (ii), so $|\Gamma|\le n-1$; in particular $n\ge2$, since otherwise $\Gamma$
+would be empty, which it is not.
+
+\emph{(5) Periodicity of the rows of $B_0$.}  Assume $B_0\ne\varnothing$; when
+$B_0=\varnothing$ this step is vacuous and one takes $Q_0:=1$.  For each row
+$L_t$ of $B_0$, $t_-\le t\le b-1$, condition (iii) makes $B\cap L_t$ a run of
+$m_t\ge n-1$ consecutive points $w_t,w_t+\su,\dots,w_t+(m_t-1)\su$.  Put
+$\xi_t(s):=\theta(w_t+s\su)$ for $s\in\Z$.  As $i$ varies, $\theta|_{B_0+i\su}$
+takes at most $n-1$ values, so its restriction to the first $n-1$ points of row
+$t$ — that is, the word of length $n-1$ read in $\xi_t$ from position $i$ — takes
+at most $n-1$ values, and $\xi_t$ has at most $n-1$ subwords of length $n-1$.  By
+the one-dimensional Morse--Hedlund theorem \cite{MH38} (a bi-infinite sequence
+with at most $m$ subwords of some length $m$ is periodic; see also
+\cite[Theorem~1.1]{Colle23a}), $\xi_t$ is periodic.  Let $Q_0$ be a common
+multiple of the periods of these rows; then $\theta(v+Q_0\su)=\theta(v)$ for all
+$v\in\mathrm{St}[t_-,b-1]$.
+
+\emph{(6) Extending upwards one row at a time.}  Suppose $R\ge b$ and $\theta$
+has period $Q\su$ on $\mathrm{St}[t_-,R-1]$, which for $R=b$ is step~(5) with
+$Q=Q_0$.  Choose $w$ with $\pi(w)=R-b$, so that the top row of $B+w$ lies on
+$L_R$ and $B_0+w+i\su\subseteq\mathrm{St}[t_-,R-1]$; then the pattern
+$\theta|_{B_0+w+i\su}$ depends only on $i\bmod Q$.  Put
+$y_s:=\theta(e_1+w+s\su)$ and apply \textup{(R$_+$)} and \textup{(R$_-$)} to
+$y:=\theta$ and $v=w+i\su$:
+\begin{gather*}
+y_{i+k}\ \text{is determined by}\ \bigl(i\bmod Q;\ y_i,\dots,y_{i+k-1}\bigr),\\
+y_{i-1}\ \text{is determined by}\ \bigl(i\bmod Q;\ y_i,\dots,y_{i+k'-1}\bigr),
+\end{gather*}
+the second being \textup{(R$_-$)} at $v=w+(i-n+k')\su$.  Put
+$K:=\max(k,k',1)$ and let
+$\sigma_i:=(i\bmod Q;\,y_i,\dots,y_{i+K-1})\in\Z/Q\times\Fp^{K}$.  Then
+$\sigma_{i+1}$ is determined by $\sigma_i$, and so is $\sigma_{i-1}$.  Let
+$\Phi$ be the forward map, defined on the set $\Sigma$ of states that actually
+occur; backward determinacy makes $\Phi$ injective on $\Sigma$, since
+$\Phi(\sigma)=\Phi(\sigma')$ forces $\sigma=\sigma'$, and $\Sigma$ is finite, so
+$\Phi$ is a bijection of $\Sigma$ and the bi-infinite orbit $(\sigma_i)$ is
+periodic.  Its period $Q'$ is a multiple of $Q$, by the phase component, and
+$y_{s+Q'}=y_s$.  Hence $\theta$ has period $Q'\su$ on $\mathrm{St}[t_-,R]$.
+Iterating from $R=b$ up to $R=t_-+\Delta$, finitely many steps, gives a $Q^*$
+for which $\theta$ has period $Q^*\su$ on the strip
+$\mathrm{St}[t_-,t_-+\Delta]$, of width $\Delta$.
+
+\emph{(7)}  By Lemma~\ref{lem:strip-period}, $\theta$ has period $Q^*h_1$.
+\end{proof}
+
+\begin{rem}\label{rem:szab-steps}
+Step~(5) of Lemma~\ref{lem:propagation} is the argument of \cite[Lemma~4]{Sz}
+and of \cite[Lemma~2.24]{CyrKra15}; steps~(6) and (7) replace \cite[Lemma~3]{Sz},
+which appeals to Lemma~39 of \cite{KS}, and use nothing beyond the generating
+property and the explicit annihilator.
+\end{rem}
+
+\subsection{Proof of Theorem \texorpdfstring{\ref{thm:szabados}}{D.1}}
+\label{app:szab-proof}
+
+Suppose $\theta$ is not periodic.  Replacing $h_2$ by $ch_2$ for an integer
+$c\ge1$, which changes neither $\pi$ nor $\su$, we may assume
+$\Delta\ge\operatorname{ht}(S)+1$.  Put
+\[D:=\{\alpha h_1+\beta h_2:\ \alpha,\beta\in[0,1)\}\cap\Z^2,\qquad
+D_j:=D+jh_2,\qquad S_j:=\mathrm{St}\bigl[j\Delta,(j+1)\Delta-1\bigr].\]
+Every $v\in\Z^2$ is uniquely $v=\alpha h_1+\beta h_2$ with $\alpha,\beta\in\R$,
+and $\pi(v)=\beta\Delta$, so $v\in S_j$ if and only if $\beta\in[j,j+1)$; in that
+case $v-\lfloor\alpha\rfloor h_1=\{\alpha\}h_1+\beta h_2$ is a lattice point of
+$D_j$.  Hence $S_j=D_j+\Z h_1$, and distinct values of $\lfloor\alpha\rfloor$
+give distinct points, so the union is disjoint.  Put $N:=P_\theta(D)<\infty$.
+
+\emph{(a) A balanced set, and unambiguity.}  Take a $\sigma$-balanced
+$B\subseteq S$ by Lemma~\ref{lem:balanced}.  We may assume $\sigma=+$: otherwise
+replace $\su$ by $-\su$, $\pi$ by $-\pi$ and $h_2$ by $-h_2$, which keeps
+$\Delta$ positive, all the definitions being symmetric.  Since $\theta$ is not
+periodic, the contrapositive of Lemma~\ref{lem:propagation} says: \emph{for all
+$a\le b$ with $b-a\ge\operatorname{ht}(B)$ and every $x\in X_\theta$, if
+$x=\theta$ on $\mathrm{St}[a,b-1]$ then $x=\theta$ on $\mathrm{St}[a,b]$.}
+Iterating row by row,
+\begin{equation}
+x=\theta\ \text{on}\ \mathrm{St}[a,b],\ b-a\ge\operatorname{ht}(B)-1
+\ \Longrightarrow\ x=\theta\ \text{on}\ \{\pi\ge a\}.
+\label{eq:D-iterate}
+\end{equation}
+
+\emph{(b) A witness of non-periodicity.}  $N!\,h_2$ is not a period of $\theta$,
+so there is a $v_0$ with $\theta(v_0+N!h_2)\ne\theta(v_0)$.  Put
+$k:=\lfloor\pi(v_0)/\Delta\rfloor-N$, so that $\pi(v_0)\ge(k+N)\Delta$.
+
+\emph{(c) Pigeonhole.}  Among the $N+1$ patterns $\theta|_{D_{k+j}}$,
+$0\le j\le N$, at most $N$ are distinct, so there are $0\le j<j'\le N$ with
+$\theta(v+(j'-j)h_2)=\theta(v)$ for all $v\in D_{k+j}$.  By \eqref{eq:D-diff}
+this holds for all $v\in S_{k+j}$, that is
+$x:=T^{(j'-j)h_2}\theta\in X_\theta$ satisfies $x=\theta$ on
+$S_{k+j}=\mathrm{St}[(k+j)\Delta,(k+j+1)\Delta-1]$.  That strip has width
+$\Delta-1\ge\operatorname{ht}(S)\ge\operatorname{ht}(B)$, so
+\eqref{eq:D-iterate} gives $x=\theta$ on $\{\pi\ge(k+j)\Delta\}$, that is
+\[\theta(v+(j'-j)h_2)=\theta(v)\qquad\text{whenever }\pi(v)\ge(k+j)\Delta .\]
+Since $\pi(h_2)=\Delta>0$, that half-plane is invariant under $+(j'-j)h_2$;
+applying the identity repeatedly, and using $(j'-j)\mid N!$, we get
+$\theta(v+N!h_2)=\theta(v)$ for every $v$ with $\pi(v)\ge(k+j)\Delta$.  But
+$\pi(v_0)\ge(k+N)\Delta\ge(k+j)\Delta$, so $\theta(v_0+N!h_2)=\theta(v_0)$,
+contradicting (b).\hfill$\square$
+
+\begin{rem}\label{rem:szab-general}
+The proof of Theorem~\ref{thm:szabados} works over any finite alphabet for a sum
+of two periodic configurations, all that is used being \eqref{eq:D-diff}, that
+the difference $\theta(\cdot+sh_2)-\theta$ is $h_1$-periodic.  Over $\Z$ it is
+the convex generalisation of \cite[Theorem~1]{Sz} recorded as
+\cite[Theorem~1.7]{Colle23a}.
+\end{rem}
+
+\subsection*{Acknowledgements}
+
+The mathematical content of this paper was developed with substantial assistance
+from large language models, which were used for literature search, for drafting,
+and for adversarial checking of the arguments; the authors are responsible for
+all statements.  The numerical verification of Appendix~\ref{app:numerics} was
+carried out with the scripts named there.
+
+% Bibliography.
+% Ground rule: an entry's data is either checked against the source, or the
+% entry says where the data came from.
+%   [CG]  -- title, authors, date and abstract checked against the arXiv
+%            abstract page; the statements and the numbers of Definition 3.4
+%            and Theorem 3.5, which carry the whole of the conditional part of
+%            this paper, checked against the arXiv HTML full text.  The further
+%            numbers quoted in Section 8 (Theorem 2.8, Proposition 3.1,
+%            Lemmas 2.10 and 2.11, Claims 3.2 and 3.3) come from the reading
+%            reported in Remark 8.1''.
+%   [Khe] -- title, author, date and abstract checked against the arXiv
+%            abstract page.
+%   all others -- bibliographic data as printed in the reference list of [CG].
+% Internal numbers of [CG], [Colle23a], [Colle23b], [Sz] and [CyrKra15] are
+% quoted in Section 8 and in Appendix D.  Those numbers, and the readings of
+% the results they name, are the manuscript's own audit record: they were
+% recorded by the authors while reading the sources, and are reproduced here
+% as written.
+% \bibliographystyle is omitted deliberately: the bibliography is an inline
+% thebibliography environment, so there is no BibTeX run and no .bbl, and
+% nothing in the source should suggest otherwise to arXiv's build.
+\begin{thebibliography}{99}
+
+\bibitem{Colle23a}
+C.~F. Colle,
+\emph{On periodic decompositions, one-sided nonexpansive directions and Nivat's
+conjecture},
+Discrete Contin. Dyn. Syst. \textbf{43} (2023), no.~12, 4299--4327.
+Published.  \S\ref{ssec:external} uses Theorem~1.10 of this paper as a
+safeguard and reports a check of the results of \cite{CG} which depend on it;
+Theorem~1.1 is the one-dimensional Morse--Hedlund theorem in the form used in
+Appendix~\ref{app:szabados}, and Theorem~1.7 the integer case of
+Remark~\ref{rem:szab-general}.
+
+\bibitem{Colle23b}
+C.~F. Colle,
+\emph{On periodic decompositions and nonexpansive lines},
+Math. Z. \textbf{303} (2023), art.~80.
+Published.  Together with \cite{Colle23a} it carries the results of \cite{CG}
+which \S\ref{ssec:external} traces back to published work.
+
+\bibitem{CGalpha}
+C.~F. Colle and E.~Garibaldi,
+\emph{An alphabetical approach to Nivat's conjecture},
+Nonlinearity \textbf{33} (2020), 3620--3652.
+
+\bibitem{CG}
+C.~F. Colle and E.~Garibaldi,
+\emph{A modular structure theorem for minimal periodic decompositions and
+periodicity of configurations with $P_\eta(4,n)\le 4n$},
+preprint, \texttt{arXiv:2606.10193} (8 June 2026).
+This is the sole external input of \S\ref{sec:reduction}, and
+Theorem~\ref{thm:convex-nivat} and Corollary~\ref{cor:nivat} are conditional on
+it.  Theorem~3.5, together with its Definition~3.4, is quoted here as
+Theorem~\ref{thm:CG} and Definition~\ref{dfn:zpstar}; the reading of the two,
+and of Theorem~2.8, Proposition~3.1, Lemmas~2.10 and 2.11 and Claims~3.2 and
+3.3, is reported in Remarks 8.1$'$ and 8.1$''$.  Theorem~2.8 is proved in
+Appendix~\ref{app:szabados}.  The preprint has not been refereed.
+
+\bibitem{CyrKra15}
+V.~Cyr and B.~Kra,
+\emph{Nonexpansive $\Z^2$-subdynamics and Nivat's conjecture},
+Trans. Amer. Math. Soc. \textbf{367} (2015), no.~9, 6487--6537.
+
+\bibitem{CyrKra16}
+V.~Cyr and B.~Kra,
+\emph{Complexity of short rectangles and periodicity},
+European J. Combin. \textbf{52} (2016), 146--173.
+
+\bibitem{EKM}
+C.~Epifanio, M.~Koskas and F.~Mignosi,
+\emph{On a conjecture on bidimensional words},
+Theoret. Comput. Sci. \textbf{299} (2003), 123--150.
+
+\bibitem{KS}
+J.~Kari and M.~Szabados,
+\emph{An algebraic geometric approach to Nivat's conjecture},
+Inform. and Comput. \textbf{271} (2020), 104481.
+
+\bibitem{KM20}
+J.~Kari and E.~Moutot,
+\emph{Decidability and periodicity of low complexity tilings},
+in 37th International Symposium on Theoretical Aspects of Computer Science
+(STACS 2020), LIPIcs vol.~154, Art.~No.~14, 2020.
+
+\bibitem{KM23}
+J.~Kari and E.~Moutot,
+\emph{Decidability and periodicity of low complexity tilings},
+Theory Comput. Syst. \textbf{67} (2023), 125--148.
+
+\bibitem{Khe}
+A.~Khetan,
+\emph{A counterexample to Nivat's conjecture for a non-convex window of full
+affine span},
+preprint, \texttt{arXiv:2607.09830v2} (10 July 2026; revised 18 July 2026).
+Cited in the introduction for the necessity of a convexity hypothesis.
+
+\bibitem{MH38}
+M.~Morse and G.~A. Hedlund,
+\emph{Symbolic dynamics},
+Amer. J. Math. \textbf{60} (1938), 815--866.
+
+\bibitem{Nivat}
+M.~Nivat,
+\emph{Invited talk at ICALP},
+Bologna, 1997.
+The conjecture was stated there; there is no written version by the author.
+
+\bibitem{QZ}
+A.~Quas and L.~Zamboni,
+\emph{Periodicity and local complexity},
+Theoret. Comput. Sci. \textbf{319} (2004), 229--240.
+
+\bibitem{ST}
+J.~W. Sander and R.~Tijdeman,
+\emph{The rectangle complexity of functions on two-dimensional lattices},
+Theoret. Comput. Sci. \textbf{270} (2002), 857--863.
+
+\bibitem{Sz}
+M.~Szabados,
+\emph{Nivat's conjecture holds for sums of two periodic configurations},
+in SOFSEM 2018: Theory and Practice of Computer Science,
+Lecture Notes in Comput. Sci. vol.~10706, Springer, 2018, pp.~539--551.
+Appendix~\ref{app:szabados} proves the $\Fp$ and convex form of Theorem~1 of
+this paper, following its argument but replacing the appeal to
+\cite[Lemma~39]{KS} in its Lemma~3.
+
+\end{thebibliography}
+
+\end{document}
