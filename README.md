@@ -1,5 +1,18 @@
 # The convex Nivat conjecture: a complexity lower bound for star configurations
 
+## arXiv status — checked 13 September 2026
+
+**Submitted; awaiting arXiv processing and announcement.** The revised
+37-page manuscript was submitted on 12 September 2026 under submission number
+`8066584`. The account currently shows `submitted`; no public arXiv identifier
+has been assigned yet. The primary category is math.DS, with a cross-list to
+math.CO.
+
+The files currently in this repository are the earlier 36-page manuscript
+dated 11 September 2026. The submitted revision adds spectrum-preserving
+encoding, revised proofs and expanded exact computational checks. The
+description and file table below refer to the repository copy.
+
 Source, compiled PDF and verification scripts for the paper
 
 > **The convex Nivat conjecture: a complexity lower bound for star
@@ -104,8 +117,9 @@ repeated builds of an unchanged source agree byte for byte.
 
 ## Status
 
-The paper is a preprint, prepared for arXiv submission; it has not been
-refereed. Corrections and counterexamples are welcome; please open an issue.
+The paper is a preprint submitted to arXiv; see the dated arXiv status above.
+It has not been refereed. Corrections and counterexamples are welcome;
+please open an issue.
 
 ## License
 
