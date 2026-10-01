@@ -107,9 +107,8 @@ The scripts need Python 3 and `numpy`. Build the PDF with
 
 ## Versions
 
-A 37-page version of 12 September 2026 was submitted to arXiv
-(submission `8066584`). This repository holds the revised version of
-1 October 2026. Earlier versions remain in the git history.
+This repository holds the version of 1 October 2026. Earlier versions remain in
+the git history.
 
 ## License
 
