@@ -243,6 +243,8 @@ class Component:
         sm = np.mod(s, self.k)
         L = self.Ltab[np.mod(t, self.aL), sm]
         R = self.Rtab[np.mod(t, self.aR), sm]
+        if self.ell == self.r + 1:
+            return np.where(t < self.ell, L, R)
         idx = np.clip(t - self.ell, 0, self.strip.shape[0] - 1)
         St = self.strip[idx, sm]
         return np.where(t < self.ell, L, np.where(t > self.r, R, St))

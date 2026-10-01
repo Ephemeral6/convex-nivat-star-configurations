@@ -1,142 +1,133 @@
-# The convex Nivat conjecture: a complexity lower bound for star configurations
+# A proof of Nivat's conjecture in its convex form
 
-## arXiv status — checked 13 September 2026
+> **A proof of Nivat's conjecture in its convex form**
+> Guancheng Pan (1 October 2026)
 
-**Submitted; awaiting arXiv processing and announcement.** The revised
-37-page manuscript was submitted on 12 September 2026 under submission number
-`8066584`. The account currently shows `submitted`; no public arXiv identifier
-has been assigned yet. The primary category is math.DS, with a cross-list to
-math.CO.
+This repository contains the paper, its LaTeX source, the numerical
+verification scripts, and the complete **Lean 4 formalisation** of the proof.
 
-The files currently in this repository are the earlier 36-page manuscript
-dated 11 September 2026. The submitted revision adds spectrum-preserving
-encoding, revised proofs and expanded exact computational checks. The
-description and file table below refer to the repository copy.
+## The theorem
 
-Source, compiled PDF and verification scripts for the paper
+Let `A` be a finite alphabet and `ξ : Z² → A`. For a finite window `S ⊂ Z²`,
+`P_ξ(S)` is the number of distinct patterns `ξ|_{u+S}`, `u ∈ Z²`.
 
-> **The convex Nivat conjecture: a complexity lower bound for star
-> configurations, and a reduction from low convex complexity to star
-> configurations**
-> Guancheng Pan, Chengsong You, Junwei Zhou, Yongchao Chen (11 September 2026)
+**Theorem (convex Nivat conjecture).** If `P_ξ(S) ≤ |S|` for some non-empty
+finite lattice-convex window `S`, that is one with `S = Conv(S) ∩ Z²`, then `ξ`
+is periodic.
 
-Nivat's conjecture asserts that a configuration `ξ : Z² → A` over a finite
-alphabet with `P_ξ(m,n) ≤ mn` for some `m, n ≥ 1` is periodic. Its *convex* form
-replaces the rectangle by an arbitrary non-empty finite lattice-convex window
-`S`, that is one with `S = Conv(S) ∩ Z²`.
+Rectangles are lattice-convex, so this contains **Nivat's conjecture** (1997):
+if `P_ξ(m,n) ≤ mn` for some `m, n ≥ 1`, then `ξ` is periodic.
 
-## Two results
+Convexity is exactly the right hypothesis. By Khetan's counterexample the
+statement fails for a non-convex window of full affine span. The convex form is
+the natural general statement, and it is the one proved here.
 
-**Theorem T: a lower bound for star configurations** (§§0–7, self-contained).
-Call `θ = Σᵢ Fᵢ : Z² → F_p` a *star configuration* when each `Fᵢ` has a non-zero
-period `kᵢvᵢ`, is not doubly periodic, and agrees with doubly periodic fields on
-the two half-planes `{π_i < ℓ_i}` and `{π_i > r_i}`, the primitive directions
-`vᵢ` being pairwise non-parallel. Then
+## Formally verified in Lean 4
 
-```
-P_θ(S) ≥ |S| + 1     for every non-empty finite lattice-convex S.
-```
+The whole proof is formalised in Lean 4 with Mathlib (`anc/lean`). The
+formalisation includes every result the paper quotes from the literature: the
+Kari–Szabados annihilator and decomposition theorems, and Colle's results on
+one-sided nonexpansive directions and regional full periodicity, together with
+Boyle–Lind and Cyr–Kra.
 
-The proof attaches to `θ` an exceptional spectrum of roots of unity in each
-direction, a Laurent polynomial `A = Πᵢ Aᵢ(T^{vᵢ})` dividing every annihilator of
-`θ` modulo constants, and the zonotope `Z = Newt(A)`. The zonotope then appears
-twice with opposite signs — as the exact cost of the affine relations carried by
-a window, and as the exact capacity of a family of quadratic characters
-independent modulo those relations — and the two cancel for every `S` and
-every `Z`.
+```lean
+theorem Nivat.convex_nivat {α : Type*} [Finite α] {ξ : Config α} {S : Finset (ℤ × ℤ)}
+    (hne : S.Nonempty) (hS : LatticeConvex S) (hP : P ξ S ≤ S.card) : IsPeriodic ξ
 
-**Theorem B: the reduction** (§8). A counterexample to the convex conjecture can
-be turned into a star configuration, so Theorem T settles the conjecture, and
-with it Nivat's. The chain is
-
-```
-[KS], [Colle23a] --(Prop 8.9)--> U_i --(Thm 8.12)--> V_i
-      --(Lem 8.17)--> star configuration --(Thm T)--> convex Nivat ==> Nivat
+theorem Nivat.nivat_conjecture {α : Type*} [Finite α] {ξ : Config α} {n k : ℕ}
+    (hn : 0 < n) (hk : 0 < k) (hP : P ξ (rectangle n k) ≤ n * k) : IsPeriodic ξ
 ```
 
-Both half-planes are proved here. Proposition 8.9 gives the first, by extending
-the full periodicity on a region to a doubly periodic field, isolating the
-component with a difference operator `Qᵢ`, and closing with a finite-state
-argument. Theorem 8.12 gives the second: pushing the configuration to the limit
-along the direction of another component, the limit is a sum of two periodic
-configurations with different directions, hence periodic by Theorem D.1, so every
-limit on the far side of the component under consideration is doubly periodic;
-since there are only finitely many such limits, the far side itself coincides
-with a doubly periodic field. Theorem 8.1 (each component fully periodic on two
-disjoint half-planes) coincides formally with the structure theorem of [CG]; the
-proof here is different and uses no minimality of the decomposition.
+- `#print axioms` gives `[propext, Classical.choice, Quot.sound]` for both
+  theorems. These are the axioms of Lean's own logic. There is no `sorry`, and
+  the development declares no axiom of its own.
+- The development has 449 modules and about 216,000 lines. About 192,000 of
+  those lines prove the results quoted from the literature.
+- An independent rebuild from a clean copy completed all 3368 jobs. Kernel
+  replay with `leanchecker` reported no error, both module by module and from
+  an empty environment up to the main theorem.
+- Formalising Colle's argument exposed one step that does not go through as
+  written: the shell sweep in the proof of Lemma 3.5(i) of the arXiv version.
+  The formalisation replaces it with a different construction, and the lemma
+  itself stands. Appendix E of the paper has the details.
 
-Apart from the annihilator and periodic decomposition theorem of Kari and
-Szabados, and Colle's Theorem 1.9 and Lemma 4.6, every step is proved in the
-paper. Appendix D proves in full the `F_p` and convex form of Szabados'
-theorem — stated with a sketch as [CG, Theorem 2.8] — using nothing beyond the
-one-dimensional Morse–Hedlund theorem.
+To check it yourself (needs [elan](https://github.com/leanprover/elan), `git`,
+`bash` and `gawk`):
+
+```sh
+cd anc/lean
+lake exe cache get
+LEAN_NUM_THREADS=2 lake build
+bash scripts/sorries.sh                                  # TOTAL: 0
+bash scripts/check_axioms.sh Nivat.nivat_conjecture      # propext, Classical.choice, Quot.sound
+```
+
+Use a small `LEAN_NUM_THREADS` on machines with limited memory; a few modules
+are large. `anc/lean/DELIVERY.md` maps every definition the statement uses to
+its Lean source.
+
+## The proof in one paragraph
+
+**Theorem A** (§§0–7, self-contained) is a complexity lower bound:
+`P_θ(S) ≥ |S| + 1` for every *star configuration* `θ = Σᵢ Fᵢ : Z² → F_p` and
+every non-empty finite lattice-convex `S`. The proof attaches to `θ` an
+exceptional spectrum of roots of unity in each direction, a Laurent polynomial
+`A = Πᵢ Aᵢ(T^{vᵢ})` dividing every annihilator, and the zonotope
+`Z = Newt(A)`. The zonotope appears twice with opposite signs: as the exact cost
+of the affine relations a window carries, and as the exact capacity of a family
+of quadratic characters independent of them. The two cancel. **§8** turns a
+minimal counterexample to the convex conjecture into a star configuration. It
+uses Kari–Szabados and Colle, then proves the two half-planes (Proposition 8.9
+and Theorem 8.12) and normalises (Lemma 8.17), contradicting Theorem A.
+
+## How the work was done
+
+The paper and the formalisation were produced by the author together with a
+personal AI research system. The system is an orchestration of language-model
+agents (Claude Opus 5, with Claude Fable 5.1 on two lanes) running in Claude
+Code. It used parallel formalisation lanes, a single integrating agent,
+dedicated refutation agents and independent auditors. Appendix F of the paper
+records the timeline, the organisation, and every significant error the system
+made and how it was caught.
 
 ## Contents
 
 | Path | |
 |---|---|
-| `nivat.tex` | LaTeX source (amsart, no BibTeX run: the bibliography is inline) |
-| `nivat.pdf` | compiled paper, 36 pages |
-| `anc/star.py` | the mechanism: star configurations, spectra, annihilators, zonotopes, affine relations |
-| `anc/verify.py` | Appendix C.2, Experiment 1 (default `N = 84`, `seed = 1`) |
-| `anc/verify2.py` | Appendix C.2, Experiment 2 (default `N = 157`, `seed = 7`) |
-| `anc/lemma31.py` | the counterexample of Appendix C.3 |
-| `anc/*_output.txt` | the actual output of the runs reported in Appendix C |
+| `nivat.tex` | LaTeX source (amsart, inline bibliography, no BibTeX) |
+| `nivat.pdf` | compiled paper, 41 pages |
+| `anc/lean/` | the Lean 4 formalisation (`DELIVERY.md` explains how to check it) |
+| `anc/star.py` | star configurations, spectra, annihilators, zonotopes, affine relations |
+| `anc/verify.py`, `anc/verify2.py` | the two randomised experiments of the numerical appendix |
+| `anc/lemma31.py` | the counterexample to the over-generalised intermediate lemma |
+| `anc/*_output.txt` | the output of the runs reported in the paper |
 
-`anc/` is the directory uploaded to arXiv as ancillary files.
+The scripts need Python 3 and `numpy`. Build the PDF with
+`pdflatex nivat.tex` twice.
 
-## Reproducing the numerical appendix
+## Versions
 
-The scripts need Python 3 and `numpy`, nothing else.
-
-```sh
-cd anc
-python verify.py              # 84 configurations, seed 1
-python verify2.py             # 157 configurations, seed 7
-python lemma31.py             # the Appendix C.3 counterexample
-```
-
-Both experiments accept `N` and `seed` as positional arguments. Across the 241
-configurations of the two experiments, on eight windows each, every instance
-satisfied `P_θ(S) ≥ |S| + 1`, and the pattern counts were unchanged when the
-enumeration box was doubled in radius. The numbers printed in Appendix C are
-those of the shipped `*_output.txt` files; where they differ from an earlier
-draft, the appendix reports the discrepancy.
-
-## Building the PDF
-
-```sh
-pdflatex nivat.tex
-pdflatex nivat.tex
-pdflatex nivat.tex
-```
-
-Three passes, no BibTeX. The preamble sets pdfTeX's reproducibility flags, so
-repeated builds of an unchanged source agree byte for byte.
-
-## Status
-
-The paper is a preprint submitted to arXiv; see the dated arXiv status above.
-It has not been refereed. Corrections and counterexamples are welcome;
-please open an issue.
+A 37-page version of 12 September 2026 was submitted to arXiv
+(submission `8066584`). This repository holds the revised version of
+1 October 2026. Earlier versions remain in the git history.
 
 ## License
 
 - The paper, `nivat.tex` and `nivat.pdf`, is licensed under
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). See `LICENSE`.
-- The scripts under `anc/` are licensed under the MIT License. See `anc/LICENSE`.
+- The Python scripts under `anc/` are licensed under the MIT License. See
+  `anc/LICENSE`.
+- The Lean source under `anc/lean/` is released under the Apache 2.0 license,
+  as stated in its file headers.
 
 ## Citing
 
 ```bibtex
-@misc{PYZC2026convexnivat,
-  author = {Pan, Guancheng and You, Chengsong and Zhou, Junwei and Chen, Yongchao},
-  title  = {The convex {N}ivat conjecture: a complexity lower bound for star
-            configurations, and a reduction from low convex complexity to star
-            configurations},
-  year   = {2026},
-  note   = {Preprint},
+@misc{Pan2026nivat,
+  author       = {Pan, Guancheng},
+  title        = {A proof of {N}ivat's conjecture in its convex form},
+  year         = {2026},
+  note         = {Preprint, with a Lean 4 formalisation},
   howpublished = {\url{https://github.com/Ephemeral6/convex-nivat-star-configurations}}
 }
 ```

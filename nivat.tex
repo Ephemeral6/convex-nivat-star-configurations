@@ -1,41 +1,9 @@
 % !TEX program = pdflatex
-%
-% The convex Nivat conjecture: a complexity lower bound for star
-% configurations, and a reduction from low convex complexity to star
-% configurations
-%
-% Build rules in force for this version:
-%   * Typesetting aligned with the authors' other public preprints: amsart 11pt,
-%     Latin Modern, 1.1in margins, the same link colour, the same reproducibility
-%     settings, and the same hand-built title block.
-%   * The internal numbering of the manuscript (Lemma 2.5, Theorem 7.3,
-%     Proposition 8.9, ...) is preserved EXACTLY, including the sections whose
-%     first statement is numbered .0 (Lemma 2.0, Lemma 3.0) and the two primed
-%     remarks (2.1', 3.1').  Section 8 now runs in numerical order 8.1--8.19 and
-%     needs no hand-set counters; elsewhere counters are still set by hand where
-%     the order demands it.
-%   * The manuscript's revision log ("修订说明 v3.1") is NOT reproduced: it
-%     records changes against drafts the reader does not have.  Nothing in it is
-%     lost -- every correction it lists is already carried by the text it
-%     produced (Remark 2.1', Remark 3.1', the componentwise reflection argument
-%     in Lemma 6.1, the explicit unit argument in Step 3 of Lemma 5.2, and
-%     Appendix C.3).
-%   * Two notational collisions of the manuscript are repaired, and only two:
-%       - the exponent map of the difference operator, written h(C) there, is
-%         written H_C here, because Lemma 1.1 simultaneously calls its local
-%         function h;
-%       - the line R*v_i, written \ell_i in 3.1 there, is written out as R v_i
-%         here, because \ell_i is the left-tail threshold of (S3) everywhere else.
-%     All other notation is the manuscript's.
-%   * Citations: the data of [CG] and [Khe] were checked against the arXiv
-%     abstract pages.  Section 8 and Appendix D quote internal numbers of
-%     [Colle23a], [Sz] and [CyrKra15]: those numbers, and the readings of the
-%     results they name, are the manuscript's own record and are reproduced as
-%     the authors wrote them.  The external input of Section 8 is [KS] and
-%     [Colle23a] only; [CG] is cited as related work and is not a dependency.
-%     The remaining entries carry the data printed in the reference list of
-%     [CG].  The bibitems are in alphabetical order, so the printed numbers
-%     [1]--[17] are the ones used in the text.
+% Final working revision: 12 September 2026.
+% Build with pdfLaTeX; bibliography is inline (no BibTeX step).
+% Preserve the established statement/equation labels and numbering.
+% Style: amsart 11pt, Latin Modern, 1.1in margins.
+% Revision history and reproducibility checks are documented separately.
 \documentclass[11pt,reqno]{amsart}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -48,6 +16,13 @@
 \definecolor{linkcol}{rgb}{0.10,0.20,0.45}
 \usepackage[colorlinks=true,linkcolor=linkcol,citecolor=linkcol,
             urlcolor=linkcol]{hyperref}
+\hypersetup{
+  pdftitle={A proof of Nivat's conjecture in its convex form},
+  pdfauthor={Guancheng Pan},
+  pdfsubject={Star configurations and low convex pattern complexity},
+  pdfkeywords={Nivat conjecture, periodicity, convex window, zonotope},
+  pdfdisplaydoctitle=true,bookmarksnumbered=true}
+
 
 % Reproducible output, as in the other preprints: omit the creation and
 % modification dates, the pdfTeX banner and the non-deterministic trailer id.
@@ -141,55 +116,21 @@
 \widowpenalty=10000
 \displaywidowpenalty=10000
 
-\title[Star configurations and the convex Nivat conjecture]
-      {The convex Nivat conjecture:\\
-       a complexity lower bound for star configurations,\\
-       and a reduction from low convex complexity\\
-       to star configurations}
-% ---------------------------------------------------------------------------
-% Title block.  Hand-built, and deliberately the same arrangement as the
-% authors' other preprints: names in a grid with superscript affiliation keys,
-% the key list at \small, the e-mail addresses, then the corresponding-author
-% line.  \@setauthors is redefined rather than worked around, because amsart
-% applies \MakeUppercase and \footnotesize to whatever it is handed and neither
-% survives contact with a tabular.
-%
-% The \author declarations are kept even though the block below, not the class,
-% prints the names: the running head and the PDF metadata read them.  Their
-% optional argument is the running-head form and deliberately carries no dagger.
-%
-% NO equal-contribution marks.  Who contributed equally has never been stated,
-% and inventing that mark would be a claim about people.
-% ---------------------------------------------------------------------------
+\title[A proof of Nivat's conjecture in its convex form]
+      {A proof of Nivat's conjecture\\
+       in its convex form}
+% Author information updated on 2026-09-30.
 \author[G. Pan]{Guancheng Pan}
-\author[C. You]{Chengsong You}
-\author[J. Zhou]{Junwei Zhou}
-\author[Y. Chen]{Yongchao Chen}
-
-\newcommand{\afn}[1]{\textsuperscript{\normalfont #1}}
 \makeatletter
 \renewcommand{\@setauthors}{%
   \begin{center}
-    \normalsize
-    \begin{tabular}{c@{\hspace{2.2em}}c}
-      \large Guancheng Pan\afn{1,2} & \large Chengsong You\afn{1,3}
-    \end{tabular}\\[0.5ex]
-    \begin{tabular}{c@{\hspace{2.2em}}c}
-      \large Junwei Zhou\afn{4,\dag} & \large Yongchao Chen\afn{1,5,\dag}
-    \end{tabular}\\[1.4ex]
-    \small
-    \textsuperscript{1}Apex Intelligence \quad
-    \textsuperscript{2}Chu Kochen Honors College, Zhejiang University\\
-    \textsuperscript{3}East China Normal University \quad
-    \textsuperscript{4}Independent Researcher \quad
-    \textsuperscript{5}Tsinghua University\\[0.8ex]
-    \texttt{3250101086@zju.edu.cn}, \texttt{youchengsong3@gmail.com}\\
-    \texttt{zjw330501@gmail.com}, \texttt{cyc@apexin.ai}\\[0.6ex]
-    \textsuperscript{\dag}Corresponding authors
+    {\large Guancheng Pan}\\[1.2ex]
+    {\small Chu Kochen Honors College, Zhejiang University}\\[0.8ex]
+    {\small\texttt{3250101086@zju.edu.cn}}
   \end{center}}
 \makeatother
 
-\date{11 September 2026}
+\date{1 October 2026}
 % The subject classification and the key words are printed as a centred block
 % under the abstract, not in amsart's first-page footer, so that page 1 reads
 % the same way in all of the authors' preprints.
@@ -197,37 +138,44 @@
 \begin{document}
 
 \begin{abstract}
-Nivat's conjecture asserts that a configuration $\xi\colon\Z^2\to\cA$ over a
-finite alphabet with $P_\xi(m,n)\le mn$ for some $m,n\ge1$ is periodic.  Its
-convex form replaces the rectangle by an arbitrary non-empty finite
-lattice-convex window $S$, that is, one with $S=\Conv(S)\cap\Z^2$.  This paper
-contains two results.
+We prove Nivat's conjecture in its convex form: if a configuration
+$\xi\colon\Z^2\to\cA$ over a finite alphabet satisfies $P_\xi(S)\le|S|$ for
+some non-empty finite lattice-convex window $S$, that is, one with
+$S=\Conv(S)\cap\Z^2$, then $\xi$ is periodic.  Rectangles are lattice-convex,
+so this contains Nivat's conjecture itself: $P_\xi(m,n)\le mn$ for some
+$m,n\ge1$ forces $\xi$ to be periodic.  Convexity is exactly the right hypothesis:
+by Khetan's counterexample the statement fails for a non-convex window of
+full affine span.
+The whole proof, including every result we quote from the literature, has been
+formalised in Lean~4 with Mathlib; the kernel reports that the final theorem
+depends on no axiom beyond the three standard ones of Lean's logic.
 
-The first occupies \S\S\ref{sec:notation}--\ref{sec:quadratic}: we call
+The proof has two parts.  The first occupies \S\S\ref{sec:notation}--\ref{sec:quadratic}: we call
 $\theta=\sum_{i=1}^mF_i\colon\Z^2\to\Fp$ a \emph{star
-configuration} when each $F_i$ has a non-zero period $k_iv_i$, is not doubly
+configuration} when $m\ge2$, each $F_i$ has a non-zero period $k_iv_i$, is not doubly
 periodic, and agrees with doubly periodic fields on the two half-planes
 $\{\pi_i<\ell_i\}$ and $\{\pi_i>r_i\}$, the primitive directions $v_i$ being
 pairwise non-parallel; and we prove that $P_\theta(S)\ge|S|+1$ for every
 non-empty finite lattice-convex $S$.  The proof attaches to $\theta$ an
 \emph{exceptional spectrum} $\Lambda_i$ of roots of unity in each direction, a
-Laurent polynomial $A=\prod_iA_i(T^{v_i})$ that divides every annihilator of
-$\theta$ modulo constants, and the zonotope $Z=\Newt(A)=\sum_i[0,d_iv_i]$.  The
-zonotope then appears twice, with opposite signs: it is the exact cost of the
-affine relations carried by a window ($\dim U_S\ge|S|+1-|R_Z(S)|$), and it is
-the exact capacity for a family of quadratic characters that are independent
-modulo those relations.  The two cancel, for every $S$ and every $Z$.
+Laurent polynomial $A=\prod_iA_i(T^{v_i})$, and the zonotope
+$Z=\Newt(A)=\sum_i[0,d_iv_i]$.  For a spectrum-preserving scalar encoding
+$\eta=w(\theta)$, every Laurent polynomial $f$ with $f(T)\eta$ constant is
+divisible by $A$.  This bounds the affine deficit by $|R_Z(S)|$:
+$\dim U_S\ge|S|+1-|R_Z(S)|$.  In the remaining case of a finite-difference
+dichotomy, the same zonotope supplies $|R_Z(S)|$ quadratic observables
+independent modulo $U_S$, giving the required complexity bound.
 
-The second result is a reduction (\S\ref{sec:reduction}): the convex conjecture
-reduces to the first result, and therefore holds.  Apart from the annihilator
-and periodic decomposition theorem of Kari and Szabados \cite{KS} and Colle's
-results \cite{Colle23a} on one-sided nonexpansive directions and on full
-periodicity over a region, every step of the chain is proved here in full.
+The second part (\S\ref{sec:reduction}) reduces the convex conjecture to the
+first, and so proves it.  On paper it quotes the annihilator and periodic
+decomposition theorem of Kari and Szabados \cite{KS} and Colle's results
+\cite{Colle23a} on one-sided nonexpansive directions and on full periodicity over
+a region; in the formalisation these are proved as well.
 Appendix~\ref{app:szabados} proves in full the $\Fp$ and convex form of
-Szabados' theorem.  A further appendix reports a numerical verification of the
-main theorem and of the intermediate assertions of
-\S\S\ref{sec:spectrum}--\ref{sec:quotient}, including a counterexample to the
-natural over-generalisation of Lemma~\ref{lem:Ae-sectors}.
+Szabados' theorem, and a further appendix reports computational checks of the
+intermediate assertions.  Appendix~\ref{app:lean} describes the formalisation
+and Appendix~\ref{app:ai} how the work was done: the mathematics and the Lean
+development were produced with the author's AI research system.
 \end{abstract}
 
 \maketitle
@@ -256,7 +204,9 @@ address \cite{Nivat}, whether the two-dimensional analogue holds:
 \emph{if $P_\xi(m,n)\le mn$ for some $m,n\ge1$, is $\xi$ periodic?}
 \end{quote}
 
-The question is open.  Partial results fall into two families.  On the
+This paper answers the question in the affirmative, and proves more: the
+same conclusion holds for every lattice-convex window (Theorem~B below).
+Before this, partial results fell into two families.  On the
 combinatorial and dynamical side, Sander--Tijdeman \cite{ST},
 Epifanio--Koskas--Mignosi \cite{EKM} and Quas--Zamboni \cite{QZ} proved
 periodicity under complexity bounds of the form $P_\xi(m,n)\le mn/C$; Cyr and
@@ -287,19 +237,22 @@ decoration.  Khetan \cite{Khe} has constructed an exact cluster
 $F\subset\Z^2$ of cardinality $8$ with full affine span and an $F$-tiling whose
 orbit closure contains no $1$-periodic $F$-tiling; since every $F$-tiling has
 low complexity with respect to the window $-F$, this is a counterexample to the
-statement for non-convex windows of full affine span.
+statement for non-convex windows of full affine span.  The convex form is
+therefore the natural general statement, it contains the rectangular one, and
+it is the one we prove.
 
 \subsection*{Results}
 
-Our results are two.  The first is a complexity lower bound for star
-configurations, proved from scratch; the second reduces the convex Nivat
-conjecture to the first, quoting only results of \cite{KS} and \cite{Colle23a}.
+The main result is Theorem~B, the convex Nivat conjecture.  It rests on
+Theorem~A, a complexity lower bound for star configurations proved from
+scratch; the reduction of Theorem~B to Theorem~A quotes only results of
+\cite{KS} and \cite{Colle23a}, and these too are proved in the formalisation.
 
 Call $\theta\colon\Z^2\to\Fp$ a \emph{star configuration} if
 $\theta=\sum_{i=1}^mF_i$ with $m\ge2$, where each $F_i$ is periodic in a
 direction $v_i$, is not doubly periodic, and coincides with doubly periodic
-fields on two complementary half-planes orthogonal to nothing in particular but
-bounded by the lines $\pi_i=\det(v_i,\cdot)=\text{const}$, the primitive
+fields on two disjoint half-planes bounded by lines of the form
+$\pi_i=\det(v_i,\cdot)=\text{const}$, the primitive
 directions $v_1,\dots,v_m$ being pairwise non-parallel.  The precise axioms
 \textup{(S1)}--\textup{(S3)} are in \S\ref{ssec:star}.  Informally: $m$
 one-dimensionally periodic fields, each of which is doubly periodic outside a
@@ -317,14 +270,19 @@ multiplication (Ostrowski), the Chinese remainder theorem, Hilbert's
 Nullstellensatz, and the existence of unimodular triangulations of lattice
 polygons.
 
-\begin{thmB}[Theorem~\ref{thm:convex-nivat}]
+\begin{thmB}[Convex Nivat conjecture; Theorem~\ref{thm:convex-nivat}]
 Let $\cA$ be finite and $\xi\colon\Z^2\to\cA$.  If $P_\xi(S)\le|S|$
 for some non-empty finite lattice-convex $S$, then $\xi$ is periodic.
-Consequently, if $P_\xi(m,n)\le mn$ for some $m,n\ge1$, then $\xi$ is periodic.
+In particular \textup{(}Nivat's conjecture\textup{)}, if $P_\xi(m,n)\le mn$ for
+some $m,n\ge1$, then $\xi$ is periodic.
 \end{thmB}
 
-Theorem~B is a reduction of the convex conjecture to Theorem~A
-(\S\ref{sec:reduction}).  The chain runs as follows: the annihilator and the
+Both statements are checked in Lean~4: Theorem~B is \texttt{Nivat.convex\_nivat}
+and its rectangular case is \texttt{Nivat.nivat\_conjecture} (see
+\emph{Machine verification} below).
+
+Theorem~B is proved by reducing it to Theorem~A (\S\ref{sec:reduction}).  The
+chain runs as follows: the annihilator and the
 periodic decomposition of Kari and Szabados \cite{KS}; the two results of Colle
 \cite{Colle23a} — a line that is one-sidedly nonexpansive in both directions,
 and an aperiodic configuration $\vartheta$ in the orbit closure which is fully
@@ -344,7 +302,41 @@ field).  Finally Lemma~\ref{lem:normalise} normalises such a $\vartheta$ into a
 star configuration, contradicting Theorem~A.  Theorem~\ref{thm:structure} —
 each component is fully periodic on two disjoint half-planes — coincides
 formally with the structure theorem of \cite{CG}; the proof given here is
-different from the one there and uses no minimality of the decomposition.
+different from the one there.  After the region has been extracted, the
+half-plane arguments do not require the $\Fp$-decomposition to be minimal;
+the region extraction uses a counterexample of minimal $\Z$-order, as specified
+in Remark~\ref{rem:minimal}.
+
+\subsection*{Machine verification}
+
+The complete proof of Theorem~B is formalised in Lean~4 \cite{Lean4} on top of
+Mathlib \cite{Mathlib}.  The formal theorem \texttt{Nivat.convex\_nivat} says:
+for every type $\alpha$ with \texttt{[Finite $\alpha$]}, every
+$\xi\colon\Z\times\Z\to\alpha$ and every non-empty \texttt{Finset} $S$ of
+$\Z\times\Z$ that is lattice-convex, $P_\xi(S)\le|S|$ implies that $\xi$ has a
+non-zero period; \texttt{Nivat.nivat\_conjecture} is the case
+$S=[1,n]\times[1,k]$.  Here $P_\xi(S)$ is literally the number of distinct
+restrictions of $\xi$ to the translates $u+S$, $u\in\Z^2$, and lattice
+convexity is $S=\Conv(S)\cap\Z^2$ with the real convex hull of Mathlib.
+
+The Lean kernel reports that both theorems depend only on \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}, the axioms of Lean's own
+logic.  There is no \texttt{sorry}, and the development declares no axiom of its
+own.  In particular nothing is taken from the literature on trust: the
+annihilator and decomposition theorems of Kari and Szabados and the results of
+Colle used in \S\ref{sec:reduction}, with the theorems of Boyle--Lind and
+Cyr--Kra behind them, are proved in the formalisation, which by volume is
+mostly about them (some $192{,}000$ of its $216{,}000$ lines).  The development
+has $449$ modules and builds from a clean checkout; its source is attached to
+this paper as an ancillary file.  Appendix~\ref{app:lean} explains how the
+formal definitions match ours and how to check the build.
+
+Formalising the quoted results also tested them.  One step of the source did not
+survive: in the proof of Lemma~3.5(i) of the arXiv version of \cite{Colle23a},
+the swept sets used as shells are in general neither enveloped nor squeezed
+between the required strips.  The formalisation replaces that construction by a
+different one; the lemma itself, and with it everything we quote, stands
+(Appendix~\ref{app:lean}).
 
 \subsection*{The shape of the proof of Theorem~A}
 
@@ -357,27 +349,27 @@ region, because outside the union of the pairwise intersections of $m$ strips in
 pairwise distinct directions at most one component is still varying.  If
 $D\one[\theta=a]\ne0$ for some colour $a$, the theorem follows for
 \emph{arbitrary} finite $S$, convex or not, by a one-line integral-domain
-argument.  The rest of the paper is the remaining case $D\one[\theta=a]\equiv0$.
+argument.  The remaining case is $D\one[\theta=a]\equiv0$ for every colour $a$.
 
 \emph{The exceptional spectrum and its zonotope} (\S\ref{sec:spectrum}).
 Pushing $\theta$ to infinity along $\pm H_i$ isolates the $i$-th component
 against a doubly periodic background, producing configurations
 $\Xi_i^\pm=F_i+B_i^\pm$ in the orbit closure together with their own pure tails
-$G_i^{\sigma,L},G_i^{\sigma,R}$.  The differences between them are invariant
+$G_i^{\sigma,L},G_i^{\sigma,R}$.  Their colour-indicator differences are invariant
 under $H_i$, hence decompose under the $\kappa_i$-th roots of unity; the set of
 roots that actually occur is the exceptional spectrum $\Lambda_i$, non-empty
 exactly because $F_i$ is not doubly periodic.  Set
 $A=\prod_iA_i(T^{v_i})$ with $A_i(t)=\prod_{\lambda\in\Lambda_i}(t-\lambda)$,
 and $Z=\Newt(A)=\sum_i[0,d_iv_i]$, $d_i=|\Lambda_i|$.  The key divisibility is
-Lemma~\ref{lem:divisibility}: if $f(T)\eta$ is constant for a scalar encoding
-$\eta$ of $\theta$, then $A\mid f$.  Counting, this says that a window $S$
+Lemma~\ref{lem:divisibility}: if $f(T)\eta$ is constant for a spectrum-preserving
+scalar encoding $\eta=w(\theta)$ as in Lemma~\ref{lem:encoding}, then $A\mid f$.
+Counting, this says that a window $S$
 carries at most $|R_Z(S)|$ independent affine relations, where
 $R_Z(S)=\{r:r+Z\subseteq\Conv(S)\}$: the \emph{cost} of the zonotope.
 
 \emph{The quadratic witness} (\S\S\ref{sec:background}--\ref{sec:zonotope}).
-Linear characters alone cannot close the gap, and they should not: the deficit
-$|R_Z(S)|$ is real.  We produce $|R_Z(S)|$ further characters that are
-quadratic.  For that one needs a single vector $d$ with
+The affine bound may fall short by $|R_Z(S)|$.  We supply that many additional
+quadratic observables.  This requires a single vector $d$ with
 $D_z[\eta(z)\eta(z+d)]\ne0$ \emph{and} $d\in(Z-Z)\cap\Z^2$.  Existence of some
 such $d$ is \S\ref{sec:twopoint}; confinement to $Z-Z$ comes from a pair of
 recursions in the two variables $(d,z)$ (\S\ref{sec:quotient}) which say that
@@ -388,9 +380,9 @@ points of $Z$ differing by $d$ is a unimodular triangulation argument
 (\S\ref{sec:zonotope}).
 
 \emph{The cancellation} (\S\ref{sec:quadratic}).  Each $r\in R_Z(S)$ now yields
-a quadratic character $\Phi_r$ on the pattern set, and these are independent
-modulo the linear ones.  The zonotope's capacity is exactly its cost, for every
-window and every zonotope; that is Remark~\ref{rem:balance}.
+a quadratic observable $\Phi_r$ on the pattern set, and these are independent
+modulo the linear ones.  Their number compensates for the full possible affine
+deficit; that is Remark~\ref{rem:balance}.
 
 \subsection*{Organisation}
 
@@ -413,12 +405,14 @@ Appendix~\ref{app:edge} briefly describes, without proof and for the record
 only, a different route that was explored and is not used here.
 Appendix~\ref{app:numerics} reports the numerical verification.
 Appendix~\ref{app:szabados} proves the $\Fp$ and convex form of Szabados'
-theorem.
+theorem.  Appendix~\ref{app:lean} describes the Lean formalisation and
+Appendix~\ref{app:ai} records how the work was done with an AI system.
 
 \smallskip\noindent\textbf{Dependencies.}
 \S\S\ref{sec:notation}--\ref{sec:quadratic} are self-contained.
 \S\ref{sec:reduction} quotes \cite{KS} (annihilators and periodic
-decompositions) and \cite[Theorem~1.9 and Lemma~4.6]{Colle23a}.
+decompositions), \cite[Theorem~1.9]{Colle23a}, and the proof of
+\cite[Lemma~4.6]{Colle23a}; the formalisation proves all of these.
 Appendix~\ref{app:szabados} uses nothing beyond the one-dimensional
 Morse--Hedlund theorem \cite{MH38}.
 
@@ -536,6 +530,8 @@ $Dh$ has finite support.
 \end{lem}
 
 \begin{proof}
+If $W=\varnothing$, then $h$ is constant and $Dh=0$.  Assume henceforth that
+$W\ne\varnothing$.
 Put $M=\cE+W$, a finite set, and $\diam_i=\max_{s\in M}|\pi_i(s)|$.  Define the
 \emph{widened strips}
 \[\Sigma_i=\bigl\{z:\ \ell_i-\diam_i\le\pi_i(z)\le r_i+\diam_i\bigr\},\]
@@ -625,9 +621,12 @@ $D'=\prod_i(T^{n_iH_i}-1)$, which is a multiple of $D$ because
 $T^{nH}-1=(T^H-1)(1+T^H+\cdots+T^{(n-1)H})$.  Hence $DI_a=0$ implies
 $D'I_a=0$; conversely, if $DI_a\ne0$ then it is non-zero of finite support by
 Lemma~\ref{lem:finite-support}, and Lemma~\ref{lem:domain} gives
-$D'I_a=(D'/D)(T)\,DI_a\ne0$.  So whether \eqref{eq:caseB} holds does not depend
-on the particular $\kappa_i$ chosen, as long as $H_i$ preserves all the tail
-fields.
+$D'I_a=(D'/D)(T)\,DI_a\ne0$.  Any two choices satisfying the conventions of
+\S\ref{ssec:conv}, namely $\kappa_i\in k_i\Z_{>0}$ and
+$H_i=\kappa_iv_i\in\Gamma$, can be compared through a common positive
+multiple in each direction.  Thus \eqref{eq:caseB} is independent of these
+choices.  Each $H_i$ must preserve its component $F_i$ as well as every tail
+field; preservation of the tails alone is insufficient.
 \end{rem}
 
 \section{Exceptional spectra, the encoding, and the dimension budget for
@@ -686,7 +685,6 @@ Let $d\colon\Z^2\to\C$ satisfy $T^{H_i}d=d$.  For $\lambda^{\kappa_i}=1$ put
   \qquad
   \widehat d_t(\lambda):=\frac1{\kappa_i}\sum_{k=0}^{\kappa_i-1}\lambda^{-k}\,
   d(kv_i+tu_i).\]
-Then:
 \begin{enumerate}
 \item $(P_\lambda d)(sv_i+tu_i)=\lambda^s\,\widehat d_t(\lambda)$, and
       $\sum_{\lambda}P_\lambda d=d$;
@@ -1436,7 +1434,7 @@ $q_0,q_1\in Z\cap\Z^2$.  Putting $q=q_0$, both $q$ and $q+d$ lie in
 $Z\cap\Z^2$.
 \end{cor}
 
-\section{Quadratic characters make up the whole linear
+\section{Quadratic observables make up the whole linear
 deficit}\label{sec:quadratic}
 
 Fix $d$ and $q$ as in Proposition~\ref{prop:witness} and
@@ -1452,7 +1450,7 @@ We have $r+Z\subseteq\Conv(S)$ and $q,q+d\in Z\cap\Z^2$, so
 \[r+q,\ r+q+d\ \in\ (r+Z)\cap\Z^2\ \subseteq\ \Conv(S)\cap\Z^2=S .\qedhere\]
 \end{proof}
 
-Consequently, for each $r\in R_Z(S)$ the \emph{quadratic scalar character}
+Consequently, for each $r\in R_Z(S)$ the \emph{quadratic scalar observable}
 \[\Phi_r\colon\ \cL\to\Q,\qquad
   \Phi_r(\gamma)=w\bigl(\gamma(r+q)\bigr)\cdot w\bigl(\gamma(r+q+d)\bigr)\]
 is well defined, and
@@ -1499,9 +1497,8 @@ The zonotope $Z$ enters the proof twice and with opposite signs: it is the
 $|R_Z(S)|$, and it is the \emph{capacity} of the quadratic witness,
 Lemma~\ref{lem:capacity} supplying exactly $|R_Z(S)|$ positions.  The two cancel
 exactly, independently of the shape of $S$ and of the size of $Z$.  The
-numerical experiments of Appendix~\ref{app:numerics} show that
-Lemma~\ref{lem:budget} is an equality on every instance of Case~B that we
-generated.
+sampled modular ranks in Appendix~\ref{app:numerics} attain the lower bound of
+Lemma~\ref{lem:budget} on every reported Case-B instance.
 \end{rem}
 
 \section{Reduction to the convex Nivat conjecture}\label{sec:reduction}
@@ -1561,8 +1558,10 @@ C_R\subseteq C$.  Let
 \[K_R:=\{w\in\R^2:\ C_R+w\subseteq C_R\}\]
 be the recession cone of $C_R$, a closed convex cone.  If $h\in\Z^2$ satisfies
 $R+h\subseteq R$, then $C_R+h=\overline{\Conv}(R+h)\subseteq C_R$, that is
-$h\in K_R$.  A half-plane is a lattice-convex region, with
-$K_R=\{w:\langle w,n\rangle\ge0\}$.
+$h\in K_R$.  A half-plane with rational boundary direction is a
+lattice-convex region: after rescaling its normal to an integer vector, a strict
+inequality can be replaced by a weak inequality with an integer threshold.
+For such a half-plane, $K_R=\{w:\langle w,n\rangle\ge0\}$.
 
 For a non-empty $\cU\subseteq\Z^2$ say that $G\colon\Z^2\to\Fp$ is \emph{fully
 periodic on $\cU$} (\cite[Definition~2.1]{CG}) if
@@ -1573,15 +1572,18 @@ two independent vectors of its period lattice pointing into the half-plane.
 Conversely:
 
 \begin{lem}[Global extension]\label{lem:extend}
-Let $R$ be a lattice-convex region and let $G$ be fully periodic on $R$, with
-vectors $h,h'$.  Then $\dim K_R=2$ and $g:=h+h'\in\operatorname{int}K_R$; for
-every $z\in\Z^2$ one has $z+Ng\in R$ for all large $N$; and there is a doubly
+Let $R$ be a lattice-convex region or a half-plane, and let $G$ be fully periodic
+on $R$, with vectors $h,h'$.  Put $g:=h+h'$.  Then for every $z\in\Z^2$ one
+has $z+Ng\in R$ for all large $N$, and there is a doubly
 periodic field $\widetilde G$ with $\Per(\widetilde G)\supseteq\Z h+\Z h'$ and
-$\widetilde G=G$ on $R$.
+$\widetilde G=G$ on $R$.  If $R$ is a lattice-convex region, then
+$\dim K_R=2$ and $g\in\operatorname{int}K_R$; if $R$ is a half-plane with
+normal $n$, then $\langle g,n\rangle>0$.
 \end{lem}
 
 \begin{proof}
-From $R+h\subseteq R$ and $R+h'\subseteq R$ we get $h,h'\in K_R$; they are
+First suppose $R$ is a lattice-convex region.  From $R+h\subseteq R$ and
+$R+h'\subseteq R$ we get $h,h'\in K_R$; they are
 linearly independent, so the closed sector they span lies in $K_R$, its interior
 is non-empty and contains $g$, whence $g\in\operatorname{int}K_R$ and
 $\dim K_R=2$.  Pick $x_0\in C_R$; by the definition of the recession cone
@@ -1589,6 +1591,16 @@ $x_0+K_R\subseteq C_R$.  For any $z$ we have
 $z+Ng-x_0=N\bigl(g+\tfrac{z-x_0}{N}\bigr)$, and for $N$ large the vector in
 brackets lies in a neighbourhood of $g$ contained in $K_R$; hence
 $z+Ng\in C_R\cap\Z^2=R$.
+
+For a half-plane $R$ with normal $n$, there is a direct argument, whether its
+boundary direction is rational or irrational and whether its defining
+inequality is strict or weak.  The inclusion $R+h\subseteq R$ implies
+$\langle h,n\rangle\ge0$: otherwise, starting at any point of $R$, repeated
+addition of $h$ would eventually leave $R$.  Likewise
+$\langle h',n\rangle\ge0$.  Since $h,h'$ are independent, these two inner
+products cannot both vanish, so $\langle g,n\rangle>0$.  Thus $z+Ng\in R$ for
+all sufficiently large $N$.  In either case the extension is constructed as
+follows.
 
 \emph{Step 1.}  For $z\in R$ and $k\ge0$: $z+kh\in R$ and $G(z+kh)=G(z)$, by
 induction on $k$; likewise for $h'$ and for $g$.
@@ -1604,8 +1616,9 @@ $\widetilde G(z+h)=G\bigl((z+Ng)+h\bigr)=G(z+Ng)=\widetilde G(z)$ by Step 1.
 The same for $h'$.
 \end{proof}
 
-Half-planes are the special case: there $K_R=\{w:\langle w,n\rangle\ge0\}$ and
-$g$ satisfies $\langle g,n\rangle>0$.
+An open half-plane with irrational boundary direction need not be a
+lattice-convex region under the closed-convex-set definition above.  The direct
+half-plane argument in Lemma~\ref{lem:extend} covers this case as well.
 
 \subsection{The results quoted, and counterexamples of minimal
 order}\label{ssec:external}
@@ -1660,7 +1673,8 @@ the proof of Proposition~\ref{prop:case-A}.
 \begin{lem}[Passing to the orbit closure and reducing mod
 $p$]\label{lem:modp}
 Let $\xi$ be as in Theorem~\ref{thm:KS} with $\cA\subset\Z_+$, and let
-$\varphi=\prod_{i=1}^m(X^{h_i}-1)$ annihilate $\xi$.  Then for every
+$\varphi=\prod_{i=1}^m(X^{h_i}-1)$ annihilate $\xi$, with the $h_i$ non-zero
+and pairwise non-parallel as in Theorem~\ref{thm:KS}(b).  Then for every
 $\vartheta\in X_\xi$ and every prime $p>\max\cA$:
 \begin{enumerate}
 \item[\textup{(a)}] $\varphi$ annihilates $\vartheta$, so
@@ -1686,7 +1700,8 @@ periods); if only one term were left, $\vartheta$ would be periodic.
 \end{proof}
 
 \begin{thm}[Colle {\cite[Theorem~1.9]{Colle23a}}]\label{thm:coneed}
-Let $\cA\subset\Z$ and let $\xi$ have a non-trivial annihilator.  If for every
+Let $\cA\subset\Z$ be finite and let $\xi\in\cA^{\Z^2}$ have a non-trivial
+annihilator.  If for every
 line $\ell$ either $-\boldsymbol\ell\notin\mathrm{ONED}(\xi)$ or
 $\boldsymbol\ell\notin\mathrm{ONED}(\xi)$, then $\xi$ is fully periodic.  In
 particular, if $\xi$ is non-periodic there is a line $\ell$ with
@@ -1697,7 +1712,7 @@ The proof of \cite[Theorem~1.9]{Colle23a} uses the periodic-limit theorem of
 Kari and Moutot \cite{KM20,KM23} and the Boyle--Lind theorem \cite{BoyleLind};
 it does not depend on the equal-order assumption of \cite[\S4.1]{Colle23a}.
 
-\begin{thm}[Colle {\cite[Lemma~4.6]{Colle23a}}]\label{thm:colregion}
+\begin{thm}[Colle {\cite[proof of Lemma~4.6]{Colle23a}}]\label{thm:colregion}
 Let $\xi$ be a counterexample of minimal order in the sense of
 Remark~\ref{rem:minimal}, so that the equal-order assumption of \S4.1 of
 \cite{Colle23a} is in force, and let $\ell$ be as in
@@ -1709,15 +1724,29 @@ unbounded edges, along $\ell$ and along $\ell'$, both nonexpansive lines for
 $X_\xi$, and finitely many bounded edges.
 \end{thm}
 
-Theorem~\ref{thm:colregion} is the conclusion of \cite[Lemma~4.6]{Colle23a},
-restated with ``fully periodic'' as defined in \S\ref{ssec:halfplanes}; its
-proof there uses Lemma~3.5, Lemma~4.2, Propositions~2.13--2.14 and
+Theorem~\ref{thm:colregion} is extracted from Cases 1 and 2 in the proof of
+\cite[Lemma~4.6]{Colle23a}.  There, regional periods require equality only
+where a point and its translate both belong to the region.  Both cases also
+provide a period parallel to each of the two non-parallel unbounded edges.
+Orient these periods $h,h'$ along the corresponding outward rays of $C_R$.
+Closed convexity puts $h,h'$ in $K_R$: if $x_0+\R_{\ge0}h\subseteq C_R$,
+then for $x\in C_R$ and $t\ge0$, letting $s\to\infty$ in
+$(1-t/s)x+(t/s)(x_0+sh)\in C_R$ gives $x+th\in C_R$.
+Thus $R+h,R+h'\subseteq R$, and the overlap identities hold at every point
+of $R$, giving full periodicity in the sense of \S\ref{ssec:halfplanes}.
+The source proof uses Lemma~3.5, Lemma~4.2, Propositions~2.13--2.14 and
 Claims~4.7--4.16 of \cite{Colle23a}, of which Claims~4.11 and 4.16 depend on the
 equal-order assumption.  Only three items of it are used below: $\vartheta$ is
 non-periodic, $R$ is a lattice-convex region, and $\vartheta$ is fully periodic
 on $R$.  The position of the two asymptotic directions of the region is not
-needed: Proposition~\ref{prop:firsthalf}(c) shows that it is determined by the
-decomposition itself.
+needed: Proposition~\ref{prop:firsthalf}(b) gives the half-plane containments
+for its recession cone that are used in Lemma~\ref{lem:available}.
+
+In the Lean formalisation Theorems~\ref{thm:KS}, \ref{thm:coneed} and
+\ref{thm:colregion} are not assumed: the forms in which they are used below are
+proved, together with the parts of \cite{Colle23a} their proofs rest on.  The one step of the source that had to
+be replaced, in the proof of Lemma~3.5(i), is described in
+Appendix~\ref{app:lean}.
 
 \subsection{The first half-plane}\label{ssec:firsthalf}
 
@@ -1756,7 +1785,7 @@ $t\ge c$ we get:
 
 \smallskip
 \noindent\textup{(F)}\quad the forward recursion
-\[G_{t+\beta_+}=-\rho^{-\alpha_{C_+}}\sum_{C\ne C_+}(-1)^{r-|C|}
+\[G_{t+\beta_+}=-(-1)^{r-|C_+|}\rho^{-\alpha_{C_+}}\sum_{C\ne C_+}(-1)^{r-|C|}
  \rho^{\alpha_C}G_{t+\beta_C},\]
 whose right-hand side involves only $G_{t+\beta_-},\dots,G_{t+\beta_+-1}$;
 
@@ -1772,8 +1801,12 @@ injective self-map of a finite set is a bijection, so
 $(\mathbf x_t)_{t\ge c}$ is purely periodic: there is $q\ge1$ with
 $\mathbf x_{t+q}=\mathbf x_t$ for all $t\ge c$.  Reading off the first
 component, $G_{t+q}=G_t$ for $t\ge c+\beta_-$, that is $G(z+qu)=G(z)$ whenever
-$t(z)\ge c+\beta_-$.  If $\Delta\equiv0$ the same holds for every $t$, and $G$
-has the two independent periods $qu$ and $kv$.
+$t(z)\ge c+\beta_-$.  If $\Delta\equiv0$, take instead the finite set
+$\Sigma_{\mathrm{all}}:=\{\mathbf x_t:t\in\Z\}$.  Both recursions hold at every
+integer $t$, so the same argument makes the forward map a permutation of
+$\Sigma_{\mathrm{all}}$.  A positive power $q$ of this permutation is the
+identity, giving $G_{t+q}=G_t$ for every $t\in\Z$.  Thus $G$ has the two
+independent periods $qu$ and $kv$.
 \end{proof}
 
 \begin{prop}[The first half-plane]\label{prop:firsthalf}
@@ -1787,14 +1820,14 @@ $\vartheta$ is fully periodic, with vectors $a,b$, and put $K:=K_R$.  Then
  \begin{itemize}
  \item[$(\alpha)$] the line $\R v_i$ meets $\operatorname{int}K$, and then
  $\vartheta_i$ is doubly periodic;
- \item[$(\beta),(\gamma)$] otherwise there are $\sigma_i\in\{+,-\}$ and
- $t_i\in\Z$ such that $\vartheta_i$ is fully periodic on the half-plane
- $U_i:=\{\sigma_i\pi_i\ge t_i\}$, and $U_i$ contains a translate $R+w_i$ of $R$;
+ \item[$(\beta)$] otherwise there are $\sigma_i\in\{+,-\}$ and $t_i\in\Z$
+ such that $K\subseteq\{\sigma_i\pi_i\ge0\}$ and $\vartheta_i$ is fully
+ periodic on the half-plane $U_i:=\{\sigma_i\pi_i\ge t_i\}$;
  \end{itemize}
 \item[\textup{(c)}] if $\vartheta$ is non-periodic and no component is doubly
-periodic, then $K$ is the sector of opening $<\pi$ spanned by two rays
-$\sigma_av_a$, $\sigma_bv_b$ with $a\ne b$, and its interior contains no
-$\pm v_j$.  In particular $K$ cannot be a half-plane.
+periodic, then $K$ is a closed sector of opening strictly between $0$ and
+$\pi$, and its interior contains no $\pm v_j$.  In particular $K$ cannot be
+a half-plane.
 \end{enumerate}
 \end{prop}
 
@@ -1824,7 +1857,7 @@ $x-x_0+e=N'g+e+(x-y_0)\in K$, because $N'g+e\in K$.
 
 \emph{Step 3 (saturation along $v_i$).}  $D_i$ has period $h_i$, so $D_i$
 vanishes on $\mathrm{Sat}_i:=\{z:(z+\Z h_i)\cap R_i'\ne\varnothing\}$.  There
-are three cases.
+are two cases.
 
 $(\alpha)$ $\R v_i\cap\operatorname{int}K\ne\varnothing$.  Then $v_i$ or $-v_i$
 lies in $\operatorname{int}K$, so for any $z$ the point $z+nh_i$ enters
@@ -1834,55 +1867,69 @@ its whole-plane case to the basis $(v_i,u_i)$, the hypothesis
 $t(H_j)=N_0\det(v_i,h_j)\ne0$ holding because the directions are pairwise
 non-parallel: $\vartheta_i$ is doubly periodic.
 
-$(\beta),(\gamma)$ $\R v_i\cap\operatorname{int}K=\varnothing$.  A convex set
+$(\beta)$ $\R v_i\cap\operatorname{int}K=\varnothing$.  A convex set
 and a line missing its interior can be separated, so $K$ lies in one of the two
 closed half-planes bounded by $\R v_i$; choose $\sigma_i$ with
-$K\subseteq\{\sigma_i\pi_i\ge0\}$.  Since $\dim K=2$, the functional
-$\sigma_i\pi_i$ does not vanish identically on $K$.  For $\tau>0$ the chord
-$K\cap\{\sigma_i\pi_i=\tau\}$ is either a segment in the direction $v_i$
-(case~$(\gamma)$: $K\cap\R v_i=\{0\}$, and the length is $\lambda\tau$ with
-$\lambda>0$) or a ray (case~$(\beta)$: $v_i$ is parallel to one of the boundary
-rays of $K$).  In case~$(\beta)$ take any $c_i>0$; in case~$(\gamma)$ take
-$c_i>0$ with $\lambda c_i\ge|h_i|$.  If $\sigma_i\pi_i(z-y_0)\ge c_i$, then
+$K\subseteq\{\sigma_i\pi_i\ge0\}$.  For the vector
+$g\in\operatorname{int}K$ of Step 1 put $a_i:=\sigma_i\pi_i(g)>0$.
+Choose $\varepsilon_i>0$ so small that $g\pm\varepsilon_i v_i\in K$.
+For every $\tau>0$, the two points
+$\frac{\tau}{a_i}(g\pm\varepsilon_i v_i)$ lie in
+$K\cap\{\sigma_i\pi_i=\tau\}$, so this slice contains a segment parallel to
+$v_i$ of length $2\varepsilon_i\tau|v_i|/a_i$.
+Choose $c_i>0$ with $2\varepsilon_i c_i|v_i|/a_i\ge|h_i|$.
+If $\sigma_i\pi_i(z-y_0)\ge c_i$, then
 \[(z+\R v_i)\cap(y_0+K)=y_0+\bigl(K\cap\{\sigma_i\pi_i
   =\sigma_i\pi_i(z-y_0)\}\bigr)\]
 contains a segment of length $\ge|h_i|$ and hence a point of $z+\Z h_i$, these
 points being spaced $|h_i|$ apart along that line; so $z\in\mathrm{Sat}_i$.
 Therefore $D_i$ vanishes on the half-plane $\{\sigma_i\pi_i\ge t\}$ with
-$t:=c_i+\sigma_i\pi_i(y_0)$.  Apply Lemma~\ref{lem:finitestate} to the basis
+$t:=\lceil c_i+\sigma_i\pi_i(y_0)\rceil$.  Apply Lemma~\ref{lem:finitestate} to the basis
 $(v_i,\sigma_iu_i)$, for which $t(z)=\sigma_i\pi_i(z)$ and
 $t(H_j)=\sigma_iN_0\det(v_i,h_j)\ne0$: the field $\vartheta_i$ is fully periodic
-on $U_i:=\{\sigma_i\pi_i\ge t_i\}$ with $t_i:=t+\beta_-$.  Since
-$y_0+K\subseteq C'$ and $K\subseteq\{\sigma_i\pi_i\ge0\}$, the half-plane $U_i$
-contains a translate of $R$.
+on $U_i:=\{\sigma_i\pi_i\ge t_i\}$ with the integer $t_i:=t+\beta_-$.
+The choice of $\sigma_i$ also gives $K\subseteq\{\sigma_i\pi_i\ge0\}$,
+as required in (b).
 
 \emph{Step 4 (part (c)).}  Suppose $\vartheta$ is non-periodic and no component
 is doubly periodic.  Then case~$(\alpha)$ occurs for no $i$, that is, no line
 $\R v_i$ meets $\operatorname{int}K$.  Now $K$ is a closed convex cone with
 $\dim K=2$.  If $K$ were a half-plane, at most one line $\R v_i$ could lie on
 its boundary and all the others would fall into case~$(\alpha)$, a
-contradiction; and $K=\R^2$ is excluded in the same way.  So $K$ is a sector of
-opening $<\pi$, each of its two boundary rays lies on one of the lines
-$\R v_a$, $\R v_b$ with $a\ne b$ — here $m\ge2$ and the two boundary rays are
-not parallel — and its interior contains no $\pm v_j$.
+contradiction; and $K=\R^2$ is excluded in the same way.  A closed convex cone
+of dimension two in the plane is either the whole plane, a half-plane, or a
+closed sector of opening strictly between $0$ and $\pi$.  Thus $K$ is such a
+sector, and its interior contains no $\pm v_j$.
 \end{proof}
 
 \begin{cor}[Theorem~\ref{thm:structure}(i)]\label{cor:firsthalf}
 Let $\vartheta$ and $R$ be as in Theorem~\ref{thm:colregion}, let $p>\max\cA$ be
 a prime, and let $\vartheta=\sum_i\bar\vartheta_i$ be the decomposition of
-Lemma~\ref{lem:modp}, with the $h_i$ pairwise non-parallel.  Apply
-Proposition~\ref{prop:firsthalf} to each component and absorb the components
-falling into case~$(\alpha)$, which are doubly periodic, into any other
-component by Operation~A of Lemma~\ref{lem:normalise}; on the half-plane $U_k$
-of that component the sum is again the restriction of a doubly periodic field,
-hence still fully periodic.  The resulting decomposition
-$\vartheta=\sum_{i\in I}G_i$ satisfies: $|I|\ge2$, since $\vartheta$ is
-non-periodic; no component is doubly periodic; the periods are pairwise
-non-parallel; and each $G_i$ is fully periodic on a half-plane
-$U_i=\{\sigma_i\pi_i\ge t_i\}$ whose boundary is parallel to $h_i$, with
-$U_i\supseteq R+w_i$.  Moreover $K_R$ is, by
-Proposition~\ref{prop:firsthalf}(c), the sector spanned by two adjacent rays
-$\sigma_av_a$, $\sigma_bv_b$.
+Lemma~\ref{lem:modp}, with the $h_i$ pairwise non-parallel.  Let $I$ be the
+indices of the components that are not doubly periodic and let $B$ be the sum
+of all the other components, so $B$ is doubly periodic.  Since $\vartheta$ is
+non-periodic, $|I|\ge2$: if $I$ were empty then $\vartheta=B$ would be doubly
+periodic, and if $I$ had one element then a common period of that component
+and $B$ along its direction would be a period of $\vartheta$.
+For each $i\in I$, case~$(\alpha)$ of Proposition~\ref{prop:firsthalf} is
+impossible.  Part (b) therefore gives a half-plane
+$U_i=\{\sigma_i\pi_i\ge t_i\}$ of full periodicity and
+$K_R\subseteq\{\sigma_i\pi_i\ge0\}$.
+Choose $i_0\in I$, set $G_{i_0}:=\bar\vartheta_{i_0}+B$, and set
+$G_i:=\bar\vartheta_i$ for $i\in I\setminus\{i_0\}$.
+The field $G_{i_0}$ has a non-zero period along $h_{i_0}$, obtained by taking
+a suitable multiple in $\Per(B)$, and is fully periodic on $U_{i_0}$:
+there it agrees with the sum of $B$ and the doubly periodic extension of
+$\bar\vartheta_{i_0}|_{U_{i_0}}$ from Lemma~\ref{lem:extend}.
+It is not doubly periodic, since subtracting $B$ would then make
+$\bar\vartheta_{i_0}$ doubly periodic.
+Thus $\vartheta=\sum_{i\in I}G_i$, no component is doubly periodic, and their
+periods are pairwise non-parallel.  Retaining the primitive directions and
+renaming the period multiples if necessary, every $G_i$ is fully periodic on
+$U_i$, with $K_R\subseteq\{\sigma_i\pi_i\ge0\}$.  The cone $K_R$ has
+dimension two and is a closed sector of opening $<\pi$ whose interior
+contains no remaining component direction, by
+Proposition~\ref{prop:firsthalf}(a),(c) applied to this decomposition.
 \end{cor}
 
 \begin{rem}\label{rem:relation}
@@ -1891,8 +1938,9 @@ Lemma~\ref{lem:fi} of \S\ref{sec:twopoint} — the support of $f_i=Q_i\eta$
 lies in a strip — and Lemma~\ref{lem:finitestate} is the general form of
 step~(6) of Lemma~\ref{lem:propagation}.
 \textup{(2)} In Proposition~\ref{prop:firsthalf}(b) neither the non-periodicity
-of $\vartheta$ nor the minimality of the decomposition is required; components
-falling into case~$(\alpha)$ are simply absorbed.
+of $\vartheta$ nor the minimality of the decomposition is required.  The
+corollary absorbs all doubly periodic components, including any that fall
+into case~$(\beta)$.
 \end{rem}
 
 \subsection{The second half-plane}\label{ssec:secondhalf}
@@ -1935,8 +1983,10 @@ so $pMd$ is a period of $G$, and it is independent of $h$.
 \end{proof}
 
 \smallskip\noindent\textbf{Safe directions.}
-In the notation of Corollary~\ref{cor:firsthalf} we may change the signs of the
-$v_j$ so that $\sigma_j=+$ throughout, that is $U_j=\{\pi_j\ge t_j\}$.  For
+In the notation of Corollary~\ref{cor:firsthalf}, whenever $\sigma_j=-$ replace
+$(v_j,u_j,h_j)$ by $(-v_j,-u_j,-h_j)$.  This preserves $h_j=k_jv_j$ with
+$k_j\ge1$ and $\det(v_j,u_j)=1$, and gives $\sigma_j=+$ throughout, that is
+$U_j=\{\pi_j\ge t_j\}$.  For
 $j\in I$ let $\cK_j$ be the set of half-planes on which $G_j$ is so far known to
 be fully periodic: initially $\cK_j=\{U_j\}$, and a half-plane $V_j$ disjoint
 from $U_j$ is added to $\cK_j$ as soon as it has been produced.  For
@@ -2003,12 +2053,14 @@ $\cK_j=\{U_j,V_j\}$ contains a half-plane on each side of $\pi_j$, and
 $\pi_j(d)\ne0$; hence $d$ is safe for $j$.
 
 If $|O|\ge2$, put $K_O:=\bigcap_{j\in O}\{\pi_j\ge0\}$.  By
-Corollary~\ref{cor:firsthalf} the inclusion $U_j\supseteq R+w_j$ gives
-$K_R\subseteq\{\pi_j\ge0\}$, so $K_O\supseteq K_R$ and $\dim K_O=2$.  Being the
+Corollary~\ref{cor:firsthalf} we have $K_R\subseteq\{\pi_j\ge0\}$ for every
+$j\in O$, so $K_O\supseteq K_R$ and $\dim K_O=2$.  Being the
 intersection of $|O|\ge2$ closed half-planes through the origin with pairwise
 distinct boundary lines $\R v_j$, the cone $K_O$ is a closed sector of opening
-$<\pi$; its two boundary rays lie on two of the lines $\R v_a$, $\R v_b$ with
-$a,b\in O$, $a\ne b$, and $\operatorname{int}K_O\subseteq\{\pi_j>0\}$ for
+$<\pi$.  At each non-zero boundary point at least one defining inequality
+is an equality; otherwise all are strict and the point is interior.
+Consequently its two boundary rays lie on two of the lines $\R v_a$, $\R v_b$
+with $a,b\in O$, $a\ne b$.  Also $\operatorname{int}K_O\subseteq\{\pi_j>0\}$ for
 $j\in O$ contains no $\pm v_j$ with $j\in O$.  Write $r\subset\R v_a$ and
 $r'\subset\R v_b$ for the two boundary rays, oriented so that turning
 anticlockwise from $r$ to $r'$ sweeps exactly $K_O$.  Among the $2m$ rays
@@ -2290,6 +2342,11 @@ If $P_\xi\bigl([1,n]\times[1,k]\bigr)\le nk$ for some $n,k\ge1$, then $\xi$ is
 periodic.  (A rectangle is lattice-convex.)
 \end{cor}
 
+Theorem~\ref{thm:convex-nivat} and Corollary~\ref{cor:nivat} are
+\texttt{Nivat.convex\_nivat} and \texttt{Nivat.nivat\_conjecture} in the Lean
+development, whose top-level proof follows Steps (0)--(7) above
+(Appendix~\ref{app:lean}).
+
 \appendix
 
 \section{Skeleton of the proof}\label{app:skeleton}
@@ -2318,7 +2375,7 @@ periodic.  (A rectangle is lattice-convex.)
   (Z-Z)\cap\Z^2=(Z\cap\Z^2)-(Z\cap\Z^2)\ \Longrightarrow\ d=q_1-q_0,\
   q_0,q_1\in Z .\\[3pt]
 \text{\S\ref{sec:quadratic}} &
-  |R_Z(S)|\text{ quadratic characters independent modulo }U_S
+  |R_Z(S)|\text{ quadratic observables independent modulo }U_S
   \ \Longrightarrow\ P_\theta(S)\ge|S|+1 .\\[3pt]
 \text{\S\ref{sec:reduction}} &
   \text{\cite{KS},\cite{Colle23a}}
@@ -2339,7 +2396,7 @@ polygons.  The external inputs to \S\ref{sec:reduction} are Kari and Szabados
 the periodic decomposition, the second a line both of whose directions are
 one-sided nonexpansive (\cite[Theorem~1.9]{Colle23a}) and a non-periodic
 configuration in the orbit closure that is fully periodic on a region
-(\cite[Lemma~4.6]{Colle23a}).  The $\Fp$ and convex form of Szabados' theorem,
+(the proof of \cite[Lemma~4.6]{Colle23a}).  The $\Fp$ and convex form of Szabados' theorem,
 used by Proposition~\ref{prop:twolimits}, is proved in
 Appendix~\ref{app:szabados}.
 
@@ -2372,8 +2429,12 @@ The scripts are \texttt{star.py} (construction, enumeration and all checks),
 \texttt{verify.py} and \texttt{verify2.py} (the two randomised experiments),
 and \texttt{lemma31.py} (the counterexample of \S\ref{app:counterexample}).
 They depend only on \texttt{numpy} and are supplied as ancillary files together
-with their output for the stated seeds; every number below is read off that
-output.
+with their output for the stated seeds.  The reported experimental values are
+read from that output; the supplementary exact checks described below are
+included with the source material.  The latter include
+\texttt{check\_case\_support.py}, \texttt{check\_periods\_and\_spectra.py},
+and \texttt{check\_encodings.py}; their locations and saved results are listed
+in the accompanying \texttt{BUILD.md}.
 
 \subsection{Method}\label{app:method}
 
@@ -2396,32 +2457,46 @@ $\Lambda_i$ either, since refining the period only adds zero Fourier
 coefficients.
 
 \item \emph{Pattern counts.}  The $S$-patterns are enumerated at all anchors
-of the square box of radius $R=90$ and again of radius $R=180$.  Away from
-the crossing region of the strips the patterns along each strip are
-$H_i$-periodic and, inside a sector, $M\Z^2$-periodic, so the count is exact
-as soon as the box is larger than the crossing region plus one period plus
-$\diam(S)$; the two counts agreed on every window of every configuration
-reported below.
+of the square box of radius $R=90$ and again of radius $R=180$.
+The entries labelled $P_\theta(S)$ below are these observed counts, hence lower
+bounds for the global complexity.  The two counts agreed on every reported
+window, but this agreement alone does not certify exhaustiveness: that would
+require covering the strip crossings and all periodic phase classes outside
+them, with the window offsets included.
 
 \item \emph{Deciding the case.}  $DI_a$ is computed on the box of radius $40$
-from the formal expansion \eqref{eq:Dexp}; all-zero for every colour $a$ means
-Case~B.
+from the formal expansion \eqref{eq:Dexp}.  A non-zero value certifies Case~A;
+an all-zero result only suggests Case~B unless the box covers the support.
+For the reported configurations, the case assignments were additionally
+confirmed on boxes containing all pairwise intersections of the strips
+\[\ell_i-\max_{C\subseteq[m]}\pi_i(H_C)\le\pi_i(z)
+  \le r_i-\min_{C\subseteq[m]}\pi_i(H_C).\]
+The strip argument of Lemma~\ref{lem:finite-support}, with $W=\{0\}$, places
+the entire support of every $DI_a$ inside this union.
 
 \item \emph{Spectrum and zonotope.}  The fields $\Xi_i^\pm$ and
 $G_i^{\sigma,\epsilon}$ are built as in \S\ref{ssec:isolating}; for each
 difference field $d_{i,\sigma,\epsilon,a}$ a length-$\kappa_i$ DFT is taken
 row by row over all rows within $2M+2$ of the strip (outside the strip the
-rows repeat with period $M$), and the union of the frequencies with
-coefficient of modulus above $10^{-9}$ gives $\Lambda_i$, $d_i$ and $Z$.  The
-set $R_Z(S)$ is decided by testing whether all subset sums of the $d_iv_i$,
+rows repeat with period $M$).  Frequencies with coefficient of modulus above
+$10^{-9}$ give numerical estimates of $\Lambda_i$, $d_i$ and $Z$.  For all
+$570$ components in the two experiments, the frequency sets were also checked
+exactly by reducing the integer row polynomials modulo the appropriate
+cyclotomic polynomials; every set agreed with the DFT output.  The set
+$R_Z(S)$ is decided by testing whether all subset sums of the $d_iv_i$,
 translated by $r$, lie in $\Conv(S)$.
 
 \item \emph{Ranks.}  The encoding $w$ is a random injection into
-$\{1,\dots,100\}$.  The rank of the $|\cL|\times(|S|+1)$ matrix
+$\{1,\dots,100\}$.  Injectivity alone does not imply the spectrum-preservation
+condition of Lemma~\ref{lem:encoding}; for the reported encodings that condition
+was checked separately by exact cyclotomic remainders and held for all $570$
+components.  The rank of the $|\cL|\times(|S|+1)$ matrix
 $\bigl(1,\,w(\gamma(s))_{s\in S}\bigr)_{\gamma\in\cL}$ is computed over
-$\mathbb F_q$ with $q=2^{31}-1$ and reported as $\dim U_S$; it is a lower
-bound for the rational rank, which is the direction needed to verify
-Lemma~\ref{lem:budget}.  In Case~B with $R_Z(S)\ne\varnothing$ the matrix is
+$\mathbb F_q$ with $q=2^{31}-1$.  The entries labelled $\dim U_S$ below are
+these modular ranks of the sampled pattern matrices; they are lower bounds
+for the rational ranks on the full pattern set.  Meeting the lower bound in
+Lemma~\ref{lem:budget} is therefore sufficient to verify that inequality for
+the sampled configuration.  In Case~B with $R_Z(S)\ne\varnothing$ the matrix is
 extended by the columns $\Phi_r(\gamma)=w(\gamma(r+q))\,w(\gamma(r+q+d))$,
 $r\in R_Z(S)$, of \S\ref{sec:quadratic}, and the rank $H_2(S)$ of the
 extended matrix is compared with $\dim U_S+|R_Z(S)|$
@@ -2455,9 +2530,9 @@ segment $\{0,1,2\}\times\{0\}$.  Result: $81$ configurations in Case~A and
 $3$ in Case~B; $P_\theta(S)\ge|S|+1$ held on all $8$ windows of all $84$
 configurations.  The three Case-B instances have $d_i\in\{3,6\}$, so $Z$ is
 larger than every window and $R_Z(S)=\varnothing$ throughout; on them
-$\dim U_S$ was exactly $|S|+1$ on every window, the witness $d$ existed
-($192$, $310$ and $28$ non-zero $d$ respectively), and $Ae_\theta$ was doubly
-periodic to within $2\cdot10^{-15}$.  These are instances of
+$\dim U_S$ was exactly $|S|+1$ on every window, with $192$, $310$ and $28$
+non-zero witnesses $d$ found respectively, and the periodicity residual of
+$Ae_\theta$ on the tested box was at most $2\cdot10^{-15}$.  These are instances of
 Remark~\ref{rem:empty-RZ}; Experiment~2 targets $R_Z(S)\ne\varnothing$.
 
 \noindent\textbf{Experiment 2} (script \texttt{verify2.py}, seed $7$).  We
@@ -2499,11 +2574,11 @@ $5$ & $(2,1),(1,2)$ & $4\times4$ & $16$ & $54$ & $(1,1)$ & $1$ & $16$ & $16$ & $
 \end{center}
 
 \noindent
-On all $35$ pairs with $R_Z(S)\ne\varnothing$ the value of $\dim U_S$ was
-\emph{exactly} $|S|+1-|R_Z(S)|$ (over $\mathbb F_q$), so the space of affine
-relations consists of exactly the multiples of $A$ and Lemma~\ref{lem:budget}
-is tight; and $H_2(S)$ was exactly $\dim U_S+|R_Z(S)|=|S|+1$, so the quadratic
-characters make up the deficit exactly, as in \S\ref{sec:quadratic}.  On the
+On all $35$ pairs with $R_Z(S)\ne\varnothing$, the sampled base matrix had
+modular rank $|S|+1-|R_Z(S)|$, and the extended matrix had modular rank
+$H_2(S)=|S|+1$.  Thus their rank difference was exactly $|R_Z(S)|$, matching
+the dimension comparison in \S\ref{sec:quadratic}.  These numerical equalities
+alone do not identify the full rational space of affine relations.  On the
 $116$ two-component configurations of Experiment~2 the criterion of
 Observation~\ref{obs:m2} below agreed with the computed case in all $116$
 instances, and the Case-B direction pairs had $|\det(v_1,v_2)|\in
@@ -2522,7 +2597,8 @@ $\supp\delta_1\cap\supp\delta_2=\varnothing$}, that is, no point is deviated by
 both components at once.  In particular, when $k_i=1$, the tails are constant
 and equal, and $|\det(v_1,v_2)|=1$, one is always in Case~A: the map
 $(\pi_1,\pi_2)\colon\Z^2\to\Z^2$ is then surjective and the two deviation sets
-must meet.  Case~B occurs only for $|\det|\ge2$.  The sample of Experiment~2 was
+must meet.  Under these additional hypotheses, Case~B occurs only for
+$|\det|\ge2$.  The sample of Experiment~2 was
 generated at random and then sorted by the numerical test; the criterion
 explains why Case~B appeared only on direction pairs with $|\det|\ge2$.
 \end{obs}
@@ -2563,17 +2639,17 @@ exactly, and only, what Lemma~\ref{lem:Ae-finite} needs.
 theorem}\label{app:szabados}
 
 This appendix proves in full the $\Fp$ and convex version of a theorem of
-Szabados.  Szabados \cite[Theorem~1]{Sz} proved that a sum of two $\Z$-valued
+Szabados.  Szabados \cite[Theorem~1]{Sz} proved that a non-periodic sum of two $\Z$-valued
 periodic configurations with different period directions does not have low
 rectangular complexity; the convex generalisation is
 \cite[Theorem~1.7]{Colle23a}, and the $\Fp$ and convex version is stated, with a
 sketch, as \cite[Theorem~2.8]{CG}.  Theorem~\ref{thm:szabados} below is the
 latter, proved here in full.  The proof follows Szabados \cite{Sz} —
 pigeonhole, balanced sets, and the one-dimensional Morse--Hedlund theorem — with
-two changes.  The coefficient ring is $\Fp$: every argument below uses only
-equality of values and the fact that a certain difference is periodic in a given
-direction, and none of it touches the arithmetic of the ring.  And the window is
-an arbitrary lattice-convex set instead of a rectangle: in
+two changes.  The coefficient ring is $\Fp$: the algebraic steps use addition,
+subtraction, equality and periodicity, without division or a property specific
+to the characteristic.  The window is an arbitrary lattice-convex set instead
+of a rectangle: in
 Lemma~\ref{lem:balanced} one deletes, at each step, whichever of the two extreme
 rows is the shorter.  In addition, Lemma~3 of \cite{Sz} rests on Lemma~39 of
 Kari and Szabados \cite{KS}; we replace it by two self-contained arguments,
@@ -2583,6 +2659,7 @@ supplied by the generating property.  Apart from the one-dimensional
 Morse--Hedlund theorem, nothing external is quoted here.
 
 \setcounter{subsection}{-1}
+\newpage
 \subsection{The statements}\label{app:szab-statements}
 
 \begin{thm}\label{thm:szabados}
@@ -2616,7 +2693,8 @@ neighbouring lattice points of a row differ by $\su$.  Put $\Delta:=\pi(h_2)\ne0
 and, replacing $h_2$ by $-h_2$ if necessary, assume $\Delta>0$.  For integers
 $a\le b$ the \emph{strip} $\mathrm{St}[a,b]:=\{v:a\le\pi(v)\le b\}$, of
 \emph{width} $b-a$, is the union of the rows $L_a,\dots,L_b$ and is invariant
-under $\pm\su$.  For a non-empty finite $F\subset\Z^2$ put
+under $\pm\su$; we also set $\mathrm{St}[a,a-1]:=\varnothing$.
+For a non-empty finite $F\subset\Z^2$ put
 $\operatorname{ht}(F):=\max\pi(F)-\min\pi(F)$; $F$ \emph{fits into}
 $\mathrm{St}[a,b]$ if some translate of it is contained there, that is if
 $\operatorname{ht}(F)\le b-a$.  For a non-empty finite lattice-convex $F$ write
@@ -2674,8 +2752,8 @@ $E:=E_\sigma(B)$.  Call $B$ \emph{$\sigma$-balanced} if
 \begin{itemize}
 \item[\textup{(i)}] $P_\theta(B)\le|B|$;
 \item[\textup{(ii)}] $P_\theta(B)<P_\theta(B\setminus E)+|E|$;
-\item[\textup{(iii)}] every non-empty row of $B$ contains at least $|E|-1$
-      points.
+\item[\textup{(iii)}] for every integer
+      $t\in[\min\pi(B),\max\pi(B)]$, one has $|B\cap L_t|\ge|E|-1$.
 \end{itemize}
 \end{dfn}
 
@@ -2698,17 +2776,24 @@ $f(i)\le0<f(i+1)$.  Let $B:=D_i$, $\sigma:=\sigma_i$ and $E:=E_\sigma(B)$.
 Condition~(i) is $f(i)\le0$.  For (ii),
 $P_\theta(B)\le|B|=|B\setminus E|+|E|<P_\theta(B\setminus E)+|E|$.
 
-For (iii), write $n=|E|$ and $E'=E_{-\sigma}(B)$, so $|E'|\ge n$.  For a real
+For (iii), write $n=|E|$ and $E'=E_{-\sigma}(B)$, so $|E'|\ge n$.
+If $n=1$, the required lower bound is zero and holds for every integer $t$.
+If $B$ has only one row, the only relevant row contains $n$ points, so (iii)
+also holds.  Hence assume $n\ge2$ and $\min\pi(B)<\max\pi(B)$.
+For a real
 $t\in[\min\pi(B),\max\pi(B)]$ let $\lambda(t)$ be the length of the intersection
 of the convex polygon $\Conv(B)$ with the line $\{\pi=t\}$; $\lambda$ is concave,
 by the concavity of the length of parallel chords of a convex set.  On the two
 extreme rows that intersection is exactly $\Conv(E)$, respectively $\Conv(E')$,
 a supporting line meeting the polygon in the convex hull of the vertices it
 carries, of lengths $(n-1)|\su|$ and $(|E'|-1)|\su|\ge(n-1)|\su|$.  Hence
-$\lambda(t)\ge(n-1)|\su|$ for every $t$.  A closed segment of length at least
-$(n-1)|\su|$ on a lattice line whose consecutive points are $|\su|$ apart
-contains at least $n-1$ lattice points, and these belong to $B$ by lattice
-convexity.
+$\lambda(t)\ge(n-1)|\su|$ for every $t$ in that interval.  For every integer
+$t$ there, surjectivity of $\pi$ gives a lattice point on $L_t$, and the lattice
+points of $L_t$ are spaced $|\su|$ apart.  Its intersection with $\Conv(B)$ is
+a closed segment of length at least $(n-1)|\su|$, so it contains at least
+$n-1$ lattice points.  These belong to $B$ by lattice convexity.  This proves
+(iii) at every intermediate integer height, including those not assumed in
+advance to meet $B$.
 \end{proof}
 
 \subsection{Ambiguity strips and the propagation lemma}\label{app:szab-prop}
@@ -2786,9 +2871,12 @@ by (ii), so $|\Gamma|\le n-1$; in particular $n\ge2$, since otherwise $\Gamma$
 would be empty, which it is not.
 
 \emph{(5) Periodicity of the rows of $B_0$.}  Assume $B_0\ne\varnothing$; when
-$B_0=\varnothing$ this step is vacuous and one takes $Q_0:=1$.  For each row
-$L_t$ of $B_0$, $t_-\le t\le b-1$, condition (iii) makes $B\cap L_t$ a run of
-$m_t\ge n-1$ consecutive points $w_t,w_t+\su,\dots,w_t+(m_t-1)\su$.  Put
+$B_0=\varnothing$, one has $t_-=b$, the initial strip
+$\mathrm{St}[t_-,b-1]$ is empty, and one takes $Q_0:=1$.
+For every integer $t$ with $t_-\le t\le b-1$, condition (iii) and $n\ge2$
+from (4) give $|B\cap L_t|\ge n-1\ge1$.  Thus no row of this strip is missing.
+By lattice convexity, $B\cap L_t=B_0\cap L_t$ is a run of $m_t\ge n-1$
+consecutive points $w_t,w_t+\su,\dots,w_t+(m_t-1)\su$.  Put
 $\xi_t(s):=\theta(w_t+s\su)$ for $s\in\Z$.  As $i$ varies, $\theta|_{B_0+i\su}$
 takes at most $n-1$ values, so its restriction to the first $n-1$ points of row
 $t$ — that is, the word of length $n-1$ read in $\xi_t$ from position $i$ — takes
@@ -2799,7 +2887,10 @@ with at most $m$ subwords of some length $m$ is periodic; see also
 multiple of the periods of these rows; then $\theta(v+Q_0\su)=\theta(v)$ for all
 $v\in\mathrm{St}[t_-,b-1]$.
 
-\emph{(6) Extending upwards one row at a time.}  Suppose $R\ge b$ and $\theta$
+\emph{(6) Extending upwards one row at a time.}  If $\Delta<b-t_-$, then
+$b-1-t_-\ge\Delta$, so the strip obtained in (5) already contains
+$\mathrm{St}[t_-,t_-+\Delta]$; take $Q^*:=Q_0$ and proceed to (7).
+Otherwise $\Delta\ge b-t_-$.  Suppose $R\ge b$ and $\theta$
 has period $Q\su$ on $\mathrm{St}[t_-,R-1]$, which for $R=b$ is step~(5) with
 $Q=Q_0$.  Choose $w$ with $\pi(w)=R-b$, so that the top row of $B+w$ lies on
 $L_R$ and $B_0+w+i\su\subseteq\mathrm{St}[t_-,R-1]$; then the pattern
@@ -2850,8 +2941,11 @@ give distinct points, so the union is disjoint.  Put $N:=P_\theta(D)<\infty$.
 
 \emph{(a) A balanced set, and unambiguity.}  Take a $\sigma$-balanced
 $B\subseteq S$ by Lemma~\ref{lem:balanced}.  We may assume $\sigma=+$: otherwise
-replace $\su$ by $-\su$, $\pi$ by $-\pi$ and $h_2$ by $-h_2$, which keeps
-$\Delta$ positive, all the definitions being symmetric.  Since $\theta$ is not
+replace $\su,h_1,\pi,h_2$ by $-\su,-h_1,-\pi,-h_2$, respectively.  This
+keeps $h_1=c_1\su$ with $c_1\ge1$ and $\Delta>0$, and condition (iii) is
+unchanged when the order of the integer heights is reversed.  Use these
+oriented periods in the definitions of $D,D_j,S_j$ and $N$ above.
+Since $\theta$ is not
 periodic, the contrapositive of Lemma~\ref{lem:propagation} says: \emph{for all
 $a\le b$ with $b-a\ge\operatorname{ht}(B)$ and every $x\in X_\theta$, if
 $x=\theta$ on $\mathrm{St}[a,b-1]$ then $x=\theta$ on $\mathrm{St}[a,b]$.}
@@ -2882,42 +2976,178 @@ $\pi(v_0)\ge(k+N)\Delta\ge(k+j)\Delta$, so $\theta(v_0+N!h_2)=\theta(v_0)$,
 contradicting (b).\hfill$\square$
 
 \begin{rem}\label{rem:szab-general}
-The proof of Theorem~\ref{thm:szabados} works over any finite alphabet for a sum
-of two periodic configurations, all that is used being \eqref{eq:D-diff}, that
-the difference $\theta(\cdot+sh_2)-\theta$ is $h_1$-periodic.  Over $\Z$ it is
+The proof of Theorem~\ref{thm:szabados} works for any finite-valued configuration
+with a decomposition into two periodic configurations over an abelian group.
+The required algebraic identity is \eqref{eq:D-diff}: the difference
+$\theta(\cdot+sh_2)-\theta$ is $h_1$-periodic.  Over $\Z$ it is
 the convex generalisation of \cite[Theorem~1]{Sz} recorded as
 \cite[Theorem~1.7]{Colle23a}.
 \end{rem}
 
-\subsection*{Acknowledgements}
+\section{The Lean formalisation}\label{app:lean}
 
-The mathematical content of this paper was developed with substantial assistance
-from large language models, which were used for literature search, for drafting,
-and for adversarial checking of the arguments; the authors are responsible for
-all statements.  The numerical verification of Appendix~\ref{app:numerics} was
-carried out with the scripts named there.
+The formalisation is a Lean~4 project built on Mathlib; the toolchain is
+\texttt{v4.33.1} and Mathlib is pinned at commit \texttt{0df444a}.  Its source
+is the ancillary directory \texttt{anc/lean}.  The main theorem is
+\texttt{Nivat.nivat\_conjecture}, in the file
+\texttt{Nivat/Section8/Main.lean}, where it is derived from
+\texttt{Nivat.convex\_nivat}.
 
-% Bibliography.
-% Ground rule: an entry's data is either checked against the source, or the
-% entry says where the data came from.
-%   [CG]  -- title, authors, date and abstract checked against the arXiv
-%            abstract page.  It is cited here as related work only; no result
-%            of it is used as a hypothesis.
-%   [Khe] -- title, author, date and abstract checked against the arXiv
-%            abstract page.
-%   all others -- bibliographic data as printed in the reference list of [CG].
-% Internal numbers of [Colle23a], [Sz] and [CyrKra15] are quoted in Section 8
-% and in Appendix D; they were recorded by the authors while reading the
-% sources, and are reproduced here as written.
-% The order of the bibitems is alphabetical by author, so that the printed
-% numbers [1]--[17] are the ones used in the text.
-% \bibliographystyle is omitted deliberately: the bibliography is an inline
-% thebibliography environment, so there is no BibTeX run and no .bbl, and
-% nothing in the source should suggest otherwise to arXiv's build.
+\subsection*{The statement}
+A reader who wants to trust the formal result needs to check only the statement
+and the handful of definitions it mentions; everything else is checked by the
+kernel.  They are, in the notation of this paper:
+\begin{itemize}
+\item \texttt{Config $\alpha$} is the type of maps $\Z\times\Z\to\alpha$, and
+  \texttt{T u f} is the translate $z\mapsto f(z+u)$;
+\item \texttt{Per f} is the subgroup $\{u: \texttt{T u f}=f\}$ and
+  \texttt{IsPeriodic f} means that \texttt{Per f} contains a non-zero vector;
+\item \texttt{pattern $\theta$ Q u} is the map $Q\to\alpha$, $q\mapsto\theta(u+q)$;
+  \texttt{patterns $\theta$ Q} is the set of all of them, $u\in\Z^2$; and
+  \texttt{P $\theta$ Q} is its cardinality (finite because $\alpha$ is);
+\item \texttt{rectangle n k} is $\{1,\dots,n\}\times\{1,\dots,k\}$, of
+  cardinality $nk$;
+\item \texttt{LatticeConvex S} says that every $z\in\Z^2$ whose image in
+  $\R^2$ lies in the convex hull of $S$ belongs to $S$.
+\end{itemize}
+With these, \texttt{nivat\_conjecture} assumes \texttt{[Finite $\alpha$]},
+$0<n$, $0<k$ and $\texttt{P}\,\xi\,(\texttt{rectangle n k})\le nk$, and
+concludes \texttt{IsPeriodic $\xi$}; \texttt{convex\_nivat} assumes
+\texttt{[Finite $\alpha$]}, $S$ non-empty and lattice-convex and
+$\texttt{P}\,\xi\,S\le|S|$, with the same conclusion.  These are
+Corollary~\ref{cor:nivat} and Theorem~\ref{thm:convex-nivat}, without extra
+hypotheses.
+
+\subsection*{The architecture}
+The top-level proof in \texttt{Nivat/Section8/} follows the proof of
+Theorem~\ref{thm:convex-nivat}: an integer encoding of the alphabet
+(\texttt{exists\_intEncoding}); a counterexample of minimal order
+(\texttt{exists\_minimalCounterexample}, Remark~\ref{rem:minimal}); the
+structure of \S\S\ref{ssec:firsthalf}--\ref{ssec:secondhalf}
+(\texttt{structure\_input}); normalisation to a star configuration
+(\texttt{exists\_starConfig\_of\_admissible}, Lemma~\ref{lem:normalise}); and
+the contradiction with Theorem~A, \texttt{star\_complexity\_lower\_bound} in
+\texttt{Nivat/MainTheorem.lean}.  Sections
+\ref{sec:notation}--\ref{sec:quadratic} are formalised section by section in
+the root of \texttt{Nivat/} (Laurent polynomials and Newton polygons in
+\texttt{Laurent/}, zonotopes and unimodular triangulations in
+\texttt{Lattice/}), and Appendix~\ref{app:szabados} in
+\texttt{AppendixD.lean}.
+
+The results quoted in \S\ref{ssec:external} are proved in
+\texttt{Nivat/External/}: Kari--Szabados in \texttt{KSAnnihilator},
+\texttt{KSDecomposition} and \texttt{KSCorollary}; Colle's theorem on
+one-sided nonexpansive directions, with Boyle--Lind and the Cyr--Kra induction
+behind it, in \texttt{Colle/Theorem114Final}, \texttt{Colle/BoyleLind} and
+\texttt{Colle/Prop210}; and Colle's region, through his Lemma~3.5 and the
+Claims of his \S4, in \texttt{Colle/ColleRegion} and about forty further
+modules.  The formalisation follows the arXiv version of \cite{Colle23a}, in
+which \cite[Theorem~1.9]{Colle23a} is numbered Theorem~1.14 and the region is
+built in the proof of Lemma~4.5.
+
+\subsection*{What formalising the source changed}
+In the proof of Lemma~3.5(i) of the arXiv version of \cite{Colle23a}, sets
+$\hat A_i^{(\varepsilon)}$ are obtained from the layers $\hat A_i$ by sweeping
+along $-\vec v_{\ell_{J+1}}$ and intersecting with $\hat A_\infty^{(\varepsilon)}$,
+and are asserted, without argument, to be enveloped and to lie between the
+strips $B_i-k_i\vec v_\ell$ and $H_{B_i}(\ell)-k_i\vec v_\ell$.  In a numerical
+model of $(\ell,\ell_J)$-regions this fails: over $2448$ instances
+(ten families of generators and several choices of $\iota$, $J$, $\varepsilon$
+and $i$), envelopedness fails in $1083$ and the strip containment in $768$.
+The formalisation does not sweep.  It pushes only the $J$-face of each layer
+outward by $\det(\text{prev},J)\cdot\det(J,\text{next})$ lattice layers and
+verifies the seven properties a shell must have directly
+(\texttt{Colle/Hole1PushShell}, theorem \texttt{exists\_chainData\_closed}).  The
+statement of Lemma~3.5 is unchanged.  Similarly the monotonicity
+$\hat A_i\subseteq\hat A_j$, which the source uses in a compactness argument but
+records only in the caption of a figure, is proved in \texttt{Colle/AhatMono}.
+
+\subsection*{Checking it}
+With \texttt{elan} installed, from the root of the project:
+\begin{center}
+\texttt{lake exe cache get};\quad \texttt{lake build};\quad
+\texttt{bash scripts/sorries.sh};\quad
+\texttt{bash scripts/check\_axioms.sh Nivat.nivat\_conjecture}.
+\end{center}
+The \texttt{lakefile} builds every module under \texttt{Nivat/}, not only those
+the main theorem imports.  On a fresh copy of the ancillary source the build
+completes ($3368$ jobs, all $449$ modules), \texttt{sorries.sh} reports
+\texttt{TOTAL: 0}, and \texttt{\#print axioms} gives
+\texttt{[propext, Classical.choice, Quot.sound]} for both
+\texttt{Nivat.nivat\_conjecture} and \texttt{Nivat.convex\_nivat}.  No constant
+of the development is an \texttt{axiom} or \texttt{opaque} declaration.
+Replaying the compiled development through the kernel once more with
+\texttt{leanchecker}, both module by module and from an empty environment up to
+\texttt{Nivat.Section8.Main}, reports no error.
+
+\section{How this work was done}\label{app:ai}
+
+This paper and its formalisation were produced by the author together with a
+personal AI research system, an orchestration of language-model agents running
+in Claude Code.  The agents recorded in the working sessions are
+Claude Opus~5, with Claude Fable~5.1 on two formalisation lanes.  We record what the system did, how it was organised, and where it
+was wrong, because a reader is entitled to know which parts of a proof were
+searched for by machine and how they were checked.
+
+\subsection*{Timeline}
+The campaign on Nivat's conjecture began on 1 September 2026; the author chose
+the target.  The proof of \S\S\ref{sec:notation}--\ref{sec:reduction} and the
+paper were finished on 12 September.  The formalisation began on 13 September;
+the three results quoted from the literature, at first stated as Lean axioms,
+were all proved and their axioms deleted by 18 September; the development was
+complete, with no \texttt{sorry} and no axiom beyond Lean's own, on
+30 September.  It was rebuilt from scratch and re-audited independently on
+1 October.
+
+\subsection*{Organisation}
+The formalisation ran as parallel lanes, each an agent owning a group of
+lemmas of the blueprint (the chain construction, the placement of the region,
+the tower of heights, the leaf lemmas of Colle's Lemma~3.5, and so on), up to
+seven at a time.  A single integrating agent was the only one allowed to build
+the main repository and to wire lanes into the main chain.  Separate agents
+were tasked only with refutation: given a proposed lemma, find a
+kernel-checked counterexample.  Auditors, given only the artefact and the
+criteria and not the author's reasoning, checked statements against the source
+papers.  The recorded formalisation sessions contain $277$ subagent runs.
+The author set the target, ruled on every change to a theorem statement, and
+directed the strategy: on 18 September the author cut the number of parallel
+lanes from seven to two because open goals were not closing while the records
+grew, and on 20 September required the formalisation to follow the source
+papers as written.
+
+\subsection*{Where the system was wrong, and how it was caught}
+\begin{itemize}
+\item \emph{A false clause in a draft of \S\ref{sec:reduction}.}  An
+  adversarial audit of the draft on 12 September found a counterexample over
+  $\mathbb F_2$ to a geometric clause of one proposition, and a gap in
+  Appendix~\ref{app:szabados}.  Both were repaired the same day, the
+  proposition by using a weaker conclusion that suffices; Theorems~A and~B
+  were not affected.
+\item \emph{False leaf lemmas.}  On 14 September three of the six leaf lemmas
+  into which the region construction had been split were refuted by
+  independent agents with kernel-checked counterexamples.  The cause was
+  hypotheses dropped when the lemmas were extracted from the source.
+\item \emph{A mis-stated external result.}  The first Lean statement of Colle's
+  full-periodicity theorem was not derivable from the result of Kari and Moutot
+  alone, as had been assumed; it needs a further step of Colle's argument.
+\item \emph{Errors of the integrating agent.}  It drafted wrong signatures,
+  cited a wrong line of the source, and twice chose data for a chain
+  construction that a kernel-checked refutation later showed impossible.
+\item \emph{Gaps in the source.}  The two points of Appendix~\ref{app:lean}
+  — the shell sweep in Colle's Lemma~3.5(i) and the monotonicity recorded only
+  in a figure caption — were found because the formalisation could not go
+  through them.
+\end{itemize}
+None of these errors survives in the final development.  The kernel accepts
+the main theorem, \texttt{Nivat.nivat\_conjecture}, with no assumption beyond
+the axioms of Lean's logic.
+
+% Inline bibliography; citation numbering is preserved.
 
 \smallskip\noindent\emph{Theorem and lemma numbers of the cited works are those
 of the originals.}
 
+\clearpage
 \begin{thebibliography}{99}
 
 \bibitem{BoyleLind}
@@ -2983,6 +3213,18 @@ A.~Khetan,
 \emph{A counterexample to Nivat's conjecture for a non-convex window of full
 affine span},
 preprint, \texttt{arXiv:2607.09830v2}, July 2026.
+
+\bibitem{Lean4}
+L.~de~Moura and S.~Ullrich,
+\emph{The Lean~4 theorem prover and programming language},
+in: Automated Deduction -- CADE~28, Lecture Notes in Comput. Sci.
+\textbf{12699}, Springer, 2021, 625--635.
+
+\bibitem{Mathlib}
+The mathlib Community,
+\emph{The Lean mathematical library},
+in: Proceedings of the 9th ACM SIGPLAN International Conference on Certified
+Programs and Proofs (CPP 2020), 2020, 367--381.
 
 \bibitem{MH38}
 M.~Morse and G.~A. Hedlund,
